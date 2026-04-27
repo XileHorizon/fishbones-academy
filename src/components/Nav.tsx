@@ -77,8 +77,8 @@ export function Nav() {
             <GithubMark size={16} />
             <span>GitHub</span>
           </a>
-          <Link to="/learn/" className="nav__cta">
-            Try in browser
+          <Link to="/courses" className="nav__cta">
+            Browse courses
           </Link>
         </nav>
 
@@ -115,8 +115,8 @@ export function Nav() {
           >
             GitHub
           </a>
-          <Link to="/learn/" className="nav__drawer-cta">
-            Try in browser
+          <Link to="/courses" className="nav__drawer-cta">
+            Browse courses
           </Link>
         </div>
       )}

@@ -111,10 +111,10 @@ export function Home() {
               Sixteen languages, no setup, no signup wall.
             </p>
             <div className="home-hero__actions">
-              <a href="/learn/" className="btn btn--primary btn--lg">
-                <PlayCircle size={16} /> Try it free in your browser
+              <Link to="/courses" className="btn btn--primary btn--lg">
+                <PlayCircle size={16} /> Browse courses
                 <ArrowRight size={14} />
-              </a>
+              </Link>
               <Link to="/download" className="btn btn--ghost btn--lg">
                 Get the desktop app
               </Link>
@@ -226,9 +226,9 @@ export function Home() {
           desktop app and start ingesting your own.
         </p>
         <div className="home-final__actions">
-          <a href="/learn/" className="btn btn--primary btn--lg">
-            <PlayCircle size={16} /> Try in browser
-          </a>
+          <Link to="/courses" className="btn btn--primary btn--lg">
+            <PlayCircle size={16} /> Browse courses
+          </Link>
           <Link to="/download" className="btn btn--ghost btn--lg">
             Get the desktop app <ArrowRight size={14} />
           </Link>

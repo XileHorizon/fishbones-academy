@@ -242,7 +242,7 @@ export function CourseDetail() {
                 href={`/learn/?courseId=${encodeURIComponent(catalogEntry.id)}`}
                 className="btn btn--primary btn--lg course-detail__sidebar-btn"
               >
-                <PlayCircle size={14} /> Try in browser
+                <PlayCircle size={14} /> Start in browser
               </a>
               <Link
                 to="/download"
