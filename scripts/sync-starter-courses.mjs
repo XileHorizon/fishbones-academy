@@ -23,25 +23,29 @@ const DEST = join(SITE_ROOT, "public", "starter-courses");
 const BUNDLED_MANIFEST = join(SITE_ROOT, "src", "data", "courses-manifest.json");
 
 const env = process.env.FISHBONES_SRC;
+// The Fishbones repo was renamed from "kata" → "Fishbones" — accept
+// both layouts so older clones / forks keep working without env var.
 const candidates = [
   ...(env ? [env] : []),
+  resolve(SITE_ROOT, "..", "..", "Apps", "Fishbones"),
+  resolve(SITE_ROOT, "..", "Fishbones"),
   resolve(SITE_ROOT, "..", "..", "Apps", "kata"),
   resolve(SITE_ROOT, "..", "kata"),
   resolve(SITE_ROOT, "..", "..", "kata"),
 ];
-const kataRoot = candidates.find((p) => existsSync(join(p, "package.json")));
+const fishbonesRoot = candidates.find((p) => existsSync(join(p, "package.json")));
 
-if (!kataRoot) {
+if (!fishbonesRoot) {
   console.warn(
-    "[sync-courses] kata checkout not found — skipping. Course detail pages will show the 'preview unavailable' state until starter-courses are staged.",
+    "[sync-courses] Fishbones checkout not found — skipping. Course detail pages will show the 'preview unavailable' state until starter-courses are staged.",
   );
   process.exit(0);
 }
 
-const src = join(kataRoot, "public", "starter-courses");
+const src = join(fishbonesRoot, "public", "starter-courses");
 if (!existsSync(src)) {
   console.warn(
-    `[sync-courses] kata starter-courses missing at ${src}. Run \`node scripts/extract-starter-courses.mjs\` over there first.`,
+    `[sync-courses] Fishbones starter-courses missing at ${src}. Run \`node scripts/extract-starter-courses.mjs\` over there first.`,
   );
   process.exit(0);
 }

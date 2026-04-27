@@ -101,6 +101,15 @@
       "packType": "course"
     },
     {
+      "id": "vyper-fundamentals",
+      "title": "Vyper Fundamentals: Pythonic Smart Contracts",
+      "language": "vyper",
+      "file": "vyper-fundamentals.json",
+      "cover": "vyper-fundamentals.jpg",
+      "sizeBytes": 176245,
+      "packType": "course"
+    },
+    {
       "id": "challenges-javascript-handwritten",
       "title": "Javascript Challenges",
       "language": "javascript",
