@@ -1,0 +1,52 @@
+/* fishbones.academy — design tokens.
+   We pull the base kit's tokens to inherit the full color/spacing/type
+   system, then layer the kata app's `default-dark` palette on top so the
+   site's monochrome surface matches the desktop app pixel-for-pixel. */
+
+@import "@mattmattmattmatt/base/site/styles/tokens.css";
+
+/* Kata default-dark palette. These are the same tokens the desktop
+   app's themes.css would set on `[data-theme-name="default-dark"]`,
+   except the app inherits its dark base from the base kit so only the
+   theme-specific overrides need to live here. We force them globally
+   (instead of behind the data-theme-name selector) because this site
+   ships a single, fixed look. */
+:root,
+[data-theme-name="default-dark"] {
+  --color-bg-primary: #09090b;
+  --color-bg-secondary: #13131a;
+  --color-bg-tertiary: #1c1c25;
+  --color-bg-elevated: #19191d;
+  --color-text-primary: #fafafa;
+  --color-text-secondary: #b4b4be;
+  --color-text-tertiary: #70707c;
+  --color-border-default: rgba(255, 255, 255, 0.08);
+  --color-border-strong: rgba(255, 255, 255, 0.18);
+
+  /* Site-only sugar. Kept in this file so any component using these
+     names doesn't need to know whether it's app-side or site-side. */
+  --site-max-width: 1180px;
+  --site-section-pad-y: 96px;
+  --site-section-pad-y-sm: 56px;
+  --site-section-pad-x: 24px;
+  --site-nav-height: 60px;
+
+  /* Glass surfaces. We use them sparingly — backdrop-blur on the nav,
+     a subtle one on hero cards. Heavy glass everywhere makes the page
+     feel like an iOS settings menu, which is not the vibe. */
+  --glass-bg: rgba(19, 19, 26, 0.72);
+  --glass-bg-strong: rgba(19, 19, 26, 0.9);
+  --glass-blur: 14px;
+
+  /* Shiki overrides. The github-dark theme paints a slightly bluer
+     background than our base; we let our own bg show through and only
+     keep the syntax foreground colors. */
+  --shiki-bg: var(--color-bg-secondary);
+}
+
+/* Lock to dark for now. Adding a light variant later just means
+   exposing a toggle that flips data-theme on <html>. */
+html[data-theme="dark"],
+html {
+  color-scheme: dark;
+}

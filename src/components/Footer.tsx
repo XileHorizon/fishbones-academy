@@ -1,0 +1,74 @@
+import { Link } from "react-router-dom";
+import { GithubMark } from "./icons/GithubMark";
+import "./Footer.css";
+
+export function Footer() {
+  return (
+    <footer className="site-footer">
+      <div className="site-footer__inner">
+        <div className="site-footer__brand">
+          <Link to="/" className="site-footer__brand-link">
+            <img src="/fishbones.png" alt="" width={24} height={24} />
+            <span>
+              <span className="site-footer__brand-name">Fishbones</span>
+              <span className="site-footer__brand-tld">.academy</span>
+            </span>
+          </Link>
+          <p className="site-footer__tagline">
+            Turn any technical book into a course you can ship code in.
+          </p>
+        </div>
+
+        <nav className="site-footer__cols" aria-label="Footer">
+          <div className="site-footer__col">
+            <h4 className="site-footer__col-title">Learn</h4>
+            <Link to="/courses">Courses</Link>
+            <Link to="/languages">Languages</Link>
+            <a href="/learn/">Try in browser</a>
+          </div>
+          <div className="site-footer__col">
+            <h4 className="site-footer__col-title">Product</h4>
+            <Link to="/download">Download</Link>
+            <Link to="/about">About</Link>
+            <Link to="/docs">Docs</Link>
+          </div>
+          <div className="site-footer__col">
+            <h4 className="site-footer__col-title">Open source</h4>
+            <a
+              href="https://github.com/InfamousVague/Fishbones"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <GithubMark size={13} /> Repository
+            </a>
+            <a
+              href="https://github.com/InfamousVague/Fishbones/releases/latest"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Releases
+            </a>
+            <a
+              href="https://github.com/InfamousVague/Fishbones/actions"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Build status
+            </a>
+          </div>
+          <div className="site-footer__col">
+            <h4 className="site-footer__col-title">Legal</h4>
+            <Link to="/privacy">Privacy</Link>
+            <Link to="/terms">Terms</Link>
+          </div>
+        </nav>
+      </div>
+      <div className="site-footer__base">
+        <span>Free, open source, MIT licensed.</span>
+        <span className="site-footer__base-meta">
+          Built with the same engine that runs the desktop app.
+        </span>
+      </div>
+    </footer>
+  );
+}

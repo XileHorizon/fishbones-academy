@@ -1,0 +1,125 @@
+import { useEffect, useState } from "react";
+import { Link, NavLink, useLocation } from "react-router-dom";
+import { Menu, X } from "lucide-react";
+import { GithubMark } from "./icons/GithubMark";
+import "./Nav.css";
+
+const LINKS = [
+  { to: "/courses", label: "Courses" },
+  { to: "/languages", label: "Languages" },
+  { to: "/docs", label: "Docs" },
+  { to: "/about", label: "About" },
+  { to: "/download", label: "Download" },
+];
+
+export function Nav() {
+  const { pathname } = useLocation();
+  // Tying drawer-open state to the current pathname auto-closes the
+  // mobile menu on every navigation without needing a setState-in-effect.
+  // The internal state is `(pathname, open?)` — a fresh pathname starts
+  // closed; toggling within a pathname keeps state until the next nav.
+  const [openFor, setOpenFor] = useState<string | null>(null);
+  const open = openFor === pathname;
+  const setOpen = (next: boolean | ((v: boolean) => boolean)) => {
+    setOpenFor((current) => {
+      const wasOpen = current === pathname;
+      const wantsOpen = typeof next === "function" ? next(wasOpen) : next;
+      return wantsOpen ? pathname : null;
+    });
+  };
+
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  return (
+    <header className={`nav${scrolled ? " nav--scrolled" : ""}`}>
+      <div className="nav__inner">
+        <Link to="/" className="nav__brand" aria-label="Fishbones Academy home">
+          <img
+            src="/fishbones.png"
+            alt=""
+            className="nav__brand-icon"
+            width={28}
+            height={28}
+          />
+          <span className="nav__brand-mark">
+            <span className="nav__brand-name">Fishbones</span>
+            <span className="nav__brand-tld">.academy</span>
+          </span>
+        </Link>
+
+        <nav className="nav__links" aria-label="Primary">
+          {LINKS.map((l) => (
+            <NavLink
+              key={l.to}
+              to={l.to}
+              className={({ isActive }) =>
+                `nav__link${isActive ? " nav__link--active" : ""}`
+              }
+              end={l.to === "/"}
+            >
+              {l.label}
+            </NavLink>
+          ))}
+          <a
+            className="nav__link nav__link--icon"
+            href="https://github.com/InfamousVague/Fishbones"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="View Fishbones on GitHub"
+          >
+            <GithubMark size={16} />
+            <span>GitHub</span>
+          </a>
+          <Link to="/learn/" className="nav__cta">
+            Try in browser
+          </Link>
+        </nav>
+
+        <button
+          type="button"
+          className="nav__menu-btn"
+          onClick={() => setOpen((v) => !v)}
+          aria-label={open ? "Close menu" : "Open menu"}
+          aria-expanded={open}
+        >
+          {open ? <X size={20} /> : <Menu size={20} />}
+        </button>
+      </div>
+
+      {open && (
+        <div className="nav__drawer" role="dialog" aria-label="Mobile menu">
+          {LINKS.map((l) => (
+            <NavLink
+              key={l.to}
+              to={l.to}
+              className={({ isActive }) =>
+                `nav__drawer-link${isActive ? " nav__drawer-link--active" : ""}`
+              }
+              end={l.to === "/"}
+            >
+              {l.label}
+            </NavLink>
+          ))}
+          <a
+            className="nav__drawer-link"
+            href="https://github.com/InfamousVague/Fishbones"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            GitHub
+          </a>
+          <Link to="/learn/" className="nav__drawer-cta">
+            Try in browser
+          </Link>
+        </div>
+      )}
+    </header>
+  );
+}

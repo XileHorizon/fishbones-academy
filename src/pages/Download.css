@@ -1,0 +1,209 @@
+.download-hero {
+  padding: 96px var(--site-section-pad-x) 24px;
+}
+
+.download-hero__inner {
+  max-width: 760px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.download-hero__lede {
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+  margin-top: 16px;
+}
+
+/* ─── Tier cards ─────────────────────────────────────── */
+
+.download-tiers {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.download-tier {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 28px;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-default);
+  border-radius: 14px;
+  position: relative;
+}
+
+.download-tier--highlight {
+  background: linear-gradient(180deg, var(--color-bg-secondary) 0%, var(--color-bg-tertiary) 100%);
+  border-color: var(--color-border-strong);
+}
+
+.download-tier__head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.download-tier__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: var(--color-bg-tertiary);
+  border: 1px solid var(--color-border-default);
+  color: var(--color-text-primary);
+}
+
+.download-tier__eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+}
+
+.download-tier__title {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.015em;
+  color: var(--color-text-primary);
+}
+
+.download-tier__price {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.download-tier__summary {
+  font-size: 13.5px;
+  color: var(--color-text-secondary);
+  line-height: 1.55;
+  margin-bottom: 6px;
+}
+
+.download-tier__features {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0;
+  margin: 8px 0 18px;
+  flex: 1;
+}
+
+.download-tier__features li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 13.5px;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+.download-tier__bullet {
+  width: 5px;
+  height: 5px;
+  margin-top: 8px;
+  border-radius: 50%;
+  background: var(--color-text-primary);
+  flex-shrink: 0;
+}
+
+.download-tier__cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: auto;
+}
+
+/* ─── Platform grid ──────────────────────────────────── */
+
+.download-platforms { padding-top: 0; }
+
+.download-platforms__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 32px;
+}
+
+.download-platforms__card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 22px;
+  text-decoration: none;
+  color: var(--color-text-primary);
+}
+
+.download-platforms__card:hover {
+  border-color: var(--color-border-strong);
+  color: var(--color-text-primary);
+}
+
+.download-platforms__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: var(--color-bg-tertiary);
+  border: 1px solid var(--color-border-default);
+  color: var(--color-text-primary);
+  margin-bottom: 8px;
+}
+
+.download-platforms__card h3 {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.005em;
+}
+
+.download-platforms__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+  padding: 8px 14px;
+  background: var(--color-text-primary);
+  color: var(--color-bg-primary);
+  border-radius: 8px;
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.download-platforms__hint {
+  text-align: center;
+  margin-top: 24px;
+  font-size: 12.5px;
+  color: var(--color-text-tertiary);
+}
+
+.download-platforms__hint a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.download-final {
+  text-align: center;
+  padding-bottom: 96px;
+}
+
+.download-final__actions {
+  display: flex;
+  justify-content: center;
+}
+
+@media (max-width: 880px) {
+  .download-tiers { grid-template-columns: 1fr; }
+  .download-platforms__grid { grid-template-columns: 1fr; }
+}

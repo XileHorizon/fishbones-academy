@@ -1,0 +1,197 @@
+{
+  "version": 1,
+  "courses": [
+    {
+      "id": "javascript-crash-course",
+      "title": "JavaScript Crash Course",
+      "language": "javascript",
+      "file": "javascript-crash-course.json",
+      "sizeBytes": 258559,
+      "packType": "course"
+    },
+    {
+      "id": "python-crash-course",
+      "title": "Python Crash Course",
+      "language": "python",
+      "file": "python-crash-course.json",
+      "sizeBytes": 817443,
+      "packType": "course"
+    },
+    {
+      "id": "javascript-the-definitive-guide",
+      "title": "JavaScript: The Definitive Guide",
+      "language": "javascript",
+      "file": "javascript-the-definitive-guide.json",
+      "sizeBytes": 319362,
+      "packType": "course"
+    },
+    {
+      "id": "svelte-5-complete",
+      "title": "Svelte 5 Complete",
+      "language": "svelte",
+      "file": "svelte-5-complete.json",
+      "sizeBytes": 72665,
+      "packType": "course"
+    },
+    {
+      "id": "solidjs-fundamentals",
+      "title": "SolidJS Fundamentals",
+      "language": "solid",
+      "file": "solidjs-fundamentals.json",
+      "sizeBytes": 15633,
+      "packType": "course"
+    },
+    {
+      "id": "fluent-react",
+      "title": "Fluent React",
+      "language": "javascript",
+      "file": "fluent-react.json",
+      "sizeBytes": 925017,
+      "packType": "course"
+    },
+    {
+      "id": "htmx-fundamentals",
+      "title": "HTMX Fundamentals",
+      "language": "htmx",
+      "file": "htmx-fundamentals.json",
+      "sizeBytes": 13838,
+      "packType": "course"
+    },
+    {
+      "id": "astro-fundamentals",
+      "title": "Astro Fundamentals",
+      "language": "astro",
+      "file": "astro-fundamentals.json",
+      "sizeBytes": 15625,
+      "packType": "course"
+    },
+    {
+      "id": "bun-fundamentals",
+      "title": "Bun Fundamentals",
+      "language": "bun",
+      "file": "bun-fundamentals.json",
+      "sizeBytes": 13385,
+      "packType": "course"
+    },
+    {
+      "id": "bun-complete",
+      "title": "Bun: The Complete Runtime",
+      "language": "bun",
+      "file": "bun-complete.json",
+      "sizeBytes": 161507,
+      "packType": "course"
+    },
+    {
+      "id": "learning-react-native",
+      "title": "Learning React Native",
+      "language": "javascript",
+      "file": "learning-react-native.json",
+      "sizeBytes": 612521,
+      "packType": "course"
+    },
+    {
+      "id": "react-native",
+      "title": "React Native",
+      "language": "reactnative",
+      "file": "react-native.json",
+      "sizeBytes": 243158,
+      "packType": "course"
+    },
+    {
+      "id": "interactive-web-development-with-three-js-and-a-frame",
+      "title": "Interactive Web Development With Three.js and A-Frame",
+      "language": "javascript",
+      "file": "interactive-web-development-with-three-js-and-a-frame.json",
+      "sizeBytes": 954169,
+      "packType": "course"
+    },
+    {
+      "id": "solidity-complete",
+      "title": "Solidity: Smart Contracts from First Principles",
+      "language": "solidity",
+      "file": "solidity-complete.json",
+      "sizeBytes": 193920,
+      "packType": "course"
+    },
+    {
+      "id": "solana-programs",
+      "title": "Solana Programs: Rust on the SVM",
+      "language": "rust",
+      "file": "solana-programs.json",
+      "sizeBytes": 357265,
+      "packType": "course"
+    },
+    {
+      "id": "viem-ethers",
+      "title": "viem and ethers.js: Talking to Ethereum from TypeScript",
+      "language": "typescript",
+      "file": "viem-ethers.json",
+      "sizeBytes": 186753,
+      "packType": "course"
+    },
+    {
+      "id": "learning-go",
+      "title": "Learning Go",
+      "language": "go",
+      "file": "learning-go.json",
+      "sizeBytes": 1474014,
+      "packType": "course"
+    },
+    {
+      "id": "challenges-javascript-handwritten",
+      "title": "Javascript Challenges",
+      "language": "javascript",
+      "file": "challenges-javascript-handwritten.json",
+      "sizeBytes": 239188,
+      "packType": "challenges"
+    },
+    {
+      "id": "challenges-typescript-mo9c9k2o",
+      "title": "Typescript — Challenge Pack",
+      "language": "typescript",
+      "file": "challenges-typescript-mo9c9k2o.json",
+      "sizeBytes": 429110,
+      "packType": "challenges"
+    },
+    {
+      "id": "challenges-python-handwritten",
+      "title": "Python Challenges",
+      "language": "python",
+      "file": "challenges-python-handwritten.json",
+      "sizeBytes": 212780,
+      "packType": "challenges"
+    },
+    {
+      "id": "challenges-go-handwritten",
+      "title": "Go Challenges",
+      "language": "go",
+      "file": "challenges-go-handwritten.json",
+      "sizeBytes": 394425,
+      "packType": "challenges"
+    },
+    {
+      "id": "challenges-rust-handwritten",
+      "title": "Rust Challenges",
+      "language": "rust",
+      "file": "challenges-rust-handwritten.json",
+      "sizeBytes": 225529,
+      "packType": "challenges"
+    },
+    {
+      "id": "challenges-reactnative-handwritten",
+      "title": "React Native Challenges",
+      "language": "reactnative",
+      "file": "challenges-reactnative-handwritten.json",
+      "sizeBytes": 23388,
+      "packType": "challenges"
+    },
+    {
+      "id": "challenges-reactnative-visual",
+      "title": "React Native UI Challenges",
+      "language": "reactnative",
+      "file": "challenges-reactnative-visual.json",
+      "sizeBytes": 17035,
+      "packType": "challenges"
+    }
+  ]
+}

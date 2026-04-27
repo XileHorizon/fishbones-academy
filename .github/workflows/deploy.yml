@@ -1,0 +1,173 @@
+name: Deploy fishbones.academy
+
+# When this fires:
+#   - push to main          — normal flow, embeds Fishbones by default
+#   - schedule (nightly)    — picks up upstream Fishbones changes within
+#                             24h even if this repo hasn't been touched
+#   - repository_dispatch   — kata's notify-marketing workflow can fire
+#                             this when its main pushes, so a Fishbones
+#                             commit redeploys the site within minutes
+#                             (event-type: fishbones-updated)
+#   - workflow_dispatch     — manual run-this-now button in the Actions
+#                             UI; the embed_fishbones input lets you
+#                             skip the kata build if it's broken
+on:
+  push:
+    branches: [main]
+  schedule:
+    # 04:23 UTC nightly — slightly off the hour to dodge GitHub's
+    # ":00" cron stampede that delays scheduled jobs by ~10-15 min.
+    - cron: "23 4 * * *"
+  repository_dispatch:
+    types: [fishbones-updated]
+  workflow_dispatch:
+    inputs:
+      embed_fishbones:
+        description: |
+          Build + embed the Fishbones web variant under /learn/.
+          Default true: the deploy checks out Fishbones, runs the web
+          build, and stages dist-web/ under public/learn/. Flip to
+          false to fall back to the coming-soon stub the build script
+          generates.
+        required: false
+        default: "true"
+        type: choice
+        options: ["true", "false"]
+
+permissions:
+  contents: read
+
+# Single in-flight pipeline per branch. New pushes cancel the prior
+# run rather than queueing — wastes less compute and avoids one stale
+# build clobbering a newer one.
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout site
+        uses: actions/checkout@v4
+
+      # Pull the upstream Fishbones (kata) repo for the web build.
+      # Public repo + GITHUB_TOKEN works without extra secrets. Skipped
+      # only when the manual dispatch explicitly opts out.
+      - name: Checkout Fishbones (kata)
+        if: ${{ github.event.inputs.embed_fishbones != 'false' }}
+        uses: actions/checkout@v4
+        with:
+          repository: InfamousVague/Fishbones
+          path: kata
+          ref: main
+
+      # @mattmattmattmatt/base — Fishbones depends on it via
+      # `file:../../Libs/base`. We check it out alongside and symlink
+      # it into the layout the file: dep resolves to.
+      - name: "Checkout @mattmattmattmatt/base"
+        if: ${{ github.event.inputs.embed_fishbones != 'false' }}
+        uses: actions/checkout@v4
+        with:
+          repository: InfamousVague/base
+          path: _base
+          ref: main
+
+      - name: "Symlink _base/ into Libs/base/ for the file: dep"
+        if: ${{ github.event.inputs.embed_fishbones != 'false' }}
+        run: |
+          # Both kata AND this site declare `file:../../Libs/base` in
+          # their package.json (resolved relative to package.json
+          # itself). With the workspace at
+          # /home/runner/work/fishbones-academy/fishbones-academy/
+          # the file: dep resolves to
+          # /home/runner/work/fishbones-academy/Libs/base — i.e. ONE
+          # level ABOVE the workspace.
+          target_dir="$(dirname "$GITHUB_WORKSPACE")/Libs"
+          mkdir -p "$target_dir"
+          ln -sfn "$GITHUB_WORKSPACE/_base" "$target_dir/base"
+          test -d "$target_dir/base/primitives" \
+            || (echo "Libs/base/primitives missing at $target_dir — symlink wiring is wrong"; exit 1)
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install site deps
+        run: npm ci
+
+      - name: Cache kata npm
+        if: ${{ github.event.inputs.embed_fishbones != 'false' }}
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: kata-npm-${{ hashFiles('kata/package-lock.json') }}
+          restore-keys: |
+            kata-npm-
+
+      - name: Cache kata build artifacts
+        if: ${{ github.event.inputs.embed_fishbones != 'false' }}
+        uses: actions/cache@v4
+        with:
+          # Vite-bundled vendor assets + the fetched node sidecar
+          # don't change unless kata's lockfile or vendor script
+          # does. Caching them shaves another ~30s off cold builds.
+          path: |
+            kata/src-tauri/resources/vendor
+            kata/src-tauri/.cache
+            kata/public/vendor
+            kata/public/pyodide
+            kata/public/starter-courses
+          key: kata-build-${{ hashFiles('kata/package-lock.json', 'kata/scripts/vendor-cdn-deps.mjs', 'kata/scripts/extract-starter-courses.mjs') }}
+          restore-keys: |
+            kata-build-
+
+      - name: Build + embed Fishbones web variant
+        if: ${{ github.event.inputs.embed_fishbones != 'false' }}
+        env:
+          FISHBONES_SRC: ${{ github.workspace }}/kata
+        run: |
+          cd kata
+          npm ci
+          cd ..
+          npm run sync:learn
+          npm run sync:courses
+
+      - name: Build site
+        run: npm run build
+
+      # ─── Production sync to the VPS (Caddy host) ────────
+      #
+      # The site lives at /var/www/fishbones-academy on the same VPS
+      # as mattssoftware.com. Caddy's per-site block (see deploy/Caddyfile
+      # in this repo) handles TLS via Let's Encrypt + the /learn/
+      # rewrite for the embed.
+      #
+      # One-time secret setup required:
+      #   gh secret set VPS_SSH_PASSWORD \
+      #     --repo InfamousVague/fishbones-academy --body '<password>'
+      #
+      # When the secret is unset (forks, dry runs) the rsync
+      # short-circuits with a warning so the workflow stays green.
+      - name: Sync to VPS
+        env:
+          VPS_HOST: 149.28.120.197
+          VPS_USER: root
+          VPS_PORT: "22"
+          VPS_TARGET_DIR: /var/www/fishbones-academy
+          SSHPASS: ${{ secrets.VPS_SSH_PASSWORD }}
+        run: |
+          if [ -z "${SSHPASS}" ]; then
+            echo "::warning::VPS_SSH_PASSWORD secret not set — skipping VPS sync."
+            exit 0
+          fi
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq sshpass rsync
+          sshpass -e rsync -a --delete \
+            -e "ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 -p ${VPS_PORT}" \
+            dist/ \
+            "${VPS_USER}@${VPS_HOST}:${VPS_TARGET_DIR}/"
+          echo "Synced dist/ to ${VPS_USER}@${VPS_HOST}:${VPS_TARGET_DIR}/"

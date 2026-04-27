@@ -1,0 +1,165 @@
+/* Reusable markdown body styles. Mirrors kata's LessonReader.css for
+   the prose treatment but trimmed to what we actually render here:
+   headings, paragraphs, code, lists, quotes, tables, links. The site
+   doesn't ship the in-app glossary or the Ask-Fishbones badge.
+   Depended on by the course-detail preview AND the docs route. */
+
+.md-body {
+  color: var(--color-text-primary);
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.md-body > :first-child { margin-top: 0; }
+.md-body > :last-child  { margin-bottom: 0; }
+
+.md-body h1 {
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin: 26px 0 12px;
+  color: var(--color-text-primary);
+}
+
+.md-body h2 {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  margin: 28px 0 10px;
+  color: var(--color-text-primary);
+}
+
+.md-body h3 {
+  font-size: 17px;
+  font-weight: 700;
+  margin: 22px 0 8px;
+  color: var(--color-text-primary);
+}
+
+.md-body h4 {
+  font-size: 15px;
+  font-weight: 700;
+  margin: 18px 0 6px;
+  color: var(--color-text-primary);
+}
+
+.md-body p {
+  margin: 0 0 14px;
+  color: var(--color-text-secondary);
+}
+
+.md-body strong {
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+
+.md-body em { color: var(--color-text-primary); font-style: italic; }
+
+.md-body a {
+  color: var(--color-text-primary);
+  text-decoration: underline;
+  text-decoration-color: var(--color-text-tertiary);
+  text-underline-offset: 3px;
+  transition: text-decoration-color 0.15s ease;
+}
+
+.md-body a:hover {
+  text-decoration-color: var(--color-text-primary);
+}
+
+.md-body ul,
+.md-body ol {
+  margin: 12px 0 14px;
+  padding-left: 22px;
+  color: var(--color-text-secondary);
+}
+
+.md-body li {
+  margin: 4px 0;
+}
+
+.md-body li::marker {
+  color: var(--color-text-tertiary);
+}
+
+.md-body blockquote {
+  margin: 18px 0;
+  padding: 8px 14px;
+  border-left: 3px solid var(--color-border-strong);
+  color: var(--color-text-tertiary);
+  font-style: italic;
+}
+
+.md-body hr {
+  margin: 24px 0;
+  border: 0;
+  height: 1px;
+  background: var(--color-border-default);
+}
+
+/* Inline code — same chip treatment as the desktop reader. */
+.md-body :not(pre) > code {
+  padding: 1px 6px;
+  background: var(--color-bg-tertiary);
+  border: 1px solid var(--color-border-default);
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+  color: var(--color-text-primary);
+}
+
+/* Code blocks — Shiki rendered. The renderer attaches `.md-code`
+   to the <pre>; the inner <code> retains Shiki's tokens. */
+.md-body pre.md-code,
+.md-body pre.md-code-pending,
+.md-body pre.md-code--plain {
+  margin: 16px 0;
+  padding: 14px 16px;
+  background: var(--color-bg-primary) !important;
+  border: 1px solid var(--color-border-default);
+  border-radius: 10px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.6;
+  overflow-x: auto;
+  /* Shiki sets its own background — neutralise so we control it. */
+}
+
+.md-body pre.md-code code,
+.md-body pre.md-code-pending code,
+.md-body pre.md-code--plain code {
+  background: transparent !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  font-size: inherit;
+  font-family: inherit;
+  color: inherit;
+}
+
+/* Tables — GFM-rendered by markdown-it. Tight, monochrome. */
+.md-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  font-size: 13.5px;
+}
+.md-body thead { background: var(--color-bg-tertiary); }
+.md-body th,
+.md-body td {
+  border: 1px solid var(--color-border-default);
+  padding: 8px 12px;
+  text-align: left;
+  vertical-align: top;
+}
+.md-body th { color: var(--color-text-primary); font-weight: 600; }
+.md-body td { color: var(--color-text-secondary); }
+.md-body tbody tr:nth-child(even) { background: rgba(255, 255, 255, 0.02); }
+
+/* Images — for blog-ish doc pages, future. */
+.md-body img {
+  max-width: 100%;
+  border-radius: 8px;
+  border: 1px solid var(--color-border-default);
+  margin: 12px 0;
+}

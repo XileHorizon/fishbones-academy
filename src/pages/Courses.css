@@ -1,0 +1,194 @@
+.courses-page__head {
+  padding-top: 80px;
+  padding-bottom: 24px;
+}
+
+.courses-page__body {
+  padding-top: 8px;
+}
+
+/* ─── Filter shell ───────────────────────────────────── */
+
+.courses-filters {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 18px 22px;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-default);
+  border-radius: 14px;
+  margin-bottom: 24px;
+  position: relative;
+}
+
+.courses-filters__search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border-default);
+  border-radius: 10px;
+  color: var(--color-text-tertiary);
+}
+
+.courses-filters__search:focus-within {
+  border-color: var(--color-border-strong);
+}
+
+.courses-filters__search input {
+  flex: 1;
+  background: transparent;
+  border: 0;
+  outline: 0;
+  color: var(--color-text-primary);
+  font-size: 14px;
+}
+.courses-filters__search input::placeholder { color: var(--color-text-tertiary); }
+
+.courses-filters__search-clear {
+  width: 22px;
+  height: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: var(--color-bg-tertiary);
+  color: var(--color-text-secondary);
+}
+
+.courses-filters__row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.courses-filters__label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+  min-width: 80px;
+}
+
+.courses-filters__pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.courses-filters__reset {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+}
+
+/* ─── Result count + grid ────────────────────────────── */
+
+.courses-page__count {
+  margin: 0 4px 18px;
+  font-size: 12.5px;
+  color: var(--color-text-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+.courses-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 14px;
+}
+
+.courses-grid__card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+  text-decoration: none;
+  color: var(--color-text-primary);
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+
+.courses-grid__card:hover {
+  border-color: var(--color-border-strong);
+  transform: translateY(-2px);
+  color: var(--color-text-primary);
+}
+
+.courses-grid__top {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.courses-grid__diff--starter { color: #86efac; border-color: rgba(134, 239, 172, 0.35); }
+.courses-grid__diff--intermediate { color: #fcd34d; border-color: rgba(252, 211, 77, 0.35); }
+.courses-grid__diff--advanced { color: #f9a8d4; border-color: rgba(249, 168, 212, 0.35); }
+
+.courses-grid__title {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+  color: var(--color-text-primary);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.courses-grid__desc {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.courses-grid__meta {
+  margin-top: auto;
+  padding-top: 8px;
+  border-top: 1px solid var(--color-border-default);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--color-text-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+.courses-grid__cta {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+
+.courses-empty {
+  text-align: center;
+  padding: 60px 24px;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-default);
+  border-radius: 14px;
+}
+
+.courses-empty h3 {
+  font-size: 18px;
+  margin-bottom: 6px;
+  color: var(--color-text-primary);
+}
+
+.courses-empty p { color: var(--color-text-secondary); }
+
+@media (max-width: 720px) {
+  .courses-filters { padding: 14px; }
+  .courses-filters__reset { position: static; }
+  .courses-filters__label { min-width: 0; width: 100%; }
+}

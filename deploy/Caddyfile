@@ -1,0 +1,59 @@
+# Caddy block for fishbones.academy. Drop into /etc/caddy/Caddyfile on
+# the production VPS (or include it from there). Caddy auto-issues a
+# Let's Encrypt cert as soon as DNS points at this box.
+#
+# Mirrors the layout of the mattssoftware.com block — same VPS, same
+# Caddy install, just a separate site block per domain.
+
+fishbones.academy, www.fishbones.academy {
+    root * /var/www/fishbones-academy
+    encode zstd gzip
+
+    # ── Embedded learn app ──────────────────────────────────────────
+    #
+    # The kata `dist-web/` tree lives under /learn/. Real assets are
+    # served directly; deep paths (e.g. /learn/courses/foo) fall
+    # through to the embed's own index.html so kata's React Router
+    # handles the route without dropping into the marketing SPA.
+    @learn path /learn /learn/*
+    handle @learn {
+        try_files {path} /learn/index.html
+        file_server
+    }
+
+    # ── Starter courses JSON ────────────────────────────────────────
+    #
+    # Course detail pages on the marketing site lazy-fetch from
+    # /starter-courses/<id>.json. They're plain JSON files; let
+    # them be cacheable for a day.
+    @courses path /starter-courses/*
+    handle @courses {
+        header Cache-Control "public, max-age=86400, immutable"
+        file_server
+    }
+
+    # ── Marketing SPA ───────────────────────────────────────────────
+    #
+    # Everything else falls back to /index.html so React Router can
+    # handle /courses, /languages, /docs, etc.
+    handle {
+        try_files {path} /index.html
+        file_server
+    }
+
+    # Optional: emit standard access logs to journalctl. Useful for
+    # debugging; comment out in environments that don't want logs.
+    log {
+        output stdout
+        format console
+    }
+}
+
+# Pre-cutover testing block. Keep until DNS points at this box and
+# the cert is issued, then drop. Resolves to the VPS's IP via nip.io.
+# fishbones-test.149.28.120.197.nip.io:80 {
+#     root * /var/www/fishbones-academy
+#     encode zstd gzip
+#     try_files {path} /index.html
+#     file_server
+# }

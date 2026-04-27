@@ -1,0 +1,206 @@
+/* Fixed top navigation. Glass-y when scrolled, fully transparent (well —
+   nearly) at the top so the hero feels uninterrupted. */
+
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 80;
+  height: var(--site-nav-height);
+  display: flex;
+  align-items: center;
+  background: transparent;
+  transition: background 0.2s ease, border-color 0.2s ease, backdrop-filter 0.2s ease;
+  border-bottom: 1px solid transparent;
+}
+
+.nav--scrolled {
+  background: rgba(9, 9, 11, 0.78);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom-color: var(--color-border-default);
+}
+
+.nav__inner {
+  width: 100%;
+  max-width: var(--site-max-width);
+  margin: 0 auto;
+  padding: 0 var(--site-section-pad-x);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.nav__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--color-text-primary);
+  font-weight: 700;
+  text-decoration: none;
+  letter-spacing: -0.01em;
+}
+
+.nav__brand-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-default);
+  padding: 3px;
+  /* Logo PNG is full-color art on a transparent background; keep it
+     monochrome on the chrome by relying on the dark-on-dark contrast. */
+}
+
+.nav__brand-mark {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 1px;
+  font-size: 16px;
+}
+
+.nav__brand-name { color: var(--color-text-primary); }
+.nav__brand-tld { color: var(--color-text-tertiary); font-weight: 500; }
+
+.nav__links {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.nav__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  color: var(--color-text-secondary);
+  font-size: 13.5px;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  text-decoration: none;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.nav__link:hover {
+  color: var(--color-text-primary);
+  background: var(--color-bg-secondary);
+}
+
+.nav__link--active {
+  color: var(--color-text-primary);
+  background: var(--color-bg-secondary);
+}
+
+.nav__link--icon { padding: 8px 10px; }
+
+.nav__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 6px;
+  padding: 8px 14px;
+  background: var(--color-text-primary);
+  color: var(--color-bg-primary);
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  text-decoration: none;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.nav__cta:hover {
+  opacity: 0.92;
+  transform: translateY(-1px);
+  color: var(--color-bg-primary);
+}
+
+.nav__menu-btn {
+  display: none;
+  width: 36px;
+  height: 36px;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-default);
+  border-radius: 8px;
+  color: var(--color-text-primary);
+}
+
+.nav__drawer {
+  position: absolute;
+  top: var(--site-nav-height);
+  left: 0;
+  right: 0;
+  background: rgba(9, 9, 11, 0.96);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--color-border-default);
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.nav__drawer-link {
+  padding: 12px 14px;
+  border-radius: 8px;
+  color: var(--color-text-secondary);
+  font-size: 15px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.nav__drawer-link:hover,
+.nav__drawer-link--active {
+  background: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+}
+
+.nav__drawer-cta {
+  margin-top: 4px;
+  padding: 12px 14px;
+  background: var(--color-text-primary);
+  color: var(--color-bg-primary);
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.nav__drawer-cta:hover { color: var(--color-bg-primary); }
+
+/* Push first page section past the fixed nav on every route. */
+.app-main {
+  padding-top: var(--site-nav-height);
+  min-height: 100vh;
+}
+
+/* Cheap suspense fallback. */
+.page-boot {
+  min-height: 60vh;
+  display: grid;
+  place-items: center;
+}
+
+.page-boot__pulse {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-text-primary);
+  opacity: 0.4;
+  animation: page-boot-pulse 1.1s ease-in-out infinite;
+}
+
+@keyframes page-boot-pulse {
+  0%, 100% { transform: scale(0.8); opacity: 0.3; }
+  50%      { transform: scale(1.4); opacity: 0.85; }
+}
+
+@media (max-width: 880px) {
+  .nav__links { display: none; }
+  .nav__menu-btn { display: inline-flex; }
+}

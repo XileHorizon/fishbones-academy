@@ -1,0 +1,237 @@
+/* The hero's animated "code becoming a lesson" element. We use real
+   layout (no canvas / SVG) so it crisp-renders at every DPR + degrades
+   to a still frame if JS doesn't load. */
+
+.hero-term {
+  width: 100%;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-default);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.04) inset,
+    0 30px 80px -30px rgba(0, 0, 0, 0.6);
+}
+
+.hero-term__chrome {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--color-border-default);
+  background: var(--color-bg-secondary);
+}
+
+.hero-term__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--color-bg-tertiary);
+  border: 1px solid var(--color-border-default);
+}
+
+.hero-term__dot:nth-child(1) { background: #2a2a30; }
+.hero-term__dot:nth-child(2) { background: #2a2a30; }
+.hero-term__dot:nth-child(3) { background: #2a2a30; }
+
+.hero-term__tabs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 16px;
+  flex: 1;
+  overflow: hidden;
+}
+
+.hero-term__tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  color: var(--color-text-tertiary);
+  font-size: 11px;
+  font-family: var(--font-mono);
+  transition: color 0.3s ease, background 0.3s ease, border-color 0.3s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.hero-term__tab--active {
+  color: var(--color-text-primary);
+  background: var(--color-bg-tertiary);
+  border-color: var(--color-border-default);
+}
+
+.hero-term__body {
+  position: relative;
+  min-height: 320px;
+  padding: 18px;
+  background: var(--color-bg-primary);
+  overflow: hidden;
+}
+
+.hero-term__stage {
+  position: absolute;
+  inset: 18px;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.45s ease, transform 0.45s ease;
+  pointer-events: none;
+}
+
+.hero-term__stage--active {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.hero-term__pre {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  line-height: 1.7;
+  color: var(--color-text-primary);
+  white-space: pre-wrap;
+}
+
+.hero-term__line {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+}
+
+.hero-term__lineno {
+  flex-shrink: 0;
+  width: 18px;
+  text-align: right;
+  color: var(--color-text-tertiary);
+  font-variant-numeric: tabular-nums;
+  font-size: 11.5px;
+  user-select: none;
+}
+
+.hero-term__line-body { flex: 1; min-width: 0; }
+
+.tk--kw { color: #fafafa; font-weight: 600; }
+.tk--fn { color: #c8aa7e; }
+.tk--str { color: #c8aa7e; }
+.tk--num { color: #d4bfff; }
+.tk--comment { color: #50505a; }
+
+/* ── Stage 1: transform pipe ─────────────────────────────── */
+
+.hero-term__transform {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 4px 0;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+}
+
+.hero-term__pipe {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-default);
+  border-radius: 8px;
+  color: var(--color-text-secondary);
+  opacity: 0;
+  transform: translateX(-8px);
+  animation: hero-pipe-in 0.4s ease-out forwards;
+}
+
+@keyframes hero-pipe-in {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.hero-term__pipe-bead {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-text-primary);
+  flex-shrink: 0;
+}
+
+.hero-term__pipe-label { flex: 1; font-family: inherit; }
+
+.hero-term__pipe-status {
+  color: var(--color-text-secondary);
+  display: inline-flex;
+  align-items: center;
+}
+
+.hero-term__transform-result {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  align-self: flex-start;
+  margin-top: 6px;
+  padding: 6px 12px;
+  background: var(--color-text-primary);
+  color: var(--color-bg-primary);
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 600;
+  font-family: var(--font-sans);
+}
+
+/* ── Stage 2: rendered lesson + console ──────────────────── */
+
+.hero-term__lesson {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 12px;
+  height: 100%;
+}
+
+.hero-term__pre--lesson {
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-default);
+  border-radius: 8px;
+  padding: 14px 14px 14px 4px;
+}
+
+.hero-term__console {
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-default);
+  border-radius: 8px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--color-text-secondary);
+}
+
+.hero-term__test {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hero-term__test--pass { color: #86efac; }
+
+.hero-term__test-summary {
+  margin-top: auto;
+  padding-top: 8px;
+  border-top: 1px solid var(--color-border-default);
+  color: var(--color-text-tertiary);
+  font-size: 11px;
+}
+
+@media (max-width: 720px) {
+  .hero-term__body { min-height: 380px; padding: 14px; }
+  .hero-term__lesson { grid-template-columns: 1fr; }
+  .hero-term__tabs { display: none; }
+  .hero-term__pre { font-size: 11.5px; }
+}
