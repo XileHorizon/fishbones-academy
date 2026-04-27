@@ -1,9 +1,16 @@
 /* fishbones.academy — design tokens.
    We pull the base kit's tokens to inherit the full color/spacing/type
-   system, then layer the kata app's `default-dark` palette on top so the
-   site's monochrome surface matches the desktop app pixel-for-pixel. */
+   system, then layer the Fishbones app's `default-dark` palette on top
+   so the site's monochrome surface matches the desktop app
+   pixel-for-pixel.
 
-@import "@mattmattmattmatt/base/site/styles/tokens.css";
+   The relative path (rather than the bare `@mattmattmattmatt/base/…`
+   specifier) is deliberate: postcss-import in CI doesn't resolve
+   bare-specifier paths through `package.json#exports`, so the workflow
+   build fails even when local Vite happily resolves it via npm's
+   symlink. Keeping a literal node_modules path avoids that. */
+
+@import "../../node_modules/@mattmattmattmatt/base/site/styles/tokens.css";
 
 /* Kata default-dark palette. These are the same tokens the desktop
    app's themes.css would set on `[data-theme-name="default-dark"]`,
