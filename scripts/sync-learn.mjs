@@ -1,15 +1,15 @@
 #!/usr/bin/env node
-/// Build the Fishbones web variant in the upstream kata repo and stage
-/// the resulting `dist-web/` under `public/learn/`. Vite's `public/`
+/// Build the Fishbones web variant from the upstream Fishbones repo and
+/// stage the resulting `dist-web/` under `public/learn/`. Vite's `public/`
 /// is copied verbatim into `dist/` at build, so the learn app ends up
 /// at fishbones.academy/learn/ in production.
 ///
-/// Resolution order for the kata checkout:
+/// Resolution order for the Fishbones checkout:
 ///   1. $FISHBONES_SRC env var
-///   2. ../../Apps/kata     (typical local layout: /Development/{Apps,Web})
-///   3. ../kata, ../../kata (sibling fallbacks)
+///   2. ../../Apps/Fishbones (typical local layout: /Development/{Apps,Web})
+///   3. ../Fishbones, ../../Fishbones (sibling fallbacks)
 ///
-/// If the kata source isn't found, we leave whatever's already in
+/// If the Fishbones source isn't found, we leave whatever's already in
 /// `public/learn/` alone (or write a stub coming-soon page if the
 /// directory is empty), and the marketing site still builds fine —
 /// the /learn/ route just renders the stub instead of the real app.
@@ -17,9 +17,9 @@
 /// Usage:
 ///   node scripts/sync-learn.mjs                # build + stage
 ///   node scripts/sync-learn.mjs --skip         # noop, fast exit
-///   node scripts/sync-learn.mjs --use-existing # copy kata's existing
+///   node scripts/sync-learn.mjs --use-existing # copy existing
 ///                                                dist-web/ without rebuilding
-///   FISHBONES_SRC=/path/to/kata node scripts/sync-learn.mjs
+///   FISHBONES_SRC=/path/to/Fishbones node scripts/sync-learn.mjs
 
 import { execSync } from "node:child_process";
 import { cp, mkdir, rm, writeFile } from "node:fs/promises";
@@ -39,15 +39,15 @@ if (args.has("--skip")) {
   process.exit(0);
 }
 
-const kataRoot = resolveKataRoot();
+const fishbonesRoot = resolveFishbonesRoot();
 
-if (!kataRoot) {
-  console.warn("[sync-learn] kata checkout not found at any of:");
+if (!fishbonesRoot) {
+  console.warn("[sync-learn] Fishbones checkout not found at any of:");
   for (const p of [
     "$FISHBONES_SRC",
-    "../../Apps/kata",
-    "../kata",
-    "../../kata",
+    "../../Apps/Fishbones",
+    "../Fishbones",
+    "../../Fishbones",
   ]) {
     console.warn(`  - ${p}`);
   }
@@ -58,59 +58,59 @@ if (!kataRoot) {
   process.exit(0);
 }
 
-console.log(`[sync-learn] using kata source at ${kataRoot}`);
+console.log(`[sync-learn] using Fishbones source at ${fishbonesRoot}`);
 
 if (!args.has("--use-existing")) {
-  // FISHBONES_BASE pins kata's Vite `base` to /learn/ (the path
+  // FISHBONES_BASE pins Fishbones' Vite `base` to /learn/ (the path
   // we mount the embed at on fishbones.academy). Without this,
-  // kata defaults to its legacy mattssoftware path
+  // Fishbones defaults to its legacy mattssoftware path
   // /fishbones/learn/, which produces asset URLs that 404 here
   // because nothing's served at that path on this host.
   console.log(
-    "[sync-learn] running `npm run build:web` in kata with base=/learn/…",
+    "[sync-learn] running `npm run build:web` in Fishbones with base=/learn/…",
   );
   try {
     execSync("npm run build:web", {
-      cwd: kataRoot,
+      cwd: fishbonesRoot,
       stdio: "inherit",
       env: { ...process.env, FISHBONES_BASE: "/learn/" },
     });
   } catch (err) {
     console.error(
-      "[sync-learn] kata build failed:",
+      "[sync-learn] Fishbones build failed:",
       err instanceof Error ? err.message : err,
     );
     process.exit(1);
   }
 }
 
-const kataDist = join(kataRoot, "dist-web");
-if (!existsSync(kataDist)) {
+const fishbonesDist = join(fishbonesRoot, "dist-web");
+if (!existsSync(fishbonesDist)) {
   console.error(
-    `[sync-learn] expected kata dist-web/ at ${kataDist} but it's missing.`,
+    `[sync-learn] expected Fishbones dist-web/ at ${fishbonesDist} but it's missing.`,
   );
   process.exit(1);
 }
 
-console.log(`[sync-learn] copying ${kataDist} → ${LEARN_DEST}`);
+console.log(`[sync-learn] copying ${fishbonesDist} → ${LEARN_DEST}`);
 await rm(LEARN_DEST, { recursive: true, force: true });
 await mkdir(LEARN_DEST, { recursive: true });
-await cp(kataDist, LEARN_DEST, { recursive: true });
+await cp(fishbonesDist, LEARN_DEST, { recursive: true });
 console.log("[sync-learn] done.");
 
-function resolveKataRoot() {
+function resolveFishbonesRoot() {
   const env = process.env.FISHBONES_SRC;
   if (env) {
     if (existsSync(join(env, "package.json"))) return env;
     console.error(
-      `[sync-learn] FISHBONES_SRC=${env} doesn't look like a kata checkout (no package.json).`,
+      `[sync-learn] FISHBONES_SRC=${env} doesn't look like a Fishbones checkout (no package.json).`,
     );
     process.exit(1);
   }
   const candidates = [
-    resolve(SITE_ROOT, "..", "..", "Apps", "kata"),
-    resolve(SITE_ROOT, "..", "kata"),
-    resolve(SITE_ROOT, "..", "..", "kata"),
+    resolve(SITE_ROOT, "..", "..", "Apps", "Fishbones"),
+    resolve(SITE_ROOT, "..", "Fishbones"),
+    resolve(SITE_ROOT, "..", "..", "Fishbones"),
   ];
   return candidates.find((p) => existsSync(join(p, "package.json")));
 }
@@ -151,7 +151,7 @@ async function ensureStubIfEmpty() {
   <body>
     <main>
       <h1>The browser app is being staged.</h1>
-      <p>Run <code>npm run sync:learn</code> against a kata checkout to embed the live build here. <a href="/">Back to fishbones.academy →</a></p>
+      <p>Run <code>npm run sync:learn</code> against a Fishbones checkout to embed the live build here. <a href="/">Back to fishbones.academy →</a></p>
     </main>
   </body>
 </html>

@@ -42,14 +42,11 @@ export function Nav() {
       <div className="nav__inner">
         <Link to="/" className="nav__brand" aria-label="Fishbones Academy home">
           <img
-            src="/fishbones.png"
-            alt=""
+            src="/fishbones_skinny_white.png"
+            alt="Fishbones"
             className="nav__brand-icon"
-            width={28}
-            height={28}
           />
           <span className="nav__brand-mark">
-            <span className="nav__brand-name">Fishbones</span>
             <span className="nav__brand-tld">.academy</span>
           </span>
         </Link>

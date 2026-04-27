@@ -44,25 +44,23 @@
 }
 
 .nav__brand-icon {
-  width: 28px;
-  height: 28px;
-  border-radius: 7px;
-  background: var(--color-bg-secondary);
-  border: 1px solid var(--color-border-default);
-  padding: 3px;
-  /* Logo PNG is full-color art on a transparent background; keep it
-     monochrome on the chrome by relying on the dark-on-dark contrast. */
+  /* Skinny fishbones wordmark — kept on its own row so the natural
+     aspect ratio (~2.7:1) reads cleanly. Height pins the size and
+     width auto-flows. */
+  height: 22px;
+  width: auto;
+  display: block;
 }
 
 .nav__brand-mark {
   display: inline-flex;
   align-items: baseline;
-  gap: 1px;
-  font-size: 16px;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
 }
 
-.nav__brand-name { color: var(--color-text-primary); }
-.nav__brand-tld { color: var(--color-text-tertiary); font-weight: 500; }
+.nav__brand-tld { color: var(--color-text-secondary); font-weight: 600; }
 
 .nav__links {
   display: flex;

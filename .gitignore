@@ -13,3 +13,4 @@ public/starter-courses/
 .vscode/
 .idea/
 *.log
+.claude/

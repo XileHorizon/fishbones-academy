@@ -23,27 +23,20 @@ export type CourseTopic =
   | "graphics";
 
 const TOPIC_OVERRIDES: Record<string, CourseTopic> = {
-  "javascript-crash-course": "languages",
-  "python-crash-course": "languages",
-  "javascript-the-definitive-guide": "languages",
-  "learning-go": "languages",
+  "the-rust-programming-language": "languages",
 
   "svelte-5-complete": "frameworks",
   "solidjs-fundamentals": "frameworks",
-  "fluent-react": "frameworks",
   "htmx-fundamentals": "frameworks",
   "astro-fundamentals": "frameworks",
-  "bun-fundamentals": "frameworks",
   "bun-complete": "frameworks",
 
-  "learning-react-native": "mobile",
   "react-native": "mobile",
-
-  "interactive-web-development-with-three-js-and-a-frame": "graphics",
 
   "solidity-complete": "web3",
   "solana-programs": "web3",
   "viem-ethers": "web3",
+  "cryptography-fundamentals": "web3",
 };
 
 export const COURSE_TOPICS: Array<{ id: CourseTopic; label: string }> = [
@@ -58,21 +51,15 @@ export const COURSE_TOPICS: Array<{ id: CourseTopic; label: string }> = [
 export type CourseDifficulty = "starter" | "intermediate" | "advanced";
 
 const DIFFICULTY_OVERRIDES: Record<string, CourseDifficulty> = {
-  "javascript-crash-course": "starter",
-  "python-crash-course": "starter",
-  "bun-fundamentals": "starter",
   "htmx-fundamentals": "starter",
   "astro-fundamentals": "starter",
   "solidjs-fundamentals": "starter",
   "svelte-5-complete": "intermediate",
-  "fluent-react": "intermediate",
   "bun-complete": "intermediate",
-  "javascript-the-definitive-guide": "intermediate",
-  "learning-go": "intermediate",
-  "learning-react-native": "intermediate",
+  "the-rust-programming-language": "intermediate",
   "react-native": "intermediate",
-  "interactive-web-development-with-three-js-and-a-frame": "intermediate",
   "viem-ethers": "intermediate",
+  "cryptography-fundamentals": "intermediate",
   "solidity-complete": "advanced",
   "solana-programs": "advanced",
   // Challenge packs scale with the user — we don't try to peg one tier.

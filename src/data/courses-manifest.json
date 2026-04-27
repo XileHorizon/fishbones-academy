@@ -2,27 +2,12 @@
   "version": 1,
   "courses": [
     {
-      "id": "javascript-crash-course",
-      "title": "JavaScript Crash Course",
-      "language": "javascript",
-      "file": "javascript-crash-course.json",
-      "sizeBytes": 258559,
-      "packType": "course"
-    },
-    {
-      "id": "python-crash-course",
-      "title": "Python Crash Course",
-      "language": "python",
-      "file": "python-crash-course.json",
-      "sizeBytes": 817443,
-      "packType": "course"
-    },
-    {
-      "id": "javascript-the-definitive-guide",
-      "title": "JavaScript: The Definitive Guide",
-      "language": "javascript",
-      "file": "javascript-the-definitive-guide.json",
-      "sizeBytes": 319362,
+      "id": "the-rust-programming-language",
+      "title": "The Rust Programming Language",
+      "language": "rust",
+      "file": "the-rust-programming-language.json",
+      "cover": "the-rust-programming-language.jpg",
+      "sizeBytes": 825395,
       "packType": "course"
     },
     {
@@ -30,6 +15,7 @@
       "title": "Svelte 5 Complete",
       "language": "svelte",
       "file": "svelte-5-complete.json",
+      "cover": "svelte-5-complete.jpg",
       "sizeBytes": 72665,
       "packType": "course"
     },
@@ -38,15 +24,8 @@
       "title": "SolidJS Fundamentals",
       "language": "solid",
       "file": "solidjs-fundamentals.json",
+      "cover": "solidjs-fundamentals.jpg",
       "sizeBytes": 15633,
-      "packType": "course"
-    },
-    {
-      "id": "fluent-react",
-      "title": "Fluent React",
-      "language": "javascript",
-      "file": "fluent-react.json",
-      "sizeBytes": 925017,
       "packType": "course"
     },
     {
@@ -54,6 +33,7 @@
       "title": "HTMX Fundamentals",
       "language": "htmx",
       "file": "htmx-fundamentals.json",
+      "cover": "htmx-fundamentals.jpg",
       "sizeBytes": 13838,
       "packType": "course"
     },
@@ -62,15 +42,8 @@
       "title": "Astro Fundamentals",
       "language": "astro",
       "file": "astro-fundamentals.json",
+      "cover": "astro-fundamentals.jpg",
       "sizeBytes": 15625,
-      "packType": "course"
-    },
-    {
-      "id": "bun-fundamentals",
-      "title": "Bun Fundamentals",
-      "language": "bun",
-      "file": "bun-fundamentals.json",
-      "sizeBytes": 13385,
       "packType": "course"
     },
     {
@@ -78,15 +51,8 @@
       "title": "Bun: The Complete Runtime",
       "language": "bun",
       "file": "bun-complete.json",
+      "cover": "bun-complete.jpg",
       "sizeBytes": 161507,
-      "packType": "course"
-    },
-    {
-      "id": "learning-react-native",
-      "title": "Learning React Native",
-      "language": "javascript",
-      "file": "learning-react-native.json",
-      "sizeBytes": 612521,
       "packType": "course"
     },
     {
@@ -94,15 +60,8 @@
       "title": "React Native",
       "language": "reactnative",
       "file": "react-native.json",
+      "cover": "react-native.jpg",
       "sizeBytes": 243158,
-      "packType": "course"
-    },
-    {
-      "id": "interactive-web-development-with-three-js-and-a-frame",
-      "title": "Interactive Web Development With Three.js and A-Frame",
-      "language": "javascript",
-      "file": "interactive-web-development-with-three-js-and-a-frame.json",
-      "sizeBytes": 954169,
       "packType": "course"
     },
     {
@@ -110,6 +69,7 @@
       "title": "Solidity: Smart Contracts from First Principles",
       "language": "solidity",
       "file": "solidity-complete.json",
+      "cover": "solidity-complete.jpg",
       "sizeBytes": 193920,
       "packType": "course"
     },
@@ -118,6 +78,7 @@
       "title": "Solana Programs: Rust on the SVM",
       "language": "rust",
       "file": "solana-programs.json",
+      "cover": "solana-programs.jpg",
       "sizeBytes": 357265,
       "packType": "course"
     },
@@ -126,15 +87,17 @@
       "title": "viem and ethers.js: Talking to Ethereum from TypeScript",
       "language": "typescript",
       "file": "viem-ethers.json",
+      "cover": "viem-ethers.jpg",
       "sizeBytes": 186753,
       "packType": "course"
     },
     {
-      "id": "learning-go",
-      "title": "Learning Go",
-      "language": "go",
-      "file": "learning-go.json",
-      "sizeBytes": 1474014,
+      "id": "cryptography-fundamentals",
+      "title": "Cryptography Fundamentals: Hashes to ZK",
+      "language": "typescript",
+      "file": "cryptography-fundamentals.json",
+      "cover": "cryptography-fundamentals.jpg",
+      "sizeBytes": 200488,
       "packType": "course"
     },
     {
@@ -142,6 +105,7 @@
       "title": "Javascript Challenges",
       "language": "javascript",
       "file": "challenges-javascript-handwritten.json",
+      "cover": "challenges-javascript-handwritten.jpg",
       "sizeBytes": 239188,
       "packType": "challenges"
     },
@@ -150,6 +114,7 @@
       "title": "Typescript — Challenge Pack",
       "language": "typescript",
       "file": "challenges-typescript-mo9c9k2o.json",
+      "cover": "challenges-typescript-mo9c9k2o.jpg",
       "sizeBytes": 429110,
       "packType": "challenges"
     },
@@ -158,6 +123,7 @@
       "title": "Python Challenges",
       "language": "python",
       "file": "challenges-python-handwritten.json",
+      "cover": "challenges-python-handwritten.jpg",
       "sizeBytes": 212780,
       "packType": "challenges"
     },
@@ -166,6 +132,7 @@
       "title": "Go Challenges",
       "language": "go",
       "file": "challenges-go-handwritten.json",
+      "cover": "challenges-go-handwritten.jpg",
       "sizeBytes": 394425,
       "packType": "challenges"
     },
@@ -174,6 +141,7 @@
       "title": "Rust Challenges",
       "language": "rust",
       "file": "challenges-rust-handwritten.json",
+      "cover": "challenges-rust-handwritten.jpg",
       "sizeBytes": 225529,
       "packType": "challenges"
     },
@@ -182,15 +150,8 @@
       "title": "React Native Challenges",
       "language": "reactnative",
       "file": "challenges-reactnative-handwritten.json",
+      "cover": "challenges-reactnative-handwritten.jpg",
       "sizeBytes": 23388,
-      "packType": "challenges"
-    },
-    {
-      "id": "challenges-reactnative-visual",
-      "title": "React Native UI Challenges",
-      "language": "reactnative",
-      "file": "challenges-reactnative-visual.json",
-      "sizeBytes": 17035,
       "packType": "challenges"
     }
   ]

@@ -353,6 +353,43 @@
   background: var(--color-bg-tertiary);
   color: var(--color-text-tertiary);
 }
+
+/* Per-lesson "Open in …" affordances. Hidden until the row is
+   hovered/focused so they don't compete with the lesson title. The
+   --browser variant uses neutral text colour (matches the embedded
+   web app's primary action); --app uses the warm accent so the two
+   flavours are scannable side-by-side. Width is locked so a chapter
+   with mixed lesson titles doesn't visibly reflow on hover. */
+.course-detail__lesson-action {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  color: var(--color-text-tertiary);
+  background: transparent;
+  text-decoration: none;
+  opacity: 0;
+  transition: opacity 0.15s ease, color 0.15s ease, background 0.15s ease;
+}
+
+.course-detail__lesson:hover .course-detail__lesson-action,
+.course-detail__lesson:focus-within .course-detail__lesson-action {
+  opacity: 1;
+}
+
+.course-detail__lesson-action:hover {
+  color: var(--color-text-primary);
+  background: var(--color-bg-tertiary);
+}
+
+.course-detail__lesson-action--app:hover {
+  /* Slight warm tint so the desktop-app CTA reads as the "richer"
+     option without screaming for attention while the row sits idle. */
+  color: #fcd34d;
+}
 .course-detail__lesson-kind--exercise { color: #fcd34d; }
 .course-detail__lesson-kind--mixed { color: #d4bfff; }
 .course-detail__lesson-kind--quiz { color: #93c5fd; }
@@ -402,6 +439,22 @@
   margin-bottom: 8px;
 }
 .course-detail__sidebar-btn:last-child { margin-bottom: 0; }
+
+/* Tiny "don't have it?" link under the sidebar's deep-link CTA. Text-
+   weight only — never compete with the two real buttons above it. */
+.course-detail__sidebar-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 10px;
+  font-size: 11.5px;
+  color: var(--color-text-tertiary);
+  text-decoration: none;
+}
+.course-detail__sidebar-hint:hover {
+  color: var(--color-text-secondary);
+  text-decoration: underline;
+}
 
 .course-detail__kind-list {
   list-style: none;

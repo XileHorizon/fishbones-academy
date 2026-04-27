@@ -5,6 +5,8 @@ import {
   ArrowRight,
   BookOpen,
   Code2,
+  Download as DownloadIcon,
+  ExternalLink,
   FileText,
   Layers,
   PlayCircle,
@@ -12,6 +14,11 @@ import {
 import { fetchFullCourse, findCatalogCourse } from "../data/courses";
 import type { CourseChapter, CourseLesson, FullCourse } from "../data/types";
 import { renderMarkdown, truncateMarkdown } from "../lib/markdown";
+import {
+  fishbonesOpenUrl,
+  hasFishbonesInstalled,
+  openInFishbones,
+} from "../lib/openInFishbones";
 import "./CourseDetail.css";
 
 const KIND_LABEL: Record<CourseLesson["kind"], string> = {
@@ -47,6 +54,28 @@ export function CourseDetail() {
   const [previewHtml, setPreviewHtml] = useState<{ id: string; html: string } | null>(
     null,
   );
+
+  // Tri-state install hint. Read once from localStorage on mount and
+  // refresh after every "Open in Fishbones" click so a successful
+  // probe in this session immediately promotes the deep-link CTA
+  // without a page reload.
+  const [hasApp, setHasApp] = useState<boolean | null>(() =>
+    hasFishbonesInstalled(),
+  );
+
+  // Re-poll the flag when the page becomes visible again. Covers the
+  // "user clicked Open, was bounced into the app, came back to this
+  // tab" cycle — the localStorage flag was set inside openInFishbones
+  // but our React state hasn't refreshed.
+  useEffect(() => {
+    const onVisibility = () => {
+      if (document.visibilityState !== "visible") return;
+      const cur = hasFishbonesInstalled();
+      setHasApp((prev) => (prev !== cur ? cur : prev));
+    };
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => document.removeEventListener("visibilitychange", onVisibility);
+  }, []);
 
   useEffect(() => {
     if (!id) return;
@@ -166,15 +195,48 @@ export function CourseDetail() {
                 : `A linear ${catalogEntry.languageLabel} course with reading lessons, hands-on exercises, and quizzes — every lesson runnable in your browser.`}
           </p>
           <div className="course-detail__hero-actions">
-            <a
-              href={`/learn/?courseId=${encodeURIComponent(catalogEntry.id)}`}
-              className="btn btn--primary btn--lg"
-            >
-              <PlayCircle size={16} /> Start in your browser <ArrowRight size={14} />
-            </a>
-            <Link to="/download" className="btn btn--ghost btn--lg">
-              Open in desktop app
-            </Link>
+            {/* Open-in-app CTA. Promoted to primary when we've seen
+                this device successfully open the desktop app before
+                (localStorage flag set after a confirmed visibilitychange
+                during the deep-link probe). First-time visitors see
+                "Start in browser" as the primary so the worst case is
+                always one click into a working preview, not a dialog
+                they have to dismiss. */}
+            {hasApp === true ? (
+              <>
+                <button
+                  type="button"
+                  className="btn btn--primary btn--lg"
+                  onClick={() => void openInFishbones(catalogEntry.id)}
+                >
+                  <ExternalLink size={16} /> Open in Fishbones
+                </button>
+                <a
+                  href={`/learn/?courseId=${encodeURIComponent(catalogEntry.id)}`}
+                  className="btn btn--ghost btn--lg"
+                >
+                  <PlayCircle size={14} /> Start in browser
+                </a>
+              </>
+            ) : (
+              <>
+                <a
+                  href={`/learn/?courseId=${encodeURIComponent(catalogEntry.id)}`}
+                  className="btn btn--primary btn--lg"
+                >
+                  <PlayCircle size={16} /> Start in your browser{" "}
+                  <ArrowRight size={14} />
+                </a>
+                <button
+                  type="button"
+                  className="btn btn--ghost btn--lg"
+                  onClick={() => void openInFishbones(catalogEntry.id)}
+                  title="Requires the desktop app — installs from the Download page"
+                >
+                  <ExternalLink size={14} /> Open in Fishbones
+                </button>
+              </>
+            )}
           </div>
           <div className="course-detail__stats">
             <Stat label="Lessons" value={lessonCount.toString()} />
@@ -246,7 +308,10 @@ export function CourseDetail() {
             {chapters.length > 0 && (
               <div className="course-detail__panel">
                 <h2 className="course-detail__panel-title">Outline</h2>
-                <ChapterOutline chapters={chapters} />
+                <ChapterOutline
+                  chapters={chapters}
+                  courseId={catalogEntry.id}
+                />
               </div>
             )}
           </main>
@@ -265,12 +330,24 @@ export function CourseDetail() {
               >
                 <PlayCircle size={14} /> Start in browser
               </a>
-              <Link
-                to="/download"
+              <button
+                type="button"
                 className="btn btn--ghost btn--lg course-detail__sidebar-btn"
+                onClick={() => void openInFishbones(catalogEntry.id)}
               >
-                Get desktop app
-              </Link>
+                <ExternalLink size={14} /> Open in Fishbones
+              </button>
+              {/* Soft "no app yet?" affordance — only shows when we
+                  haven't seen the desktop app respond on this device.
+                  Stays out of the way for users who already have it. */}
+              {hasApp !== true && (
+                <Link
+                  to="/download"
+                  className="course-detail__sidebar-hint"
+                >
+                  <DownloadIcon size={11} /> Don't have it? Download Fishbones
+                </Link>
+              )}
             </div>
 
             <div className="course-detail__sidebar-card">
@@ -311,7 +388,13 @@ export function CourseDetail() {
   );
 }
 
-function ChapterOutline({ chapters }: { chapters: CourseChapter[] }) {
+function ChapterOutline({
+  chapters,
+  courseId,
+}: {
+  chapters: CourseChapter[];
+  courseId: string;
+}) {
   // Cap at the first 6 chapters with their first 4 lessons each so the
   // outline stays scannable. The full course is one click away.
   const trimmed = chapters.slice(0, 6);
@@ -340,6 +423,31 @@ function ChapterOutline({ chapters }: { chapters: CourseChapter[] }) {
                   >
                     {KIND_LABEL[l.kind]}
                   </span>
+                  {/* Per-lesson "Open" actions, hover-revealed so they
+                      don't compete with the lesson title's hierarchy.
+                      Two flavours, mirroring the page-level CTAs:
+                        - browser: /learn/?courseId=…&lessonId=…  (always
+                          works, opens the embedded web app)
+                        - fishbones://: deep-link into the desktop app,
+                          falls through with no harm if the scheme isn't
+                          registered (browser shows its handler dialog,
+                          user dismisses, page is unchanged) */}
+                  <a
+                    className="course-detail__lesson-action course-detail__lesson-action--browser"
+                    href={`/learn/?courseId=${encodeURIComponent(courseId)}&lessonId=${encodeURIComponent(l.id)}`}
+                    title="Open this lesson in the browser"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <PlayCircle size={11} />
+                  </a>
+                  <a
+                    className="course-detail__lesson-action course-detail__lesson-action--app"
+                    href={fishbonesOpenUrl(courseId, l.id)}
+                    title="Open this lesson in the Fishbones desktop app"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <ExternalLink size={11} />
+                  </a>
                 </li>
               );
             })}

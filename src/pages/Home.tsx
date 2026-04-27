@@ -120,7 +120,7 @@ export function Home() {
               </Link>
             </div>
             <p className="home-hero__hint">
-              25 starter courses. Sample one in your browser without an account.
+              17 starter courses. Sample one in your browser without an account.
             </p>
           </div>
           <div className="home-hero__visual">
@@ -161,7 +161,7 @@ export function Home() {
             <span className="section__eyebrow">Curriculum</span>
             <h2 className="section__title">Pick a starter pack and ship code today.</h2>
             <p className="section__subtitle">
-              Twenty-five courses are already curated and runnable in your
+              Seventeen courses are already curated and runnable in your
               browser. Languages, frameworks, smart contracts, kata-style
               challenge sets — same shape, same UX, every one of them
               has tests to grade your code.

@@ -103,7 +103,7 @@ export function Download() {
           eyebrow="Sample"
           title="In your browser"
           price="Free"
-          summary="Twenty-five starter courses, runs in IndexedDB, no install."
+          summary="Seventeen starter courses, runs in IndexedDB, no install."
           features={[
             "Sixteen+ browser-runnable languages",
             "Full Monaco editor + hidden tests",

@@ -66,7 +66,7 @@ export function Courses() {
       <header className="courses-page__head section section--narrow">
         <span className="section__eyebrow">Catalogue</span>
         <h1 className="section__title">
-          Twenty-five starter courses, ready to ship code in.
+          Seventeen starter courses, ready to ship code in.
         </h1>
         <p className="section__subtitle">
           Linear textbooks, framework deep-dives, and kata-style challenge
@@ -193,16 +193,17 @@ export function Courses() {
               <Link
                 key={c.id}
                 to={`/courses/${c.id}`}
-                className="card courses-grid__card"
+                className="courses-grid__card"
               >
-                {/* Cover art — synced into /starter-courses/<id>.jpg by
-                    scripts/sync-starter-courses.mjs. Real artwork for
-                    21 books, themed gradient tile (matching the kata
-                    library's --no-cover treatment) for the 4 packs
-                    that don't ship cover.png. The language pill +
-                    challenges/difficulty chips overlay the cover at
-                    the top corners so the metadata is legible without
-                    eating into the cover composition. */}
+                {/* Bookshelf-style cover — full 2:3 portrait paperback
+                    rather than a cropped landscape band. The whole
+                    composition is visible (cartouche, flourishes,
+                    insignia, etc. — the artwork is too detailed to
+                    waste on a 5:3 crop). A subtle paperback drop-shadow
+                    + inner edge highlight sells the "book on a shelf"
+                    feel without leaning on a literal wood-grain prop.
+                    Cover synced from kata into /starter-courses/<id>.jpg
+                    by scripts/sync-starter-courses.mjs. */}
                 <div
                   className={`courses-grid__cover courses-grid__cover--lang-${c.language}`}
                 >
@@ -215,31 +216,34 @@ export function Courses() {
                       draggable={false}
                     />
                   )}
-                  <div className="courses-grid__cover-chips">
+                  {c.packType === "challenges" && (
+                    <span className="courses-grid__cover-flag">Challenges</span>
+                  )}
+                </div>
+                {/* Shelf line — fakes the lip of a wooden shelf the
+                    book is standing on. Gradient strip rather than a
+                    full prop so it stays in the design's visual
+                    register (subtle, naturalist) instead of looking
+                    like an iBooks skin. */}
+                <div className="courses-grid__shelf" aria-hidden />
+                <div className="courses-grid__body">
+                  <div className="courses-grid__chips">
                     <span className="pill pill--mono">{c.languageLabel}</span>
-                    {c.packType === "challenges" && (
-                      <span className="pill">Challenges</span>
-                    )}
                     {c.difficulty && (
-                      <span className={`pill courses-grid__diff courses-grid__diff--${c.difficulty}`}>
+                      <span
+                        className={`pill courses-grid__diff courses-grid__diff--${c.difficulty}`}
+                      >
                         {c.difficulty}
                       </span>
                     )}
                   </div>
-                </div>
-                <div className="courses-grid__body">
                   <h3 className="courses-grid__title">{c.title}</h3>
-                  <p className="courses-grid__desc">
-                    {c.packType === "challenges"
-                      ? `Curated ${c.languageLabel} kata problems with hidden tests grading each one. Difficulty tags + topic groups.`
-                      : `~${c.approxLessons} lessons of ${c.languageLabel.toLowerCase()} with hidden tests, runnable in your browser.`}
-                  </p>
                   <div className="courses-grid__meta">
                     <span>~{c.approxLessons} lessons</span>
                     <span>·</span>
                     <span>~{Math.round(c.approxMinutes / 60)}h</span>
                     <span className="courses-grid__cta">
-                      Open <ArrowRight size={12} />
+                      Open <ArrowRight size={11} />
                     </span>
                   </div>
                 </div>

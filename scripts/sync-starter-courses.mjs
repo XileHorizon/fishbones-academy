@@ -8,7 +8,7 @@
 ///
 /// Idempotent. Skips silently if the kata checkout isn't around.
 
-import { cp, mkdir, rm } from "node:fs/promises";
+import { copyFile, cp, mkdir, rm } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -16,6 +16,11 @@ import { fileURLToPath } from "node:url";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const SITE_ROOT = join(__dirname, "..");
 const DEST = join(SITE_ROOT, "public", "starter-courses");
+/// Bundled-into-JS catalog manifest. The /courses page imports this at
+/// build time so the grid renders without an extra fetch. Keep it in
+/// lockstep with the runtime manifest in public/ — otherwise covers,
+/// new packs, or sizeBytes drift between the two.
+const BUNDLED_MANIFEST = join(SITE_ROOT, "src", "data", "courses-manifest.json");
 
 const env = process.env.FISHBONES_SRC;
 const candidates = [
@@ -45,4 +50,20 @@ console.log(`[sync-courses] copying ${src} → ${DEST}`);
 await rm(DEST, { recursive: true, force: true });
 await mkdir(DEST, { recursive: true });
 await cp(src, DEST, { recursive: true });
+
+// Keep the bundled manifest (imported by src/data/courses.ts at build
+// time) byte-identical to the runtime one. Without this the catalog
+// grid renders with whatever stale snapshot was last committed —
+// missing covers, missing courses, drifted sizeBytes — even after
+// the runtime files in /starter-courses/ get fresh.
+const srcManifest = join(src, "manifest.json");
+if (existsSync(srcManifest)) {
+  await copyFile(srcManifest, BUNDLED_MANIFEST);
+  console.log(`[sync-courses] bundled manifest updated → ${BUNDLED_MANIFEST}`);
+} else {
+  console.warn(
+    `[sync-courses] no manifest.json at ${srcManifest}; bundled manifest left as-is`,
+  );
+}
+
 console.log("[sync-courses] done.");

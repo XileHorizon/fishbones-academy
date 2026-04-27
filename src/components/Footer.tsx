@@ -8,9 +8,12 @@ export function Footer() {
       <div className="site-footer__inner">
         <div className="site-footer__brand">
           <Link to="/" className="site-footer__brand-link">
-            <img src="/fishbones.png" alt="" width={24} height={24} />
+            <img
+              src="/fishbones_skinny_white.png"
+              alt="Fishbones"
+              className="site-footer__brand-icon"
+            />
             <span>
-              <span className="site-footer__brand-name">Fishbones</span>
               <span className="site-footer__brand-tld">.academy</span>
             </span>
           </Link>
