@@ -61,12 +61,19 @@ if (!kataRoot) {
 console.log(`[sync-learn] using kata source at ${kataRoot}`);
 
 if (!args.has("--use-existing")) {
-  console.log("[sync-learn] running `npm run build:web` in kata…");
+  // FISHBONES_BASE pins kata's Vite `base` to /learn/ (the path
+  // we mount the embed at on fishbones.academy). Without this,
+  // kata defaults to its legacy mattssoftware path
+  // /fishbones/learn/, which produces asset URLs that 404 here
+  // because nothing's served at that path on this host.
+  console.log(
+    "[sync-learn] running `npm run build:web` in kata with base=/learn/…",
+  );
   try {
     execSync("npm run build:web", {
       cwd: kataRoot,
       stdio: "inherit",
-      env: process.env,
+      env: { ...process.env, FISHBONES_BASE: "/learn/" },
     });
   } catch (err) {
     console.error(

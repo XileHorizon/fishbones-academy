@@ -125,6 +125,16 @@ jobs:
           restore-keys: |
             kata-build-
 
+      # ImageMagick is what kata's extract-starter-courses.mjs uses to
+      # resize cover art (the bundled originals are 4MB each; resized
+      # to 480px JPEG q78 they're ~70KB). Without it, the script
+      # silently skips covers and the library falls back to the
+      # language-tinted glyph tiles. Ubuntu-latest runners don't
+      # ship ImageMagick by default.
+      - name: Install ImageMagick (for cover-art resize)
+        if: ${{ github.event.inputs.embed_fishbones != 'false' }}
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq imagemagick
+
       - name: Build + embed Fishbones web variant
         if: ${{ github.event.inputs.embed_fishbones != 'false' }}
         env:
