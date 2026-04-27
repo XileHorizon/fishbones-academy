@@ -21,6 +21,87 @@
 }
 .course-detail__back:hover { color: var(--color-text-primary); }
 
+/* Cover-on-the-side row. Cover is portrait (200px wide × ~300px),
+   text column flexes to fill the rest. Below 720px the row stacks
+   so the cover lands on top. */
+.course-detail__hero-row {
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
+}
+
+.course-detail__hero-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.course-detail__cover {
+  flex-shrink: 0;
+  width: 220px;
+  aspect-ratio: 2 / 3;
+  border-radius: 12px;
+  overflow: hidden;
+  background: linear-gradient(145deg, #2a2a2a, #0c0c0c);
+  border: 1px solid var(--color-border-default);
+  box-shadow:
+    0 12px 32px rgba(0, 0, 0, 0.42),
+    0 1px 0 rgba(255, 255, 255, 0.04) inset;
+  /* Same per-language gradient palette the catalog uses, so the
+     cover-less fallback reads as part of the family. */
+}
+.course-detail__cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.course-detail__cover--lang-javascript,
+.course-detail__cover--lang-typescript {
+  background: linear-gradient(145deg, #4e432a, #262013);
+}
+.course-detail__cover--lang-python {
+  background: linear-gradient(145deg, #1f3b5a, #101d2d);
+}
+.course-detail__cover--lang-rust {
+  background: linear-gradient(145deg, #6b2f1e, #2d140c);
+}
+.course-detail__cover--lang-go {
+  background: linear-gradient(145deg, #204f5e, #0e2630);
+}
+.course-detail__cover--lang-svelte {
+  background: linear-gradient(145deg, #5c2a16, #2a120a);
+}
+.course-detail__cover--lang-solid {
+  background: linear-gradient(145deg, #1c4d6b, #0e2535);
+}
+.course-detail__cover--lang-bun {
+  background: linear-gradient(145deg, #3d3520, #1d180c);
+}
+.course-detail__cover--lang-htmx {
+  background: linear-gradient(145deg, #3a4252, #1a1f29);
+}
+.course-detail__cover--lang-astro {
+  background: linear-gradient(145deg, #3a2a4d, #1a0f26);
+}
+.course-detail__cover--lang-solidity {
+  background: linear-gradient(145deg, #3a3a3a, #1a1a1a);
+}
+.course-detail__cover--lang-react,
+.course-detail__cover--lang-reactnative {
+  background: linear-gradient(145deg, #1c4357, #0e2330);
+}
+
+@media (max-width: 720px) {
+  .course-detail__hero-row {
+    flex-direction: column;
+    gap: 24px;
+  }
+  .course-detail__cover {
+    width: 160px;
+  }
+}
+
 .course-detail__hero-chips {
   display: flex;
   flex-wrap: wrap;

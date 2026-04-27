@@ -195,30 +195,53 @@ export function Courses() {
                 to={`/courses/${c.id}`}
                 className="card courses-grid__card"
               >
-                <div className="courses-grid__top">
-                  <span className="pill pill--mono">{c.languageLabel}</span>
-                  {c.packType === "challenges" && (
-                    <span className="pill">Challenges</span>
+                {/* Cover art — synced into /starter-courses/<id>.jpg by
+                    scripts/sync-starter-courses.mjs. Real artwork for
+                    21 books, themed gradient tile (matching the kata
+                    library's --no-cover treatment) for the 4 packs
+                    that don't ship cover.png. The language pill +
+                    challenges/difficulty chips overlay the cover at
+                    the top corners so the metadata is legible without
+                    eating into the cover composition. */}
+                <div
+                  className={`courses-grid__cover courses-grid__cover--lang-${c.language}`}
+                >
+                  {c.cover && (
+                    <img
+                      className="courses-grid__cover-img"
+                      src={`/starter-courses/${c.cover}`}
+                      alt=""
+                      loading="lazy"
+                      draggable={false}
+                    />
                   )}
-                  {c.difficulty && (
-                    <span className={`pill courses-grid__diff courses-grid__diff--${c.difficulty}`}>
-                      {c.difficulty}
-                    </span>
-                  )}
+                  <div className="courses-grid__cover-chips">
+                    <span className="pill pill--mono">{c.languageLabel}</span>
+                    {c.packType === "challenges" && (
+                      <span className="pill">Challenges</span>
+                    )}
+                    {c.difficulty && (
+                      <span className={`pill courses-grid__diff courses-grid__diff--${c.difficulty}`}>
+                        {c.difficulty}
+                      </span>
+                    )}
+                  </div>
                 </div>
-                <h3 className="courses-grid__title">{c.title}</h3>
-                <p className="courses-grid__desc">
-                  {c.packType === "challenges"
-                    ? `Curated ${c.languageLabel} kata problems with hidden tests grading each one. Difficulty tags + topic groups.`
-                    : `~${c.approxLessons} lessons of ${c.languageLabel.toLowerCase()} with hidden tests, runnable in your browser.`}
-                </p>
-                <div className="courses-grid__meta">
-                  <span>~{c.approxLessons} lessons</span>
-                  <span>·</span>
-                  <span>~{Math.round(c.approxMinutes / 60)}h</span>
-                  <span className="courses-grid__cta">
-                    Open <ArrowRight size={12} />
-                  </span>
+                <div className="courses-grid__body">
+                  <h3 className="courses-grid__title">{c.title}</h3>
+                  <p className="courses-grid__desc">
+                    {c.packType === "challenges"
+                      ? `Curated ${c.languageLabel} kata problems with hidden tests grading each one. Difficulty tags + topic groups.`
+                      : `~${c.approxLessons} lessons of ${c.languageLabel.toLowerCase()} with hidden tests, runnable in your browser.`}
+                  </p>
+                  <div className="courses-grid__meta">
+                    <span>~{c.approxLessons} lessons</span>
+                    <span>·</span>
+                    <span>~{Math.round(c.approxMinutes / 60)}h</span>
+                    <span className="courses-grid__cta">
+                      Open <ArrowRight size={12} />
+                    </span>
+                  </div>
                 </div>
               </Link>
             ))}

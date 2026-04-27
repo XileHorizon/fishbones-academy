@@ -125,20 +125,39 @@ export function CourseDetail() {
           <Link to="/courses" className="course-detail__back">
             <ArrowLeft size={14} /> All courses
           </Link>
-          <div className="course-detail__hero-chips">
-            <span className="pill pill--mono">{catalogEntry.languageLabel}</span>
-            {catalogEntry.packType === "challenges" && (
-              <span className="pill">Challenge pack</span>
-            )}
-            {catalogEntry.difficulty && (
-              <span
-                className={`pill courses-grid__diff courses-grid__diff--${catalogEntry.difficulty}`}
+          {/* Cover art on the hero — same JPEG the catalog grid
+              uses, but rendered as a tall portrait thumbnail
+              alongside the chips/title block instead of the
+              landscape band the catalog cards have. The mobile
+              breakpoint stacks the cover on top. */}
+          <div className="course-detail__hero-row">
+            {catalogEntry.cover && (
+              <div
+                className={`course-detail__cover course-detail__cover--lang-${catalogEntry.language}`}
               >
-                {catalogEntry.difficulty}
-              </span>
+                <img
+                  src={`/starter-courses/${catalogEntry.cover}`}
+                  alt=""
+                  loading="lazy"
+                  draggable={false}
+                />
+              </div>
             )}
-          </div>
-          <h1 className="course-detail__title">{catalogEntry.title}</h1>
+            <div className="course-detail__hero-text">
+              <div className="course-detail__hero-chips">
+                <span className="pill pill--mono">{catalogEntry.languageLabel}</span>
+                {catalogEntry.packType === "challenges" && (
+                  <span className="pill">Challenge pack</span>
+                )}
+                {catalogEntry.difficulty && (
+                  <span
+                    className={`pill courses-grid__diff courses-grid__diff--${catalogEntry.difficulty}`}
+                  >
+                    {catalogEntry.difficulty}
+                  </span>
+                )}
+              </div>
+              <h1 className="course-detail__title">{catalogEntry.title}</h1>
           <p className="course-detail__lede">
             {course?.description && course.description.length > 30
               ? course.description
@@ -166,6 +185,8 @@ export function CourseDetail() {
               label="Est. time"
               value={`${Math.round(catalogEntry.approxMinutes / 60)}h`}
             />
+          </div>
+            </div>
           </div>
         </div>
       </header>

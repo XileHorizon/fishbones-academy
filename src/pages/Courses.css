@@ -103,8 +103,11 @@
 .courses-grid__card {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding: 20px;
+  /* Padding moved INTO .courses-grid__body — the cover bleeds to
+     the card's edges so the artwork dominates the upper half of
+     the card (Codecademy / Frontend Masters style). */
+  padding: 0;
+  overflow: hidden;
   text-decoration: none;
   color: var(--color-text-primary);
   transition: border-color 0.15s ease, transform 0.15s ease;
@@ -116,6 +119,124 @@
   color: var(--color-text-primary);
 }
 
+/* ── Cover art band ────────────────────────────────────────── */
+
+/* The cover sits at the top of the card, edge-to-edge, in a 5:3
+   landscape ratio (book covers are 2:3 portrait but we crop to
+   landscape to keep the card height reasonable). The actual JPEG
+   is positioned with object-fit: cover so the most central part of
+   the artwork stays visible. The chips overlay the cover at the
+   top corners.
+
+   When `c.cover` is unset we fall through to the language-tinted
+   gradient below — same palette as kata's --no-cover treatment so
+   covered + uncovered tiles read as one design. */
+.courses-grid__cover {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 5 / 3;
+  background: linear-gradient(145deg, #2a2a2a, #0c0c0c);
+  overflow: hidden;
+}
+
+.courses-grid__cover-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Slight desaturate + dim on idle so the chips read clearly;
+     restore on hover for the wow moment. */
+  filter: saturate(0.92) brightness(0.94);
+  transition: filter 0.18s ease, transform 0.3s ease;
+}
+
+.courses-grid__card:hover .courses-grid__cover-img {
+  filter: saturate(1.08) brightness(1);
+  transform: scale(1.025);
+}
+
+/* Soft top-down gradient over the cover so the chips have contrast
+   even on bright cover art. Subtle — doesn't kill the artwork. */
+.courses-grid__cover::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.42) 0%,
+    rgba(0, 0, 0, 0.05) 35%,
+    rgba(0, 0, 0, 0) 60%
+  );
+  pointer-events: none;
+}
+
+.courses-grid__cover-chips {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* Per-language gradient for the cover band when no JPEG is loaded
+   (e.g. fetch is in flight, or the manifest entry has no `cover`
+   field). Mirrors kata's BookCover.css palette so the no-cover
+   fallback reads as the same family. */
+.courses-grid__cover--lang-javascript,
+.courses-grid__cover--lang-typescript {
+  background: linear-gradient(145deg, #4e432a, #262013);
+}
+.courses-grid__cover--lang-python {
+  background: linear-gradient(145deg, #1f3b5a, #101d2d);
+}
+.courses-grid__cover--lang-rust {
+  background: linear-gradient(145deg, #6b2f1e, #2d140c);
+}
+.courses-grid__cover--lang-swift {
+  background: linear-gradient(145deg, #6b2b2b, #2d1212);
+}
+.courses-grid__cover--lang-go {
+  background: linear-gradient(145deg, #204f5e, #0e2630);
+}
+.courses-grid__cover--lang-svelte {
+  background: linear-gradient(145deg, #5c2a16, #2a120a);
+}
+.courses-grid__cover--lang-solid {
+  background: linear-gradient(145deg, #1c4d6b, #0e2535);
+}
+.courses-grid__cover--lang-bun {
+  background: linear-gradient(145deg, #3d3520, #1d180c);
+}
+.courses-grid__cover--lang-htmx {
+  background: linear-gradient(145deg, #3a4252, #1a1f29);
+}
+.courses-grid__cover--lang-astro {
+  background: linear-gradient(145deg, #3a2a4d, #1a0f26);
+}
+.courses-grid__cover--lang-solidity {
+  background: linear-gradient(145deg, #3a3a3a, #1a1a1a);
+}
+.courses-grid__cover--lang-react,
+.courses-grid__cover--lang-reactnative {
+  background: linear-gradient(145deg, #1c4357, #0e2330);
+}
+
+/* ── Card body (everything below the cover) ──────────────── */
+
+.courses-grid__body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px 18px 18px;
+  flex: 1;
+}
+
+/* Legacy class — kept around for any callers who haven't moved
+   their chips into the cover band. */
 .courses-grid__top {
   display: flex;
   flex-wrap: wrap;
