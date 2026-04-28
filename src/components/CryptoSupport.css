@@ -1,8 +1,10 @@
-/* Glass-morphism crypto donation cards.
-   Each card splits into two regions: a solid brand-coloured anchor on
-   the left and a translucent glass panel on the right that holds the
-   QR + address + copy button. The two halves share a single rounded
-   border so the card reads as one chip of multi-material hardware. */
+/* Crypto donation cards, restructured to read like the Untitled UI
+   credit-card component: dark glass surface with a hairline-divided
+   right strip carrying the QR + brand badge, and the address as the
+   "card number" mono row across the bottom of the main zone. Brand
+   colour appears as a soft radial tint + the bottom-right badge —
+   the chain identity reads from a glance without dominating the
+   surface. */
 
 .crypto-grid {
   display: grid;
@@ -11,16 +13,10 @@
   width: 100%;
 }
 
-@media (min-width: 640px) {
+@media (min-width: 880px) {
   .crypto-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 20px;
-  }
-}
-
-@media (min-width: 1024px) {
-  .crypto-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 22px;
   }
 }
 
@@ -28,184 +24,454 @@
 
 .crypto-card {
   position: relative;
-  display: flex;
-  flex-direction: row;
-  border-radius: 16px;
-  overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.04) inset,
-    0 10px 28px rgba(0, 0, 0, 0.35);
-  isolation: isolate;
-  min-height: 280px;
-}
-
-/* ──────────────── Solid (left) panel ──────────────── */
-
-.crypto-card__solid {
-  position: relative;
-  flex: 0 0 30%;
-  min-width: 96px;
-  padding: 18px;
   display: grid;
-  place-items: center;
-  /* Subtle inner highlight + edge shadow so the brand panel reads as
-     a solid chip pressed into the glass plate, not a flat sticker. */
+  grid-template-columns: minmax(0, 1fr) 30%;
+  border-radius: 18px;
+  overflow: hidden;
+  isolation: isolate;
+  /* The card surface itself: dark, slightly translucent, faintly
+     blurred so cards layered over a textured page background pick
+     up the page's gradient. */
+  background: rgba(15, 15, 22, 0.78);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.18),
-    inset -1px 0 0 rgba(0, 0, 0, 0.18);
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 14px 36px rgba(0, 0, 0, 0.5);
+  min-height: 220px;
 }
 
-.crypto-card__solid::after {
-  /* Diagonal sheen — shows the brand colour underneath but adds a
-     ghosted highlight so the panel doesn't feel matte. */
+/* Brand-tinted radial wash. Sits behind everything else (the card's
+   children all run at z-index 1 by virtue of `position: relative`).
+   The tint is set per-card via the --brand-tint custom property. */
+.crypto-card::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0) 45%);
+  background: radial-gradient(
+    circle at 100% 0%,
+    var(--brand-tint, rgba(155, 166, 237, 0.18)) 0%,
+    transparent 55%
+  );
   pointer-events: none;
+  z-index: 0;
 }
 
-.crypto-card__icon {
-  width: 56px;
-  height: 56px;
-  display: grid;
-  place-items: center;
+.crypto-card > * {
   position: relative;
   z-index: 1;
-  /* Soft drop so the glyph reads against the brand panel's diagonal
-     sheen even when the underlying colour is light (USDC, ETH). */
-  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.18));
 }
 
-.crypto-card__icon svg {
-  width: 100%;
-  height: 100%;
-  display: block;
-}
+/* ──────────────── Main (left) zone ──────────────── */
 
-/* ──────────────── Glass (right) panel ──────────────── */
-
-.crypto-card__glass {
-  flex: 1 1 auto;
-  padding: 18px 18px 16px;
+.crypto-card__main {
+  padding: 22px 22px 20px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  /* Translucent dark fill + heavy blur + saturate; matches the
-     glass-pill nav vocabulary defined in tokens.css. */
-  background: rgba(20, 20, 28, 0.62);
-  backdrop-filter: blur(20px) saturate(140%);
-  -webkit-backdrop-filter: blur(20px) saturate(140%);
-  box-shadow:
-    inset 1px 0 0 rgba(255, 255, 255, 0.06),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  justify-content: space-between;
+  min-width: 0;
+  gap: 18px;
 }
 
 .crypto-card__head {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 12px;
 }
 
 .crypto-card__title {
-  font-size: 15.5px;
+  font-size: 19px;
   font-weight: 700;
-  letter-spacing: -0.005em;
+  letter-spacing: -0.015em;
   color: var(--color-text-primary);
-  line-height: 1.1;
+  line-height: 1;
+  min-width: 0;
 }
 
-.crypto-card__network {
-  margin-top: 2px;
-  font-size: 12px;
-  color: var(--color-text-tertiary);
-  font-family: var(--font-mono);
-  letter-spacing: 0;
+/* Untitled UI gives titles a trailing period like "Untitled."; we
+   borrow the cadence for the chain name. The dot inherits the title
+   colour — the brand cue lives in the radial wash and badge instead. */
+.crypto-card__title-dot {
+  color: inherit;
 }
 
-/* ──────────────── QR ──────────────── */
-
-.crypto-card__qr {
-  align-self: center;
-  padding: 8px;
-  border-radius: 10px;
-  background: #FFFFFF;
-  /* Tiny inner shadow so the QR chip reads as physically inset into
-     the glass; the white field is otherwise too bright to belong. */
-  box-shadow:
-    0 1px 2px rgba(0, 0, 0, 0.45),
-    inset 0 0 0 1px rgba(0, 0, 0, 0.04);
-}
-
-.crypto-card__qr-svg {
-  display: block;
-}
-
-/* ──────────────── Address + Copy ──────────────── */
-
-.crypto-card__addr-row {
+.crypto-card__bottom {
   display: flex;
-  align-items: flex-start;
+  flex-direction: column;
   gap: 10px;
+  min-width: 0;
 }
+
+.crypto-card__meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+}
+
+.crypto-card__meta-label {
+  font-weight: 700;
+  color: var(--color-text-secondary);
+  letter-spacing: 0.14em;
+}
+
+.crypto-card__meta-sep {
+  opacity: 0.5;
+}
+
+.crypto-card__meta-value {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  font-size: 11.5px;
+}
+
+/* ──────────────── Address ("card number") ──────────────── */
 
 .crypto-card__addr {
-  flex: 1 1 auto;
+  display: block;
   font-family: var(--font-mono);
-  font-size: 12px;
-  line-height: 1.45;
-  color: var(--color-text-secondary);
+  font-size: 13.5px;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: -0.005em;
+  color: var(--color-text-primary);
   word-break: break-all;
-  /* Selection is required — visitors paste the address into wallets. */
+  /* Selectable — visitors paste this into a wallet. */
   user-select: text;
   -webkit-user-select: text;
+  min-width: 0;
 }
 
+/* ──────────────── Copy button (now in the right strip) ──────────────── */
+
 .crypto-card__copy {
-  flex: 0 0 auto;
-  align-self: stretch;
-  padding: 6px 12px;
+  width: 100%;
+  padding: 7px 10px;
   border-radius: 8px;
   font-size: 12px;
   font-weight: 600;
-  letter-spacing: -0.005em;
-  color: var(--color-text-primary);
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  letter-spacing: 0;
+  color: var(--color-text-secondary);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.10);
   transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
-  min-width: 70px;
 }
 
 .crypto-card__copy:hover {
-  background: rgba(255, 255, 255, 0.10);
-  border-color: rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(255, 255, 255, 0.20);
+  color: var(--color-text-primary);
 }
 
 .crypto-card__copy[data-copied] {
-  background: rgba(74, 222, 128, 0.12);
+  background: rgba(74, 222, 128, 0.14);
   border-color: rgba(74, 222, 128, 0.35);
   color: #86EFAC;
 }
 
-/* ──────────────── Mobile stack ──────────────── */
-/* On narrow viewports the multi-material split rotates: the brand
-   panel becomes a horizontal banner above the glass panel. Reads
-   better on phones where 30% of a 360px viewport is too narrow for
-   the icon + ticker. */
+/* ──────────────── Right strip (QR + brand badge) ──────────────── */
 
-@media (max-width: 480px) {
+.crypto-card__strip {
+  /* Matches the Untitled credit-card's right strip: hairline divider,
+     barely-darker tint to suggest a different material, content
+     stacked top-to-bottom (QR, then brand emblem). */
+  border-left: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(0, 0, 0, 0.18);
+  padding: 16px 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-width: 0;
+}
+
+.crypto-card__qr {
+  background: #FFFFFF;
+  padding: 5px;
+  border-radius: 8px;
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.45),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.04);
+  align-self: center;
+}
+
+.crypto-card__qr-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 116px;
+}
+
+/* Brand badge — small circular chip next to the title in the main
+   zone. It's the only place the brand colour appears as a solid
+   block in this redesign. */
+.crypto-card__badge {
+  flex: 0 0 auto;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  position: relative;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    0 2px 6px rgba(0, 0, 0, 0.35);
+}
+
+.crypto-card__badge svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.18));
+}
+
+/* ──────────────── Mobile rotation ──────────────── */
+/* On narrow viewports the right strip becomes too cramped for a
+   readable QR, so we rotate the layout into a portrait card: main
+   zone on top, strip beneath as a horizontal band. */
+
+@media (max-width: 520px) {
   .crypto-card {
-    flex-direction: column;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
     min-height: 0;
   }
-  .crypto-card__solid {
-    flex: 0 0 auto;
-    padding: 16px;
+  .crypto-card__strip {
+    border-left: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    flex-direction: row;
+    align-items: center;
+    gap: 18px;
+    padding: 14px 18px;
   }
-  .crypto-card__icon {
-    width: 40px;
-    height: 40px;
+  .crypto-card__qr-svg {
+    max-width: 92px;
+  }
+  .crypto-card__copy {
+    width: auto;
+    flex: 1 1 auto;
+  }
+}
+
+/* ──────────────── Tip dock (floating widget) ──────────────── */
+/* Sits in the bottom-right corner of any page it's mounted on. The
+   trigger is a compact pill; clicking it expands a panel above it
+   that hosts a vertically scrollable stack of donation cards. */
+
+.crypto-dock {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 90;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+  font-family: var(--font-sans);
+  /* iOS safe area — phones with a home indicator add ~34px below the
+     viewport, and a fixed widget sitting at bottom: 0 vanishes
+     underneath. env(safe-area-inset-bottom) returns 0 elsewhere. */
+  padding-bottom: env(safe-area-inset-bottom, 0);
+  pointer-events: none;
+}
+
+.crypto-dock > * {
+  pointer-events: auto;
+}
+
+.crypto-dock__trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px 10px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  color: var(--color-text-primary);
+  background: rgba(20, 20, 28, 0.78);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 8px 22px rgba(0, 0, 0, 0.45);
+  transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+
+.crypto-dock__trigger:hover {
+  transform: translateY(-1px);
+  border-color: rgba(255, 255, 255, 0.18);
+  background: rgba(28, 28, 38, 0.85);
+}
+
+.crypto-dock[data-open] .crypto-dock__trigger {
+  border-color: rgba(255, 255, 255, 0.22);
+  background: rgba(28, 28, 38, 0.92);
+}
+
+.crypto-dock__trigger-icon {
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #F7931A 0%, #9945FF 100%);
+  color: #FFFFFF;
+}
+
+.crypto-dock__trigger-icon svg {
+  width: 14px;
+  height: 14px;
+  stroke: #FFFFFF;
+}
+
+.crypto-dock__trigger-label { white-space: nowrap; }
+
+/* ──────────────── Panel ──────────────── */
+
+.crypto-dock__panel {
+  width: min(380px, calc(100vw - 32px));
+  max-height: min(640px, calc(100vh - 120px));
+  display: flex;
+  flex-direction: column;
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(15, 15, 22, 0.86);
+  backdrop-filter: blur(22px) saturate(150%);
+  -webkit-backdrop-filter: blur(22px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 24px 60px rgba(0, 0, 0, 0.55);
+  /* Soft entrance — slide-up + fade. Honours reduced-motion below. */
+  animation: crypto-dock-in 0.18s var(--ease-out, cubic-bezier(0, 0, 0.2, 1));
+  transform-origin: bottom right;
+}
+
+@keyframes crypto-dock-in {
+  from { opacity: 0; transform: translateY(8px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .crypto-dock__panel { animation: none; }
+}
+
+.crypto-dock__head {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px 18px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.crypto-dock__head-text { flex: 1 1 auto; min-width: 0; }
+
+.crypto-dock__title {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--color-text-primary);
+}
+
+.crypto-dock__sub {
+  margin-top: 2px;
+  font-size: 12px;
+  color: var(--color-text-tertiary);
+  line-height: 1.4;
+}
+
+.crypto-dock__close {
+  flex: 0 0 auto;
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  color: var(--color-text-tertiary);
+  background: transparent;
+  border: 1px solid transparent;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.crypto-dock__close:hover {
+  color: var(--color-text-primary);
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.10);
+}
+
+/* The scrollable stack — vertical list of cards inside the panel.
+   We override the grid layout to a single column and let the panel
+   own the scroll boundary so the panel chrome (header + close) stays
+   pinned while the cards scroll. */
+
+.crypto-dock__stack {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 14px;
+  /* Flex column rather than grid: a grid container distributes its
+     auto rows equally when the container has a fixed height, which
+     was clipping each card to a fraction of the panel. Flex column
+     lets each card grow to its content height and the stack scrolls
+     past the panel boundary. */
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
+  scrollbar-width: thin;
+}
+
+.crypto-dock__stack > .crypto-card {
+  flex: 0 0 auto;
+}
+
+.crypto-dock__stack::-webkit-scrollbar { width: 8px; }
+.crypto-dock__stack::-webkit-scrollbar-track { background: transparent; }
+.crypto-dock__stack::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+}
+.crypto-dock__stack::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+/* Inside the dock the cards are always single-column and run their
+   mobile-rotated layout (strip beneath main) — the panel is too
+   narrow for a side-by-side strip. */
+.crypto-dock__stack .crypto-card {
+  grid-template-columns: 1fr;
+  grid-template-rows: auto auto;
+  min-height: 0;
+}
+.crypto-dock__stack .crypto-card__strip {
+  border-left: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  flex-direction: row;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 16px;
+}
+.crypto-dock__stack .crypto-card__qr-svg {
+  max-width: 88px;
+}
+.crypto-dock__stack .crypto-card__copy {
+  width: auto;
+  flex: 1 1 auto;
+}
+
+@media (max-width: 520px) {
+  .crypto-dock { right: 12px; bottom: 12px; }
+  .crypto-dock__panel {
+    max-height: min(70vh, calc(100vh - 100px));
   }
 }
