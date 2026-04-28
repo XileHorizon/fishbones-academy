@@ -353,9 +353,9 @@ export function CourseDetail() {
             <div className="course-detail__sidebar-card">
               <h3 className="course-detail__sidebar-title">Prerequisites</h3>
               <p className="course-detail__sidebar-body">
-                {catalogEntry.difficulty === "advanced"
+                {catalogEntry.difficulty === "hard"
                   ? `Comfort with another language plus a working knowledge of ${catalogEntry.languageLabel}. Each lesson assumes you can read code without hand-holding.`
-                  : catalogEntry.difficulty === "intermediate"
+                  : catalogEntry.difficulty === "medium"
                     ? `Comfort with at least one programming language. ${catalogEntry.languageLabel}-specific syntax is taught from scratch.`
                     : `None — every concept is introduced when it's first used. Some prior coding experience helps but isn't required.`}
               </p>

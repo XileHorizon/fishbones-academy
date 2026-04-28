@@ -7,6 +7,53 @@
   padding-top: 8px;
 }
 
+/* Hero row: book cover left, text right. Book sits in its own 2:3
+   portrait frame matching the catalog cards' paperback treatment so
+   the page reads as one bookshelf — the hero specimen is just the
+   catalogue's "title book" greeting the visitor. Stacks on phones. */
+.courses-page__head-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 36px;
+}
+
+.courses-page__cover {
+  flex-shrink: 0;
+  width: 200px;
+  aspect-ratio: 2 / 3;
+  border-radius: 4px;
+  overflow: hidden;
+  background: linear-gradient(145deg, #2a2a2a, #0c0c0c);
+  /* Same shadow ladder the catalog cards use so the hero reads as
+     one of them, scaled up. */
+  box-shadow:
+    0 18px 32px -10px rgba(0, 0, 0, 0.6),
+    0 4px 8px rgba(0, 0, 0, 0.24),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+.courses-page__cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.courses-page__head-text {
+  flex: 1;
+  min-width: 0;
+}
+
+@media (max-width: 720px) {
+  .courses-page__head-row {
+    flex-direction: column;
+    gap: 22px;
+  }
+  .courses-page__cover {
+    width: 150px;
+  }
+}
+
 /* ─── Filter shell ───────────────────────────────────── */
 
 .courses-filters {
@@ -295,9 +342,9 @@
   gap: 6px;
 }
 
-.courses-grid__diff--starter { color: #86efac; border-color: rgba(134, 239, 172, 0.35); }
-.courses-grid__diff--intermediate { color: #fcd34d; border-color: rgba(252, 211, 77, 0.35); }
-.courses-grid__diff--advanced { color: #f9a8d4; border-color: rgba(249, 168, 212, 0.35); }
+.courses-grid__diff--easy { color: #86efac; border-color: rgba(134, 239, 172, 0.35); }
+.courses-grid__diff--medium { color: #fcd34d; border-color: rgba(252, 211, 77, 0.35); }
+.courses-grid__diff--hard { color: #f9a8d4; border-color: rgba(249, 168, 212, 0.35); }
 
 .courses-grid__title {
   font-size: 13.5px;

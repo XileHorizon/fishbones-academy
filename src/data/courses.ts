@@ -48,20 +48,20 @@ export const COURSE_TOPICS: Array<{ id: CourseTopic; label: string }> = [
   { id: "challenges", label: "Challenges" },
 ];
 
-export type CourseDifficulty = "starter" | "intermediate" | "advanced";
+export type CourseDifficulty = "easy" | "medium" | "hard";
 
 const DIFFICULTY_OVERRIDES: Record<string, CourseDifficulty> = {
-  "htmx-fundamentals": "starter",
-  "astro-fundamentals": "starter",
-  "solidjs-fundamentals": "starter",
-  "svelte-5-complete": "intermediate",
-  "bun-complete": "intermediate",
-  "the-rust-programming-language": "intermediate",
-  "react-native": "intermediate",
-  "viem-ethers": "intermediate",
-  "cryptography-fundamentals": "intermediate",
-  "solidity-complete": "advanced",
-  "solana-programs": "advanced",
+  "htmx-fundamentals": "easy",
+  "astro-fundamentals": "easy",
+  "solidjs-fundamentals": "easy",
+  "svelte-5-complete": "medium",
+  "bun-complete": "medium",
+  "the-rust-programming-language": "medium",
+  "react-native": "medium",
+  "viem-ethers": "medium",
+  "cryptography-fundamentals": "medium",
+  "solidity-complete": "hard",
+  "solana-programs": "hard",
   // Challenge packs scale with the user — we don't try to peg one tier.
 };
 
@@ -69,9 +69,9 @@ export const COURSE_DIFFICULTIES: Array<{
   id: CourseDifficulty;
   label: string;
 }> = [
-  { id: "starter", label: "Starter" },
-  { id: "intermediate", label: "Intermediate" },
-  { id: "advanced", label: "Advanced" },
+  { id: "easy", label: "Easy" },
+  { id: "medium", label: "Medium" },
+  { id: "hard", label: "Hard" },
 ];
 
 export interface CatalogCourse extends CourseManifestEntry {
