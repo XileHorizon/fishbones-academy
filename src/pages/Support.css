@@ -1,0 +1,44 @@
+.support-hero {
+  padding: 96px var(--site-section-pad-x) 16px;
+}
+
+.support-hero__inner {
+  max-width: 820px;
+  margin: 0 auto;
+}
+
+.support-hero__lede {
+  font-size: 18px;
+  line-height: 1.65;
+  color: var(--color-text-secondary);
+  margin-top: 12px;
+}
+
+.support-hero__meta {
+  margin-top: 24px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.support-section {
+  padding-top: 48px;
+  padding-bottom: 96px;
+}
+
+.support-footnote {
+  margin-top: 28px;
+  max-width: 720px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--color-text-tertiary);
+}
+
+@media (max-width: 768px) {
+  .support-hero {
+    padding-top: 56px;
+  }
+  .support-hero__lede {
+    font-size: 16px;
+  }
+}

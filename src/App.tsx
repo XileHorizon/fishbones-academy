@@ -24,6 +24,9 @@ const Privacy = lazy(() =>
   import("./pages/Privacy").then((m) => ({ default: m.Privacy })),
 );
 const Terms = lazy(() => import("./pages/Terms").then((m) => ({ default: m.Terms })));
+const Support = lazy(() =>
+  import("./pages/Support").then((m) => ({ default: m.Support })),
+);
 const NotFound = lazy(() =>
   import("./pages/NotFound").then((m) => ({ default: m.NotFound })),
 );
@@ -58,6 +61,8 @@ export function App() {
             <Route path="/docs/:section" element={<Docs />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/terms" element={<Terms />} />
+            <Route path="/support" element={<Support />} />
+            <Route path="/donate" element={<Support />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>

@@ -1,0 +1,211 @@
+/* Glass-morphism crypto donation cards.
+   Each card splits into two regions: a solid brand-coloured anchor on
+   the left and a translucent glass panel on the right that holds the
+   QR + address + copy button. The two halves share a single rounded
+   border so the card reads as one chip of multi-material hardware. */
+
+.crypto-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+  width: 100%;
+}
+
+@media (min-width: 640px) {
+  .crypto-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .crypto-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* ──────────────── Card shell ──────────────── */
+
+.crypto-card {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.04) inset,
+    0 10px 28px rgba(0, 0, 0, 0.35);
+  isolation: isolate;
+  min-height: 280px;
+}
+
+/* ──────────────── Solid (left) panel ──────────────── */
+
+.crypto-card__solid {
+  position: relative;
+  flex: 0 0 30%;
+  min-width: 96px;
+  padding: 18px;
+  display: grid;
+  place-items: center;
+  /* Subtle inner highlight + edge shadow so the brand panel reads as
+     a solid chip pressed into the glass plate, not a flat sticker. */
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset -1px 0 0 rgba(0, 0, 0, 0.18);
+}
+
+.crypto-card__solid::after {
+  /* Diagonal sheen — shows the brand colour underneath but adds a
+     ghosted highlight so the panel doesn't feel matte. */
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0) 45%);
+  pointer-events: none;
+}
+
+.crypto-card__icon {
+  width: 56px;
+  height: 56px;
+  display: grid;
+  place-items: center;
+  position: relative;
+  z-index: 1;
+  /* Soft drop so the glyph reads against the brand panel's diagonal
+     sheen even when the underlying colour is light (USDC, ETH). */
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.18));
+}
+
+.crypto-card__icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* ──────────────── Glass (right) panel ──────────────── */
+
+.crypto-card__glass {
+  flex: 1 1 auto;
+  padding: 18px 18px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  /* Translucent dark fill + heavy blur + saturate; matches the
+     glass-pill nav vocabulary defined in tokens.css. */
+  background: rgba(20, 20, 28, 0.62);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  box-shadow:
+    inset 1px 0 0 rgba(255, 255, 255, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.crypto-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.crypto-card__title {
+  font-size: 15.5px;
+  font-weight: 700;
+  letter-spacing: -0.005em;
+  color: var(--color-text-primary);
+  line-height: 1.1;
+}
+
+.crypto-card__network {
+  margin-top: 2px;
+  font-size: 12px;
+  color: var(--color-text-tertiary);
+  font-family: var(--font-mono);
+  letter-spacing: 0;
+}
+
+/* ──────────────── QR ──────────────── */
+
+.crypto-card__qr {
+  align-self: center;
+  padding: 8px;
+  border-radius: 10px;
+  background: #FFFFFF;
+  /* Tiny inner shadow so the QR chip reads as physically inset into
+     the glass; the white field is otherwise too bright to belong. */
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.45),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.04);
+}
+
+.crypto-card__qr-svg {
+  display: block;
+}
+
+/* ──────────────── Address + Copy ──────────────── */
+
+.crypto-card__addr-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.crypto-card__addr {
+  flex: 1 1 auto;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--color-text-secondary);
+  word-break: break-all;
+  /* Selection is required — visitors paste the address into wallets. */
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+.crypto-card__copy {
+  flex: 0 0 auto;
+  align-self: stretch;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  color: var(--color-text-primary);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  min-width: 70px;
+}
+
+.crypto-card__copy:hover {
+  background: rgba(255, 255, 255, 0.10);
+  border-color: rgba(255, 255, 255, 0.22);
+}
+
+.crypto-card__copy[data-copied] {
+  background: rgba(74, 222, 128, 0.12);
+  border-color: rgba(74, 222, 128, 0.35);
+  color: #86EFAC;
+}
+
+/* ──────────────── Mobile stack ──────────────── */
+/* On narrow viewports the multi-material split rotates: the brand
+   panel becomes a horizontal banner above the glass panel. Reads
+   better on phones where 30% of a 360px viewport is too narrow for
+   the icon + ticker. */
+
+@media (max-width: 480px) {
+  .crypto-card {
+    flex-direction: column;
+    min-height: 0;
+  }
+  .crypto-card__solid {
+    flex: 0 0 auto;
+    padding: 16px;
+  }
+  .crypto-card__icon {
+    width: 40px;
+    height: 40px;
+  }
+}

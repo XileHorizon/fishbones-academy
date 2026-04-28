@@ -58,6 +58,7 @@ export function Footer() {
             >
               Build status
             </a>
+            <Link to="/support">Support the work</Link>
           </div>
           <div className="site-footer__col">
             <h4 className="site-footer__col-title">Legal</h4>
