@@ -30,6 +30,12 @@ const Support = lazy(() =>
 const NotFound = lazy(() =>
   import("./pages/NotFound").then((m) => ({ default: m.NotFound })),
 );
+// OAuth popup landing — kept eager-loaded so the popup doesn't sit on
+// a Suspense fallback while the OAuth chunk fetches. The page is tiny
+// and the popup auto-closes after ~150ms, so the cost of bundling it
+// into the main chunk is negligible compared to the round-trip a lazy
+// import would add.
+import { OAuthDone } from "./pages/OAuthDone";
 
 export function App() {
   // Title + description per route. Cheap and works without a meta
@@ -63,6 +69,7 @@ export function App() {
             <Route path="/terms" element={<Terms />} />
             <Route path="/support" element={<Support />} />
             <Route path="/donate" element={<Support />} />
+            <Route path="/oauth/done" element={<OAuthDone />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
