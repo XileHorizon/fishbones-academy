@@ -12,142 +12,42 @@ import {
   useRef,
   useState,
   type CSSProperties,
-  type ReactNode,
 } from "react";
 // We only use a tiny slice of the API; QrFactoryT below pins the shape.
 import qrcodeFactory from "qrcode-generator";
+// Single source of truth for tip wallets + brand glyphs lives in
+// TipPopover. CryptoSupport (the /support grid + floating dock) used
+// to keep its own duplicate of the address list, which drifted out
+// of sync — `REPLACE_WITH_*` placeholders shipped to production for
+// months while TipPopover already had the real wallets. Re-export
+// the canonical types and defaults so any future address swap is a
+// single-file edit.
+import {
+  DEFAULT_TIP_METHODS,
+  type TipMethod,
+} from "./TipPopover";
 import "./CryptoSupport.css";
 
 // ─────────────────────────── Types ───────────────────────────
 
-export interface CryptoMethod {
-  id: string;
-  ticker: string;
-  name: string;
-  network: string;
-  address: string;
-  /** Brand badge fill — either a CSS colour or a gradient string. */
-  background: string;
-  /** Brand badge foreground colour (the glyph). */
-  foreground?: string;
-  /**
-   * rgba string used to tint the card's radial wash. Should be the
-   * brand colour at ~0.18 alpha. If omitted we fall back to a neutral
-   * tint so multi-stop gradients (e.g. SOL) still get a soft glow.
-   */
-  tint?: string;
-  /** Inline SVG glyph rendered on the brand badge — receives currentColor. */
-  icon: ReactNode;
-}
+/// Alias kept for backwards compatibility with existing callers
+/// (`CryptoMethod[]` props on the page-level grid). The TipPopover
+/// shape is identical — id, ticker, name, network, address, badge
+/// background/foreground, tint, glyph node — so a thin alias keeps
+/// the local API stable without duplicating the interface.
+export type CryptoMethod = TipMethod;
 
 export interface CryptoSupportProps {
   methods?: CryptoMethod[];
   className?: string;
 }
 
-// ─────────────────────────── Icons ───────────────────────────
-// Single-colour SVG glyphs — they pick up `currentColor` from the
-// solid panel's foreground. Kept inline so we don't grow the icons
-// folder for one-off marks.
-
-function BtcGlyph() {
-  return (
-    <svg viewBox="0 0 32 32" aria-hidden focusable="false">
-      <g fill="currentColor">
-        <rect x="11" y="4" width="2.2" height="24" rx="0.4" />
-        <rect x="17" y="4" width="2.2" height="24" rx="0.4" />
-      </g>
-      <g fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M9 8h9.5a4 4 0 0 1 0 8H9" />
-        <path d="M9 16h10.5a4 4 0 0 1 0 8H9" />
-      </g>
-    </svg>
-  );
-}
-
-function EthGlyph() {
-  return (
-    <svg viewBox="0 0 32 32" aria-hidden focusable="false" fill="currentColor">
-      <path d="M16 2 L7 17 L16 22 Z" opacity="0.65" />
-      <path d="M16 2 L25 17 L16 22 Z" opacity="0.95" />
-      <path d="M7 19 L16 30 L16 24 Z" opacity="0.65" />
-      <path d="M16 24 L16 30 L25 19 Z" opacity="0.95" />
-    </svg>
-  );
-}
-
-function SolGlyph() {
-  return (
-    <svg viewBox="0 0 32 32" aria-hidden focusable="false" fill="currentColor">
-      <path d="M9 8h17l-3 4H6Z" />
-      <path d="M6 14h17l3 4H9Z" />
-      <path d="M9 20h17l-3 4H6Z" />
-    </svg>
-  );
-}
-
-function UsdcGlyph() {
-  return (
-    <svg viewBox="0 0 32 32" aria-hidden focusable="false">
-      <circle cx="16" cy="16" r="13.2" fill="none" stroke="currentColor" strokeWidth="2.2" />
-      <g fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M16 7.5v2.4M16 22.1v2.4" />
-        <path d="M19.6 12.4c0-1.6-1.6-2.6-3.6-2.6s-3.6 1-3.6 2.6 1.6 2.1 3.6 2.6 3.6 1 3.6 2.6-1.6 2.6-3.6 2.6-3.6-1-3.6-2.6" />
-      </g>
-    </svg>
-  );
-}
-
 // ─────────────────────────── Defaults ───────────────────────────
-// Placeholder addresses — Matt swaps these for real ones before a
-// public deploy. Greppable via `REPLACE_WITH_`.
+// Re-exported from TipPopover so the `/support` cards and the
+// floating dock render the same chains in the same order with the
+// same wallets the desktop app uses.
 
-export const DEFAULT_METHODS: CryptoMethod[] = [
-  {
-    id: "btc",
-    ticker: "BTC",
-    name: "Bitcoin",
-    network: "Bitcoin mainnet",
-    address: "REPLACE_WITH_BTC_ADDRESS",
-    background: "#F7931A",
-    foreground: "#FFFFFF",
-    tint: "rgba(247, 147, 26, 0.20)",
-    icon: <BtcGlyph />,
-  },
-  {
-    id: "eth",
-    ticker: "ETH",
-    name: "Ethereum",
-    network: "Ethereum mainnet",
-    address: "REPLACE_WITH_ETH_ADDRESS",
-    background: "#627EEA",
-    foreground: "#FFFFFF",
-    tint: "rgba(98, 126, 234, 0.22)",
-    icon: <EthGlyph />,
-  },
-  {
-    id: "sol",
-    ticker: "SOL",
-    name: "Solana",
-    network: "Solana mainnet",
-    address: "REPLACE_WITH_SOL_ADDRESS",
-    background: "linear-gradient(135deg, #9945FF 0%, #14F195 100%)",
-    foreground: "#FFFFFF",
-    tint: "rgba(153, 69, 255, 0.22)",
-    icon: <SolGlyph />,
-  },
-  {
-    id: "usdc",
-    ticker: "USDC",
-    name: "USD Coin",
-    network: "USDC on Base",
-    address: "REPLACE_WITH_USDC_ADDRESS",
-    background: "#2775CA",
-    foreground: "#FFFFFF",
-    tint: "rgba(39, 117, 202, 0.22)",
-    icon: <UsdcGlyph />,
-  },
-];
+export const DEFAULT_METHODS: CryptoMethod[] = DEFAULT_TIP_METHODS;
 
 // ─────────────────────────── QR ───────────────────────────
 // `qrcode-generator` builds the bitmap in JS; we render it as an SVG
