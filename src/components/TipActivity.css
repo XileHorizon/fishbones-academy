@@ -1,0 +1,315 @@
+/* TipActivity — recent-tips feed shown beneath the donation card grid
+   on /support and /donate. Visual rhythm matches the existing
+   crypto-card surface (glass-morphism, 18px radii) so the feed reads
+   as the same family of components. */
+
+.tip-activity {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 28px;
+}
+
+/* ─────────── Header ─────────── */
+
+.tip-activity__head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.tip-activity__head-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.tip-activity__title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: rgba(255, 255, 255, 0.96);
+}
+
+.tip-activity__sub {
+  margin: 0;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.55);
+  line-height: 1.4;
+}
+
+.tip-activity__refresh {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  padding: 0 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.72);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease,
+    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.tip-activity__refresh:hover:not(:disabled),
+.tip-activity__refresh:focus-visible {
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(255, 255, 255, 0.20);
+  color: rgba(255, 255, 255, 0.95);
+  outline: none;
+}
+
+.tip-activity__refresh:disabled {
+  opacity: 0.5;
+  cursor: progress;
+}
+
+.tip-activity__refresh:disabled svg {
+  animation: tip-activity-spin 0.9s linear infinite;
+}
+
+@keyframes tip-activity-spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tip-activity__refresh:disabled svg { animation: none; }
+}
+
+/* ─────────── Per-chain error chips ─────────── */
+/* Inline strip showing which chains failed to load. The rest of the
+   feed still renders — these don't gate the list. */
+
+.tip-activity__errors {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tip-activity__error-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px 4px 6px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  font-size: 11.5px;
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.tip-activity__error-chip .tip-activity__chain-badge {
+  /* Smaller badge inside the error chip — the chip itself already
+     reads as a label so the badge can be a quiet color tag. */
+  font-size: 9px;
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+
+/* ─────────── List ─────────── */
+
+.tip-activity__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.tip-activity__row {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 14px;
+  background: rgba(15, 15, 22, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  backdrop-filter: blur(12px) saturate(140%);
+  -webkit-backdrop-filter: blur(12px) saturate(140%);
+}
+
+.tip-activity__row--skeleton {
+  /* Use the same grid + chrome — only the inner elements change. */
+  pointer-events: none;
+}
+
+.tip-activity__chain-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 24px;
+  min-width: 50px;
+  padding: 0 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: #ffffff;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+  /* Inset highlight + drop so the chip reads as a coloured token,
+     not flat. Matches the brand badges on the donation cards. */
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 1px 2px rgba(0, 0, 0, 0.35);
+}
+
+.tip-activity__main {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.tip-activity__amount {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.96);
+  letter-spacing: -0.005em;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+.tip-activity__amount-muted {
+  font-weight: 500;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.tip-activity__meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1.4;
+  min-width: 0;
+}
+
+.tip-activity__meta-label {
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.38);
+}
+
+.tip-activity__meta-sep {
+  opacity: 0.6;
+}
+
+.tip-activity__meta-mono {
+  font-family: "SF Mono", "JetBrains Mono", "Fira Code", monospace;
+  font-size: 11.5px;
+  letter-spacing: -0.01em;
+  word-break: keep-all;
+  white-space: nowrap;
+}
+
+.tip-activity__meta-link {
+  color: rgba(255, 255, 255, 0.65);
+  text-decoration: none;
+  transition: color 0.12s ease;
+}
+
+.tip-activity__meta-link:hover,
+.tip-activity__meta-link:focus-visible {
+  color: rgba(255, 255, 255, 0.95);
+  text-decoration: underline;
+  outline: none;
+}
+
+.tip-activity__time {
+  white-space: nowrap;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ─────────── Skeletons ─────────── */
+/* Subtle pulsing bars while we wait for the first round of fetches.
+   Sized to match what the resolved row will look like so layout
+   doesn't jump on settle. */
+
+.tip-activity__skeleton {
+  display: block;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 6px;
+  height: 14px;
+  animation: tip-activity-pulse 1.4s ease-in-out infinite;
+}
+
+.tip-activity__skeleton--badge {
+  height: 24px;
+  border-radius: 6px;
+  width: 50px;
+}
+
+.tip-activity__skeleton--main {
+  width: 70%;
+  height: 18px;
+}
+
+.tip-activity__skeleton--time {
+  width: 60px;
+  height: 12px;
+}
+
+@keyframes tip-activity-pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 0.85; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tip-activity__skeleton { animation: none; }
+}
+
+/* ─────────── Empty state ─────────── */
+
+.tip-activity__empty {
+  padding: 18px 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px dashed rgba(255, 255, 255, 0.10);
+  border-radius: 12px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.55;
+  text-align: center;
+}
+
+.tip-activity__empty p {
+  margin: 0;
+}
+
+/* ─────────── Tight viewports ─────────── */
+
+@media (max-width: 520px) {
+  .tip-activity__row {
+    grid-template-columns: 48px minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    row-gap: 4px;
+  }
+  .tip-activity__time {
+    grid-column: 2 / 3;
+    grid-row: 2 / 3;
+    text-align: left;
+    align-self: start;
+  }
+  .tip-activity__main {
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
+  }
+  .tip-activity__chain-badge {
+    grid-row: 1 / 3;
+    align-self: center;
+  }
+}

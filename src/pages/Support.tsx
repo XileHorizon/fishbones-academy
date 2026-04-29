@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { GithubMark } from "../components/icons/GithubMark";
 import { CryptoSupport } from "../components/CryptoSupport";
+import { TipActivity } from "../components/TipActivity";
 import "./Support.css";
 
 export function Support() {
@@ -48,6 +49,12 @@ export function Support() {
           QR encodes the full address; scan with your wallet to verify before
           sending.
         </p>
+        {/* Recent-tips feed. Pulls confirmed inbound transactions for */}
+        {/* every address above from public block explorers (no API */}
+        {/* keys) and renders a unified time-sorted list. Each chain */}
+        {/* fetches independently — a single chain failing doesn't */}
+        {/* block the rest of the feed. */}
+        <TipActivity />
       </section>
     </div>
   );

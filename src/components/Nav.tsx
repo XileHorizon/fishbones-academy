@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { GithubMark } from "./icons/GithubMark";
+import TipPopover from "./TipPopover";
 import "./Nav.css";
 
 const LINKS = [
@@ -74,6 +75,10 @@ export function Nav() {
             <GithubMark size={16} />
             <span>GitHub</span>
           </a>
+          {/* Tip jar — port of the Fishbones desktop app's TipDropdown. */}
+          {/* Sits between GitHub + the main CTA so the affordance is */}
+          {/* visible from every page without competing with course nav. */}
+          <TipPopover />
           <Link to="/courses" className="nav__cta">
             Browse courses
           </Link>
