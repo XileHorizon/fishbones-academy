@@ -7,16 +7,142 @@
       "language": "rust",
       "file": "the-rust-programming-language.json",
       "cover": "the-rust-programming-language.jpg",
-      "sizeBytes": 825395,
+      "sizeBytes": 1255509,
       "packType": "course"
     },
     {
-      "id": "svelte-5-complete",
-      "title": "Svelte 5 Complete",
+      "id": "rust-by-example",
+      "title": "Rust by Example",
+      "language": "rust",
+      "file": "rust-by-example.json",
+      "cover": "rust-by-example.jpg",
+      "sizeBytes": 97257,
+      "packType": "course"
+    },
+    {
+      "id": "rust-async-book",
+      "title": "The Async Book (Rust)",
+      "language": "rust",
+      "file": "rust-async-book.json",
+      "cover": "rust-async-book.jpg",
+      "sizeBytes": 83147,
+      "packType": "course"
+    },
+    {
+      "id": "rustonomicon",
+      "title": "The Rustonomicon",
+      "language": "rust",
+      "file": "rustonomicon.json",
+      "cover": "rustonomicon.jpg",
+      "sizeBytes": 113487,
+      "packType": "course"
+    },
+    {
+      "id": "eloquent-javascript",
+      "title": "Eloquent JavaScript",
+      "language": "javascript",
+      "file": "eloquent-javascript.json",
+      "cover": "eloquent-javascript.jpg",
+      "sizeBytes": 110594,
+      "packType": "course"
+    },
+    {
+      "id": "javascript-info",
+      "title": "The Modern JavaScript Tutorial — Fundamentals",
+      "language": "javascript",
+      "file": "javascript-info.json",
+      "cover": "javascript-info.jpg",
+      "sizeBytes": 115547,
+      "packType": "course"
+    },
+    {
+      "id": "javascript-the-definitive-guide",
+      "title": "JavaScript: The Definitive Guide",
+      "language": "javascript",
+      "file": "javascript-the-definitive-guide.json",
+      "cover": "javascript-the-definitive-guide.jpg",
+      "sizeBytes": 318646,
+      "packType": "course"
+    },
+    {
+      "id": "you-dont-know-js-yet",
+      "title": "You Don't Know JS Yet",
+      "language": "javascript",
+      "file": "you-dont-know-js-yet.json",
+      "cover": "you-dont-know-js-yet.jpg",
+      "sizeBytes": 98170,
+      "packType": "course"
+    },
+    {
+      "id": "composing-programs",
+      "title": "Composing Programs",
+      "language": "python",
+      "file": "composing-programs.json",
+      "cover": "composing-programs.jpg",
+      "sizeBytes": 102917,
+      "packType": "course"
+    },
+    {
+      "id": "python-crash-course",
+      "title": "Python Crash Course",
+      "language": "python",
+      "file": "python-crash-course.json",
+      "cover": "python-crash-course.jpg",
+      "sizeBytes": 812094,
+      "packType": "course"
+    },
+    {
+      "id": "learning-go",
+      "title": "Learning Go",
+      "language": "go",
+      "file": "learning-go.json",
+      "cover": "learning-go.jpg",
+      "sizeBytes": 1470803,
+      "packType": "course"
+    },
+    {
+      "id": "algorithms-erickson",
+      "title": "Algorithms (Erickson)",
+      "language": "python",
+      "file": "algorithms-erickson.json",
+      "cover": "algorithms-erickson.jpg",
+      "sizeBytes": 102602,
+      "packType": "course"
+    },
+    {
+      "id": "open-data-structures",
+      "title": "Open Data Structures",
+      "language": "python",
+      "file": "open-data-structures.json",
+      "cover": "open-data-structures.jpg",
+      "sizeBytes": 129204,
+      "packType": "course"
+    },
+    {
+      "id": "crafting-interpreters-js",
+      "title": "Crafting Interpreters (JavaScript)",
+      "language": "javascript",
+      "file": "crafting-interpreters-js.json",
+      "cover": "crafting-interpreters-js.jpg",
+      "sizeBytes": 245795,
+      "packType": "course"
+    },
+    {
+      "id": "pro-git",
+      "title": "Pro Git",
+      "language": "javascript",
+      "file": "pro-git.json",
+      "cover": "pro-git.jpg",
+      "sizeBytes": 69777,
+      "packType": "course"
+    },
+    {
+      "id": "svelte-tutorial",
+      "title": "Learning Svelte",
       "language": "svelte",
-      "file": "svelte-5-complete.json",
-      "cover": "svelte-5-complete.jpg",
-      "sizeBytes": 72665,
+      "file": "svelte-tutorial.json",
+      "cover": "svelte-tutorial.jpg",
+      "sizeBytes": 2229098,
       "packType": "course"
     },
     {
@@ -25,7 +151,7 @@
       "language": "solid",
       "file": "solidjs-fundamentals.json",
       "cover": "solidjs-fundamentals.jpg",
-      "sizeBytes": 15633,
+      "sizeBytes": 48974,
       "packType": "course"
     },
     {
@@ -34,7 +160,7 @@
       "language": "htmx",
       "file": "htmx-fundamentals.json",
       "cover": "htmx-fundamentals.jpg",
-      "sizeBytes": 13838,
+      "sizeBytes": 46195,
       "packType": "course"
     },
     {
@@ -43,7 +169,7 @@
       "language": "astro",
       "file": "astro-fundamentals.json",
       "cover": "astro-fundamentals.jpg",
-      "sizeBytes": 15625,
+      "sizeBytes": 56908,
       "packType": "course"
     },
     {
@@ -52,7 +178,7 @@
       "language": "bun",
       "file": "bun-complete.json",
       "cover": "bun-complete.jpg",
-      "sizeBytes": 161507,
+      "sizeBytes": 241049,
       "packType": "course"
     },
     {
@@ -61,7 +187,79 @@
       "language": "reactnative",
       "file": "react-native.json",
       "cover": "react-native.jpg",
-      "sizeBytes": 243158,
+      "sizeBytes": 441071,
+      "packType": "course"
+    },
+    {
+      "id": "learning-react-native",
+      "title": "Learning React Native",
+      "language": "javascript",
+      "file": "learning-react-native.json",
+      "cover": "learning-react-native.jpg",
+      "sizeBytes": 610241,
+      "packType": "course"
+    },
+    {
+      "id": "fluent-react",
+      "title": "Fluent React",
+      "language": "javascript",
+      "file": "fluent-react.json",
+      "cover": "fluent-react.jpg",
+      "sizeBytes": 921536,
+      "packType": "course"
+    },
+    {
+      "id": "tauri-2-fundamentals",
+      "title": "Tauri 2 Fundamentals",
+      "language": "tauri",
+      "file": "tauri-2-fundamentals.json",
+      "cover": "tauri-2-fundamentals.jpg",
+      "sizeBytes": 15591,
+      "packType": "course"
+    },
+    {
+      "id": "interactive-web-development-with-three-js-and-a-frame",
+      "title": "Interactive Web Development With Three.js and A-Frame",
+      "language": "javascript",
+      "file": "interactive-web-development-with-three-js-and-a-frame.json",
+      "cover": "interactive-web-development-with-three-js-and-a-frame.jpg",
+      "sizeBytes": 951120,
+      "packType": "course"
+    },
+    {
+      "id": "mastering-bitcoin",
+      "title": "Mastering Bitcoin",
+      "language": "javascript",
+      "file": "mastering-bitcoin.json",
+      "cover": "mastering-bitcoin.jpg",
+      "sizeBytes": 92505,
+      "packType": "course"
+    },
+    {
+      "id": "programming-bitcoin",
+      "title": "Programming Bitcoin",
+      "language": "python",
+      "file": "programming-bitcoin.json",
+      "cover": "programming-bitcoin.jpg",
+      "sizeBytes": 140801,
+      "packType": "course"
+    },
+    {
+      "id": "mastering-ethereum",
+      "title": "Mastering Ethereum",
+      "language": "javascript",
+      "file": "mastering-ethereum.json",
+      "cover": "mastering-ethereum.jpg",
+      "sizeBytes": 82823,
+      "packType": "course"
+    },
+    {
+      "id": "mastering-lightning-network",
+      "title": "Mastering Lightning Network",
+      "language": "javascript",
+      "file": "mastering-lightning-network.json",
+      "cover": "mastering-lightning-network.jpg",
+      "sizeBytes": 94596,
       "packType": "course"
     },
     {
@@ -70,34 +268,7 @@
       "language": "solidity",
       "file": "solidity-complete.json",
       "cover": "solidity-complete.jpg",
-      "sizeBytes": 193920,
-      "packType": "course"
-    },
-    {
-      "id": "solana-programs",
-      "title": "Solana Programs: Rust on the SVM",
-      "language": "rust",
-      "file": "solana-programs.json",
-      "cover": "solana-programs.jpg",
-      "sizeBytes": 357277,
-      "packType": "course"
-    },
-    {
-      "id": "viem-ethers",
-      "title": "viem and ethers.js: Talking to Ethereum from TypeScript",
-      "language": "typescript",
-      "file": "viem-ethers.json",
-      "cover": "viem-ethers.jpg",
-      "sizeBytes": 186753,
-      "packType": "course"
-    },
-    {
-      "id": "cryptography-fundamentals",
-      "title": "Cryptography Fundamentals: Hashes to ZK",
-      "language": "typescript",
-      "file": "cryptography-fundamentals.json",
-      "cover": "cryptography-fundamentals.jpg",
-      "sizeBytes": 200488,
+      "sizeBytes": 277475,
       "packType": "course"
     },
     {
@@ -106,7 +277,34 @@
       "language": "vyper",
       "file": "vyper-fundamentals.json",
       "cover": "vyper-fundamentals.jpg",
-      "sizeBytes": 176245,
+      "sizeBytes": 273313,
+      "packType": "course"
+    },
+    {
+      "id": "solana-programs",
+      "title": "Solana Programs: Rust on the SVM",
+      "language": "rust",
+      "file": "solana-programs.json",
+      "cover": "solana-programs.jpg",
+      "sizeBytes": 493951,
+      "packType": "course"
+    },
+    {
+      "id": "viem-ethers",
+      "title": "viem and ethers.js: Talking to Ethereum from TypeScript",
+      "language": "typescript",
+      "file": "viem-ethers.json",
+      "cover": "viem-ethers.jpg",
+      "sizeBytes": 292370,
+      "packType": "course"
+    },
+    {
+      "id": "cryptography-fundamentals",
+      "title": "Cryptography Fundamentals: Hashes to ZK",
+      "language": "typescript",
+      "file": "cryptography-fundamentals.json",
+      "cover": "cryptography-fundamentals.jpg",
+      "sizeBytes": 333998,
       "packType": "course"
     },
     {
@@ -115,7 +313,7 @@
       "language": "javascript",
       "file": "challenges-javascript-handwritten.json",
       "cover": "challenges-javascript-handwritten.jpg",
-      "sizeBytes": 239188,
+      "sizeBytes": 880966,
       "packType": "challenges"
     },
     {
@@ -124,7 +322,7 @@
       "language": "typescript",
       "file": "challenges-typescript-mo9c9k2o.json",
       "cover": "challenges-typescript-mo9c9k2o.jpg",
-      "sizeBytes": 429110,
+      "sizeBytes": 1174973,
       "packType": "challenges"
     },
     {
@@ -133,7 +331,7 @@
       "language": "python",
       "file": "challenges-python-handwritten.json",
       "cover": "challenges-python-handwritten.jpg",
-      "sizeBytes": 212780,
+      "sizeBytes": 827243,
       "packType": "challenges"
     },
     {
@@ -142,7 +340,7 @@
       "language": "go",
       "file": "challenges-go-handwritten.json",
       "cover": "challenges-go-handwritten.jpg",
-      "sizeBytes": 394425,
+      "sizeBytes": 1124296,
       "packType": "challenges"
     },
     {
@@ -151,7 +349,7 @@
       "language": "rust",
       "file": "challenges-rust-handwritten.json",
       "cover": "challenges-rust-handwritten.jpg",
-      "sizeBytes": 225529,
+      "sizeBytes": 884521,
       "packType": "challenges"
     },
     {
@@ -160,7 +358,7 @@
       "language": "reactnative",
       "file": "challenges-reactnative-handwritten.json",
       "cover": "challenges-reactnative-handwritten.jpg",
-      "sizeBytes": 23388,
+      "sizeBytes": 157056,
       "packType": "challenges"
     }
   ]
