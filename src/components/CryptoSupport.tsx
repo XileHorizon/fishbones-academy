@@ -107,21 +107,9 @@ function QrCode({ value, size = 116 }: { value: string; size?: number }) {
 
 interface CryptoCardProps {
   method: CryptoMethod;
-  /** When rendered inside the dock deck, the card's depth relative to
-   *  the active card (0 = front, n-1 = back). Drives the data-depth
-   *  attribute that the dock CSS keys off for the shuffle transform. */
-  depth?: number;
-  /** When true, the card sits at the front of the deck and accepts
-   *  pointer interaction; non-front cards are pulled out of the tab
-   *  order so keyboard users can't focus controls hidden behind the
-   *  active one. */
-  isActive?: boolean;
-  /** Click handler — the dock uses this to bring a peeking card to
-   *  the front when the user taps its visible sliver. */
-  onSelect?: () => void;
 }
 
-function CryptoCard({ method, depth, isActive, onSelect }: CryptoCardProps) {
+function CryptoCard({ method }: CryptoCardProps) {
   const [copied, setCopied] = useState(false);
   const timer = useRef<number | null>(null);
 
@@ -162,35 +150,8 @@ function CryptoCard({ method, depth, isActive, onSelect }: CryptoCardProps) {
     "--brand-tint": method.tint ?? "rgba(155, 166, 237, 0.18)",
   } as CSSProperties;
 
-  // Non-front cards in the dock deck shouldn't trap focus — their
-  // controls are visually behind the active card. We mirror that in
-  // the DOM by tabbing them out and routing pointer events to the
-  // onSelect handler instead so a click brings the card to the front.
-  const inDeck = depth !== undefined;
-  const inactiveDeck = inDeck && !isActive;
-
   return (
-    <article
-      className="crypto-card"
-      data-id={method.id}
-      data-depth={depth}
-      data-active={isActive ? "" : undefined}
-      style={cardStyle}
-      onClick={inactiveDeck ? onSelect : undefined}
-      role={inactiveDeck ? "button" : undefined}
-      tabIndex={inactiveDeck ? 0 : undefined}
-      aria-label={inactiveDeck ? `Bring ${method.name} to the front` : undefined}
-      onKeyDown={
-        inactiveDeck
-          ? (e) => {
-              if (e.key === "Enter" || e.key === " ") {
-                e.preventDefault();
-                onSelect?.();
-              }
-            }
-          : undefined
-      }
-    >
+    <article className="crypto-card" data-id={method.id} style={cardStyle}>
       <div className="crypto-card__main">
         <header className="crypto-card__head">
           <div
@@ -235,7 +196,6 @@ function CryptoCard({ method, depth, isActive, onSelect }: CryptoCardProps) {
           onClick={copy}
           data-copied={copied || undefined}
           aria-label={`Copy ${method.name} address`}
-          tabIndex={inactiveDeck ? -1 : undefined}
         >
           {copied ? "Copied" : "Copy address"}
         </button>
@@ -256,229 +216,3 @@ export function CryptoSupport({ methods = DEFAULT_METHODS, className }: CryptoSu
   );
 }
 
-// ─────────────────────────── Tip dock ───────────────────────────
-// Floating, fixed-position widget that visitors can use to tip from
-// any page. Collapsed by default (a small pill in the bottom-right
-// corner); expanding it pops a panel above the trigger with the same
-// donation cards stacked vertically. The stack scrolls inside the
-// panel so it works at any viewport height. Drop <CryptoTipDock /> at
-// the app root to make it global; pass `excludePaths` if certain
-// routes should hide it (e.g. the /support page itself, where the
-// dock would duplicate content).
-
-export interface CryptoTipDockProps {
-  methods?: CryptoMethod[];
-  /** Pathname matchers — if any match window.location, the dock hides. */
-  excludePaths?: string[];
-  /** Override the trigger pill's label. Defaults to "Tip in crypto". */
-  label?: string;
-}
-
-function CoinIcon() {
-  // Generic coin / token glyph — the dock isn't tied to one chain so
-  // we use a stack-of-coins motif rather than a specific brand mark.
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden focusable="false" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-      <ellipse cx="12" cy="6" rx="7" ry="2.5" />
-      <path d="M5 6v5c0 1.4 3.1 2.5 7 2.5s7-1.1 7-2.5V6" />
-      <path d="M5 11v5c0 1.4 3.1 2.5 7 2.5s7-1.1 7-2.5v-5" />
-    </svg>
-  );
-}
-
-function CloseIcon() {
-  return (
-    <svg viewBox="0 0 16 16" aria-hidden focusable="false" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
-      <path d="M3.5 3.5l9 9M12.5 3.5l-9 9" />
-    </svg>
-  );
-}
-
-export function CryptoTipDock({
-  methods = DEFAULT_METHODS,
-  excludePaths,
-  label = "Tip in crypto",
-}: CryptoTipDockProps) {
-  const [open, setOpen] = useState(false);
-  const [hidden, setHidden] = useState(false);
-  const [activeIdx, setActiveIdx] = useState(0);
-  const panelRef = useRef<HTMLDivElement | null>(null);
-  const triggerRef = useRef<HTMLButtonElement | null>(null);
-  const stackRef = useRef<HTMLDivElement | null>(null);
-  const wheelAccum = useRef(0);
-  const touchY = useRef<number | null>(null);
-
-  // Advance / retreat the deck by one position with wrap-around. The
-  // CSS reads `data-depth` off each card and slides everything to the
-  // new arrangement; the card that was at depth 0 leaves the front
-  // and reappears at the back of the deck (the "flip behind" feel).
-  const advance = (dir: 1 | -1) => {
-    setActiveIdx((i) => (i + dir + methods.length) % methods.length);
-  };
-
-  // Path-based hide. We listen to popstate + a polling fallback for
-  // pushState/replaceState since react-router doesn't fire a window
-  // event on navigation, and we'd rather not couple the dock to a
-  // specific router. The polling cadence is cheap (one read per
-  // animation frame batch).
-  useEffect(() => {
-    if (!excludePaths || excludePaths.length === 0) return;
-    const check = () => {
-      const path = window.location.pathname;
-      setHidden(excludePaths.some((p) => path === p || path.startsWith(p + "/")));
-    };
-    check();
-    const id = window.setInterval(check, 400);
-    window.addEventListener("popstate", check);
-    return () => {
-      window.clearInterval(id);
-      window.removeEventListener("popstate", check);
-    };
-  }, [excludePaths]);
-
-  // Close on Escape; arrow keys cycle the deck; close on outside
-  // click. All scoped to the open state so we don't burn listeners
-  // while collapsed.
-  useEffect(() => {
-    if (!open) return;
-    function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") setOpen(false);
-      else if (e.key === "ArrowDown" || e.key === "ArrowRight") {
-        e.preventDefault();
-        advance(1);
-      } else if (e.key === "ArrowUp" || e.key === "ArrowLeft") {
-        e.preventDefault();
-        advance(-1);
-      }
-    }
-    function onClick(e: MouseEvent) {
-      const t = e.target as Node | null;
-      if (!t) return;
-      if (panelRef.current?.contains(t)) return;
-      if (triggerRef.current?.contains(t)) return;
-      setOpen(false);
-    }
-    window.addEventListener("keydown", onKey);
-    window.addEventListener("mousedown", onClick);
-    return () => {
-      window.removeEventListener("keydown", onKey);
-      window.removeEventListener("mousedown", onClick);
-    };
-  }, [open]); // eslint-disable-line react-hooks/exhaustive-deps -- advance is stable enough; methods.length doesn't change after mount
-
-  // Wheel + touch handlers on the stack itself. The deck doesn't have
-  // real scroll content (cards are absolutely stacked), so we capture
-  // wheel ticks and swipe deltas, accumulate them past a small
-  // threshold, then advance the active index by one. Threshold
-  // prevents trackpad-driven micro-flips. */
-  useEffect(() => {
-    if (!open) return;
-    const stack = stackRef.current;
-    if (!stack) return;
-    const STEP = 80;
-
-    function onWheel(e: WheelEvent) {
-      e.preventDefault();
-      wheelAccum.current += e.deltaY;
-      if (wheelAccum.current > STEP) {
-        advance(1);
-        wheelAccum.current = 0;
-      } else if (wheelAccum.current < -STEP) {
-        advance(-1);
-        wheelAccum.current = 0;
-      }
-    }
-    function onTouchStart(e: TouchEvent) {
-      touchY.current = e.touches[0]?.clientY ?? null;
-    }
-    function onTouchMove(e: TouchEvent) {
-      if (touchY.current === null) return;
-      const y = e.touches[0]?.clientY;
-      if (y === undefined) return;
-      const dy = touchY.current - y;
-      if (Math.abs(dy) > 50) {
-        advance(dy > 0 ? 1 : -1);
-        touchY.current = y;
-      }
-      e.preventDefault();
-    }
-    function onTouchEnd() {
-      touchY.current = null;
-    }
-
-    stack.addEventListener("wheel", onWheel, { passive: false });
-    stack.addEventListener("touchstart", onTouchStart, { passive: true });
-    stack.addEventListener("touchmove", onTouchMove, { passive: false });
-    stack.addEventListener("touchend", onTouchEnd, { passive: true });
-    return () => {
-      stack.removeEventListener("wheel", onWheel);
-      stack.removeEventListener("touchstart", onTouchStart);
-      stack.removeEventListener("touchmove", onTouchMove);
-      stack.removeEventListener("touchend", onTouchEnd);
-    };
-  }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  if (hidden) return null;
-
-  return (
-    <div className="crypto-dock" data-open={open || undefined}>
-      {open && (
-        <div
-          ref={panelRef}
-          className="crypto-dock__panel"
-          role="dialog"
-          aria-label="Crypto tip jar"
-        >
-          <header className="crypto-dock__head">
-            <div className="crypto-dock__head-text">
-              <h3 className="crypto-dock__title">Send a tip</h3>
-              <p className="crypto-dock__sub">
-                Pick a chain — scan the QR or copy the address.
-              </p>
-            </div>
-            <button
-              type="button"
-              className="crypto-dock__close"
-              onClick={() => setOpen(false)}
-              aria-label="Close tip jar"
-            >
-              <CloseIcon />
-            </button>
-          </header>
-          <div
-            ref={stackRef}
-            className="crypto-dock__stack"
-            style={{ "--deck-size": methods.length } as CSSProperties}
-            aria-roledescription="card stack"
-          >
-            {methods.map((m, i) => {
-              const depth = (i - activeIdx + methods.length) % methods.length;
-              return (
-                <CryptoCard
-                  key={m.id}
-                  method={m}
-                  depth={depth}
-                  isActive={depth === 0}
-                  onSelect={() => setActiveIdx(i)}
-                />
-              );
-            })}
-          </div>
-        </div>
-      )}
-      <button
-        ref={triggerRef}
-        type="button"
-        className="crypto-dock__trigger"
-        onClick={() => setOpen((v) => !v)}
-        aria-expanded={open}
-        aria-haspopup="dialog"
-      >
-        <span className="crypto-dock__trigger-icon" aria-hidden>
-          <CoinIcon />
-        </span>
-        <span className="crypto-dock__trigger-label">{label}</span>
-      </button>
-    </div>
-  );
-}

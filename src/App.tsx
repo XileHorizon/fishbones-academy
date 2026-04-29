@@ -3,7 +3,6 @@ import { Route, Routes, useLocation } from "react-router-dom";
 import { Nav } from "./components/Nav";
 import { Footer } from "./components/Footer";
 import { ScrollToTop } from "./components/ScrollToTop";
-import { CryptoTipDock } from "./components/CryptoSupport";
 
 const Home = lazy(() => import("./pages/Home").then((m) => ({ default: m.Home })));
 const Courses = lazy(() => import("./pages/Courses").then((m) => ({ default: m.Courses })));
@@ -69,10 +68,6 @@ export function App() {
         </Suspense>
       </main>
       <Footer />
-      {/* Floating tip dock — visible on every route except /support
-          and /donate, where the full grid would duplicate the dock's
-          contents. */}
-      <CryptoTipDock excludePaths={["/support", "/donate"]} />
     </>
   );
 }
