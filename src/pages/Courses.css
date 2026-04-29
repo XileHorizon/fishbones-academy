@@ -152,6 +152,89 @@
   gap: 36px 22px;
 }
 
+/* ── Tier-grouped sections ──────────────────────────────────
+   Wraps multiple .courses-grid blocks, one per editorial tier
+   (Beta / Alpha / Unreviewed). Generous vertical gap between
+   sections so the heading row reads as a divider, not just
+   another row. Mirrors the kata desktop library shelf. */
+.courses-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 56px;
+}
+
+.courses-section {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.courses-section__head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--color-border-default, rgba(255, 255, 255, 0.08));
+}
+
+.courses-section__pill {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 10.5px;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 3px 10px;
+}
+
+/* Pill palette mirrors the kata BookCover badges: amber for Alpha,
+   emerald for Beta, sky for legacy PRE-RELEASE / Unreviewed-as-RC. */
+.courses-section__pill--beta {
+  background: rgba(43, 182, 115, 0.20);
+  color: #4dd699;
+  border: 1px solid rgba(43, 182, 115, 0.45);
+}
+.courses-section__pill--alpha {
+  background: rgba(245, 177, 58, 0.18);
+  color: #f5b13a;
+  border: 1px solid rgba(245, 177, 58, 0.45);
+}
+.courses-section__pill--unreviewed {
+  background: rgba(160, 168, 184, 0.16);
+  color: #c0c6d2;
+  border: 1px solid rgba(160, 168, 184, 0.32);
+}
+
+.courses-section__title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.courses-section__count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 22px;
+  padding: 0 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--color-border-default, rgba(255, 255, 255, 0.08));
+  color: var(--color-text-secondary, rgba(255, 255, 255, 0.65));
+  font-size: 11.5px;
+  font-weight: 600;
+}
+
+.courses-section__blurb {
+  flex: 1 1 280px;
+  min-width: 0;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--color-text-secondary, rgba(255, 255, 255, 0.65));
+}
+
 /* The card itself is no longer a panel — the BOOK is the card. We
    strip the .card chrome (border, padded background) so the cover
    stands free, the way a paperback would on a shelf. The body text

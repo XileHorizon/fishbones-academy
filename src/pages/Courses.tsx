@@ -5,9 +5,12 @@ import {
   CATALOG,
   COURSE_DIFFICULTIES,
   COURSE_TOPICS,
+  RELEASE_SECTION_ORDER,
   type CourseDifficulty,
   type CourseTopic,
+  type CatalogCourse,
 } from "../data/courses";
+import type { ReleaseStatus } from "../data/types";
 import { LANGUAGES } from "../data/languages";
 import "./Courses.css";
 
@@ -41,6 +44,25 @@ export function Courses() {
   const hasFilters =
     query !== "" || language !== "all" || topic !== "all" || difficulty !== "all";
 
+  // Group filtered courses by release tier so the catalog can render a
+  // labelled section per tier (BETA top, ALPHA middle, UNREVIEWED
+  // bottom). Mirrors the kata desktop app's library shelf so the same
+  // book reads identically in both surfaces. Sections with no matches
+  // after the filter pass are dropped — no empty headings.
+  const releaseSections = useMemo(() => {
+    const buckets = new Map<ReleaseStatus, CatalogCourse[]>();
+    for (const c of filtered) {
+      const list = buckets.get(c.releaseStatus);
+      if (list) list.push(c);
+      else buckets.set(c.releaseStatus, [c]);
+    }
+    return RELEASE_SECTION_ORDER.flatMap((s) => {
+      const rows = buckets.get(s.status) ?? [];
+      if (rows.length === 0) return [];
+      return [{ ...s, rows }];
+    });
+  }, [filtered]);
+
   // Languages with at least one course in the catalog. We don't show
   // language chips for languages we have no courses for — keeps the
   // filter row honest.
@@ -64,15 +86,30 @@ export function Courses() {
   return (
     <div className="courses-page">
       <header className="courses-page__head section section--narrow">
-        <span className="section__eyebrow">Catalogue</span>
-        <h1 className="section__title">
-          Seventeen starter courses, ready to ship code in.
-        </h1>
-        <p className="section__subtitle">
-          Linear textbooks, framework deep-dives, and kata-style challenge
-          packs. Every one of them runs in your browser today — open the
-          embedded preview and start the first lesson without an account.
-        </p>
+        {/* Two-column hero. The Fishbones specimen plate sits on the
+            left as the catalogue's "shelf-end" book, the headline +
+            subtitle stack on the right. Below 720px the row stacks so
+            the book lands on top, like the CourseDetail hero does. */}
+        <div className="courses-page__head-row">
+          <div className="courses-page__cover">
+            <img
+              src="/fishbones-specimen.jpg"
+              alt="Fishbones — naturalist specimen plate"
+              draggable={false}
+            />
+          </div>
+          <div className="courses-page__head-text">
+            <span className="section__eyebrow">Catalogue</span>
+            <h1 className="section__title">
+              Pick something off the shelf.
+            </h1>
+            <p className="section__subtitle">
+              Three flavors on the shelf: linear textbooks, framework
+              deep-dives, and kata-style challenge packs. Pick one and
+              start the first lesson — no signup, no install.
+            </p>
+          </div>
+        </div>
       </header>
 
       <section className="section courses-page__body">
@@ -181,73 +218,88 @@ export function Courses() {
           </span>
         </div>
 
-        {/* ─── Grid ────────────────────────────────────── */}
+        {/* ─── Tier-grouped grid ─────────────────────────
+            Books are now sorted into editorial-tier sections (Beta /
+            Alpha / Unreviewed), top-to-bottom. The cards themselves
+            are unchanged; only the surrounding <section> wrapper
+            and heading row are new. Carries the same vocabulary the
+            kata desktop app uses on its library shelf. */}
         {filtered.length === 0 ? (
           <div className="courses-empty">
             <h3>No courses match.</h3>
             <p>Drop a filter or two and we'll find something.</p>
           </div>
         ) : (
-          <div className="courses-grid">
-            {filtered.map((c) => (
-              <Link
-                key={c.id}
-                to={`/courses/${c.id}`}
-                className="courses-grid__card"
+          <div className="courses-sections">
+            {releaseSections.map((sec) => (
+              <section
+                key={sec.status}
+                className={`courses-section courses-section--${sec.status.toLowerCase()}`}
+                aria-label={sec.label}
               >
-                {/* Bookshelf-style cover — full 2:3 portrait paperback
-                    rather than a cropped landscape band. The whole
-                    composition is visible (cartouche, flourishes,
-                    insignia, etc. — the artwork is too detailed to
-                    waste on a 5:3 crop). A subtle paperback drop-shadow
-                    + inner edge highlight sells the "book on a shelf"
-                    feel without leaning on a literal wood-grain prop.
-                    Cover synced from kata into /starter-courses/<id>.jpg
-                    by scripts/sync-starter-courses.mjs. */}
-                <div
-                  className={`courses-grid__cover courses-grid__cover--lang-${c.language}`}
-                >
-                  {c.cover && (
-                    <img
-                      className="courses-grid__cover-img"
-                      src={`/starter-courses/${c.cover}`}
-                      alt=""
-                      loading="lazy"
-                      draggable={false}
-                    />
-                  )}
-                  {c.packType === "challenges" && (
-                    <span className="courses-grid__cover-flag">Challenges</span>
-                  )}
-                </div>
-                {/* Shelf line — fakes the lip of a wooden shelf the
-                    book is standing on. Gradient strip rather than a
-                    full prop so it stays in the design's visual
-                    register (subtle, naturalist) instead of looking
-                    like an iBooks skin. */}
-                <div className="courses-grid__shelf" aria-hidden />
-                <div className="courses-grid__body">
-                  <div className="courses-grid__chips">
-                    <span className="pill pill--mono">{c.languageLabel}</span>
-                    {c.difficulty && (
-                      <span
-                        className={`pill courses-grid__diff courses-grid__diff--${c.difficulty}`}
+                <header className="courses-section__head">
+                  <span
+                    className={`pill courses-section__pill courses-section__pill--${sec.status.toLowerCase()}`}
+                  >
+                    {sec.status}
+                  </span>
+                  <h2 className="courses-section__title">{sec.label}</h2>
+                  <span className="courses-section__count">{sec.rows.length}</span>
+                  <span className="courses-section__blurb">{sec.blurb}</span>
+                </header>
+                <div className="courses-grid">
+                  {sec.rows.map((c) => (
+                    <Link
+                      key={c.id}
+                      to={`/courses/${c.id}`}
+                      className="courses-grid__card"
+                    >
+                      <div
+                        className={`courses-grid__cover courses-grid__cover--lang-${c.language}`}
                       >
-                        {c.difficulty}
-                      </span>
-                    )}
-                  </div>
-                  <h3 className="courses-grid__title">{c.title}</h3>
-                  <div className="courses-grid__meta">
-                    <span>~{c.approxLessons} lessons</span>
-                    <span>·</span>
-                    <span>~{Math.round(c.approxMinutes / 60)}h</span>
-                    <span className="courses-grid__cta">
-                      Open <ArrowRight size={11} />
-                    </span>
-                  </div>
+                        {c.cover && (
+                          <img
+                            className="courses-grid__cover-img"
+                            src={`/starter-courses/${c.cover}`}
+                            alt=""
+                            loading="lazy"
+                            draggable={false}
+                          />
+                        )}
+                        {c.packType === "challenges" && (
+                          <span className="courses-grid__cover-flag">
+                            Challenges
+                          </span>
+                        )}
+                      </div>
+                      <div className="courses-grid__shelf" aria-hidden />
+                      <div className="courses-grid__body">
+                        <div className="courses-grid__chips">
+                          <span className="pill pill--mono">
+                            {c.languageLabel}
+                          </span>
+                          {c.difficulty && (
+                            <span
+                              className={`pill courses-grid__diff courses-grid__diff--${c.difficulty}`}
+                            >
+                              {c.difficulty}
+                            </span>
+                          )}
+                        </div>
+                        <h3 className="courses-grid__title">{c.title}</h3>
+                        <div className="courses-grid__meta">
+                          <span>~{c.approxLessons} lessons</span>
+                          <span>·</span>
+                          <span>~{Math.round(c.approxMinutes / 60)}h</span>
+                          <span className="courses-grid__cta">
+                            Open <ArrowRight size={11} />
+                          </span>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
                 </div>
-              </Link>
+              </section>
             ))}
           </div>
         )}

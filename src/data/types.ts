@@ -3,6 +3,12 @@
 /// surface (workbench, tests, AI tutor) is the embedded /learn/ app and
 /// reads the full schema from the same JSON files.
 
+/// Editorial release tier — mirrors kata's `Course.releaseStatus`.
+/// Pipeline runs `UNREVIEWED` (drafts; bottom of the catalog) →
+/// `ALPHA` (next up) → `BETA` (final polish). Missing in the
+/// manifest = `UNREVIEWED` (the catalog normalises on read).
+export type ReleaseStatus = "UNREVIEWED" | "ALPHA" | "BETA";
+
 export interface CourseManifestEntry {
   id: string;
   title: string;
@@ -11,6 +17,10 @@ export interface CourseManifestEntry {
   cover?: string;
   sizeBytes?: number;
   packType?: "course" | "challenges";
+  /// Editorial tier set in the on-disk `course.json`. Drives the
+  /// section grouping in the catalog (BETA top, ALPHA middle,
+  /// UNREVIEWED bottom).
+  releaseStatus?: ReleaseStatus;
 }
 
 export interface CourseManifest {

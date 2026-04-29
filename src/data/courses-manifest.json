@@ -8,7 +8,8 @@
       "file": "the-rust-programming-language.json",
       "cover": "the-rust-programming-language.jpg",
       "sizeBytes": 1255509,
-      "packType": "course"
+      "packType": "course",
+      "releaseStatus": "BETA"
     },
     {
       "id": "rust-by-example",
@@ -17,25 +18,28 @@
       "file": "rust-by-example.json",
       "cover": "rust-by-example.jpg",
       "sizeBytes": 97257,
-      "packType": "course"
+      "packType": "course",
+      "releaseStatus": "ALPHA"
     },
     {
       "id": "rust-async-book",
       "title": "The Async Book (Rust)",
       "language": "rust",
-      "file": "rust-async-book.json",
-      "cover": "rust-async-book.jpg",
+      "file": "the-async-book-rust.json",
+      "cover": "the-async-book-rust.jpg",
       "sizeBytes": 83147,
-      "packType": "course"
+      "packType": "course",
+      "releaseStatus": "UNREVIEWED"
     },
     {
       "id": "rustonomicon",
       "title": "The Rustonomicon",
       "language": "rust",
-      "file": "rustonomicon.json",
-      "cover": "rustonomicon.jpg",
+      "file": "the-rustonomicon.json",
+      "cover": "the-rustonomicon.jpg",
       "sizeBytes": 113487,
-      "packType": "course"
+      "packType": "course",
+      "releaseStatus": "UNREVIEWED"
     },
     {
       "id": "eloquent-javascript",
@@ -44,16 +48,18 @@
       "file": "eloquent-javascript.json",
       "cover": "eloquent-javascript.jpg",
       "sizeBytes": 110594,
-      "packType": "course"
+      "packType": "course",
+      "releaseStatus": "UNREVIEWED"
     },
     {
       "id": "javascript-info",
       "title": "The Modern JavaScript Tutorial — Fundamentals",
       "language": "javascript",
-      "file": "javascript-info.json",
-      "cover": "javascript-info.jpg",
+      "file": "the-modern-javascript-tutorial-fundamentals.json",
+      "cover": "the-modern-javascript-tutorial-fundamentals.jpg",
       "sizeBytes": 115547,
-      "packType": "course"
+      "packType": "course",
+      "releaseStatus": "UNREVIEWED"
     },
     {
       "id": "javascript-the-definitive-guide",
@@ -62,16 +68,18 @@
       "file": "javascript-the-definitive-guide.json",
       "cover": "javascript-the-definitive-guide.jpg",
       "sizeBytes": 318646,
-      "packType": "course"
+      "packType": "course",
+      "releaseStatus": "UNREVIEWED"
     },
     {
       "id": "you-dont-know-js-yet",
       "title": "You Don't Know JS Yet",
       "language": "javascript",
-      "file": "you-dont-know-js-yet.json",
-      "cover": "you-dont-know-js-yet.jpg",
+      "file": "you-don-t-know-js-yet.json",
+      "cover": "you-don-t-know-js-yet.jpg",
       "sizeBytes": 98170,
-      "packType": "course"
+      "packType": "course",
+      "releaseStatus": "UNREVIEWED"
     },
     {
       "id": "composing-programs",
@@ -80,7 +88,8 @@
       "file": "composing-programs.json",
       "cover": "composing-programs.jpg",
       "sizeBytes": 102917,
-      "packType": "course"
+      "packType": "course",
+      "releaseStatus": "UNREVIEWED"
     },
     {
       "id": "python-crash-course",
@@ -89,7 +98,8 @@
       "file": "python-crash-course.json",
       "cover": "python-crash-course.jpg",
       "sizeBytes": 812094,
-      "packType": "course"
+      "packType": "course",
+      "releaseStatus": "UNREVIEWED"
     },
     {
       "id": "learning-go",
@@ -98,7 +108,8 @@
       "file": "learning-go.json",
       "cover": "learning-go.jpg",
       "sizeBytes": 1470803,
-      "packType": "course"
+      "packType": "course",
+      "releaseStatus": "BETA"
     },
     {
       "id": "algorithms-erickson",
@@ -107,7 +118,8 @@
       "file": "algorithms-erickson.json",
       "cover": "algorithms-erickson.jpg",
       "sizeBytes": 102602,
-      "packType": "course"
+      "packType": "course",
+      "releaseStatus": "UNREVIEWED"
     },
     {
       "id": "open-data-structures",
@@ -116,16 +128,18 @@
       "file": "open-data-structures.json",
       "cover": "open-data-structures.jpg",
       "sizeBytes": 129204,
-      "packType": "course"
+      "packType": "course",
+      "releaseStatus": "UNREVIEWED"
     },
     {
       "id": "crafting-interpreters-js",
       "title": "Crafting Interpreters (JavaScript)",
       "language": "javascript",
-      "file": "crafting-interpreters-js.json",
-      "cover": "crafting-interpreters-js.jpg",
+      "file": "crafting-interpreters-javascript.json",
+      "cover": "crafting-interpreters-javascript.jpg",
       "sizeBytes": 245795,
-      "packType": "course"
+      "packType": "course",
+      "releaseStatus": "UNREVIEWED"
     },
     {
       "id": "pro-git",
@@ -134,16 +148,18 @@
       "file": "pro-git.json",
       "cover": "pro-git.jpg",
       "sizeBytes": 69777,
-      "packType": "course"
+      "packType": "course",
+      "releaseStatus": "UNREVIEWED"
     },
     {
       "id": "svelte-tutorial",
       "title": "Learning Svelte",
       "language": "svelte",
-      "file": "svelte-tutorial.json",
-      "cover": "svelte-tutorial.jpg",
+      "file": "learning-svelte.json",
+      "cover": "learning-svelte.jpg",
       "sizeBytes": 2229098,
-      "packType": "course"
+      "packType": "course",
+      "releaseStatus": "BETA"
     },
     {
       "id": "solidjs-fundamentals",
@@ -152,7 +168,8 @@
       "file": "solidjs-fundamentals.json",
       "cover": "solidjs-fundamentals.jpg",
       "sizeBytes": 48974,
-      "packType": "course"
+      "packType": "course",
+      "releaseStatus": "UNREVIEWED"
     },
     {
       "id": "htmx-fundamentals",
@@ -161,7 +178,8 @@
       "file": "htmx-fundamentals.json",
       "cover": "htmx-fundamentals.jpg",
       "sizeBytes": 46195,
-      "packType": "course"
+      "packType": "course",
+      "releaseStatus": "UNREVIEWED"
     },
     {
       "id": "astro-fundamentals",
@@ -170,16 +188,18 @@
       "file": "astro-fundamentals.json",
       "cover": "astro-fundamentals.jpg",
       "sizeBytes": 56908,
-      "packType": "course"
+      "packType": "course",
+      "releaseStatus": "UNREVIEWED"
     },
     {
       "id": "bun-complete",
       "title": "Bun: The Complete Runtime",
       "language": "bun",
-      "file": "bun-complete.json",
-      "cover": "bun-complete.jpg",
+      "file": "bun-the-complete-runtime.json",
+      "cover": "bun-the-complete-runtime.jpg",
       "sizeBytes": 241049,
-      "packType": "course"
+      "packType": "course",
+      "releaseStatus": "UNREVIEWED"
     },
     {
       "id": "react-native",
@@ -188,7 +208,8 @@
       "file": "react-native.json",
       "cover": "react-native.jpg",
       "sizeBytes": 441071,
-      "packType": "course"
+      "packType": "course",
+      "releaseStatus": "UNREVIEWED"
     },
     {
       "id": "learning-react-native",
@@ -197,7 +218,8 @@
       "file": "learning-react-native.json",
       "cover": "learning-react-native.jpg",
       "sizeBytes": 610241,
-      "packType": "course"
+      "packType": "course",
+      "releaseStatus": "UNREVIEWED"
     },
     {
       "id": "fluent-react",
@@ -206,7 +228,8 @@
       "file": "fluent-react.json",
       "cover": "fluent-react.jpg",
       "sizeBytes": 921536,
-      "packType": "course"
+      "packType": "course",
+      "releaseStatus": "ALPHA"
     },
     {
       "id": "tauri-2-fundamentals",
@@ -215,7 +238,8 @@
       "file": "tauri-2-fundamentals.json",
       "cover": "tauri-2-fundamentals.jpg",
       "sizeBytes": 15591,
-      "packType": "course"
+      "packType": "course",
+      "releaseStatus": "UNREVIEWED"
     },
     {
       "id": "interactive-web-development-with-three-js-and-a-frame",
@@ -224,7 +248,8 @@
       "file": "interactive-web-development-with-three-js-and-a-frame.json",
       "cover": "interactive-web-development-with-three-js-and-a-frame.jpg",
       "sizeBytes": 951120,
-      "packType": "course"
+      "packType": "course",
+      "releaseStatus": "UNREVIEWED"
     },
     {
       "id": "mastering-bitcoin",
@@ -233,7 +258,8 @@
       "file": "mastering-bitcoin.json",
       "cover": "mastering-bitcoin.jpg",
       "sizeBytes": 92505,
-      "packType": "course"
+      "packType": "course",
+      "releaseStatus": "ALPHA"
     },
     {
       "id": "programming-bitcoin",
@@ -242,7 +268,8 @@
       "file": "programming-bitcoin.json",
       "cover": "programming-bitcoin.jpg",
       "sizeBytes": 140801,
-      "packType": "course"
+      "packType": "course",
+      "releaseStatus": "UNREVIEWED"
     },
     {
       "id": "mastering-ethereum",
@@ -251,7 +278,8 @@
       "file": "mastering-ethereum.json",
       "cover": "mastering-ethereum.jpg",
       "sizeBytes": 82823,
-      "packType": "course"
+      "packType": "course",
+      "releaseStatus": "ALPHA"
     },
     {
       "id": "mastering-lightning-network",
@@ -260,106 +288,118 @@
       "file": "mastering-lightning-network.json",
       "cover": "mastering-lightning-network.jpg",
       "sizeBytes": 94596,
-      "packType": "course"
+      "packType": "course",
+      "releaseStatus": "UNREVIEWED"
     },
     {
       "id": "solidity-complete",
       "title": "Solidity: Smart Contracts from First Principles",
       "language": "solidity",
-      "file": "solidity-complete.json",
-      "cover": "solidity-complete.jpg",
+      "file": "solidity-smart-contracts-from-first-principles.json",
+      "cover": "solidity-smart-contracts-from-first-principles.jpg",
       "sizeBytes": 277475,
-      "packType": "course"
+      "packType": "course",
+      "releaseStatus": "ALPHA"
     },
     {
       "id": "vyper-fundamentals",
       "title": "Vyper Fundamentals: Pythonic Smart Contracts",
       "language": "vyper",
-      "file": "vyper-fundamentals.json",
-      "cover": "vyper-fundamentals.jpg",
+      "file": "vyper-fundamentals-pythonic-smart-contracts.json",
+      "cover": "vyper-fundamentals-pythonic-smart-contracts.jpg",
       "sizeBytes": 273313,
-      "packType": "course"
+      "packType": "course",
+      "releaseStatus": "UNREVIEWED"
     },
     {
       "id": "solana-programs",
       "title": "Solana Programs: Rust on the SVM",
       "language": "rust",
-      "file": "solana-programs.json",
-      "cover": "solana-programs.jpg",
+      "file": "solana-programs-rust-on-the-svm.json",
+      "cover": "solana-programs-rust-on-the-svm.jpg",
       "sizeBytes": 493951,
-      "packType": "course"
+      "packType": "course",
+      "releaseStatus": "ALPHA"
     },
     {
       "id": "viem-ethers",
       "title": "viem and ethers.js: Talking to Ethereum from TypeScript",
       "language": "typescript",
-      "file": "viem-ethers.json",
-      "cover": "viem-ethers.jpg",
+      "file": "viem-and-ethers-js-talking-to-ethereum-from-typescript.json",
+      "cover": "viem-and-ethers-js-talking-to-ethereum-from-typescript.jpg",
       "sizeBytes": 292370,
-      "packType": "course"
+      "packType": "course",
+      "releaseStatus": "UNREVIEWED"
     },
     {
       "id": "cryptography-fundamentals",
       "title": "Cryptography Fundamentals: Hashes to ZK",
       "language": "typescript",
-      "file": "cryptography-fundamentals.json",
-      "cover": "cryptography-fundamentals.jpg",
+      "file": "cryptography-fundamentals-hashes-to-zk.json",
+      "cover": "cryptography-fundamentals-hashes-to-zk.jpg",
       "sizeBytes": 333998,
-      "packType": "course"
+      "packType": "course",
+      "releaseStatus": "UNREVIEWED"
     },
     {
       "id": "challenges-javascript-handwritten",
       "title": "Javascript Challenges",
       "language": "javascript",
-      "file": "challenges-javascript-handwritten.json",
-      "cover": "challenges-javascript-handwritten.jpg",
+      "file": "javascript-challenges.json",
+      "cover": "javascript-challenges.jpg",
       "sizeBytes": 880966,
-      "packType": "challenges"
+      "packType": "challenges",
+      "releaseStatus": "UNREVIEWED"
     },
     {
       "id": "challenges-typescript-mo9c9k2o",
       "title": "Typescript — Challenge Pack",
       "language": "typescript",
-      "file": "challenges-typescript-mo9c9k2o.json",
-      "cover": "challenges-typescript-mo9c9k2o.jpg",
+      "file": "typescript-challenge-pack.json",
+      "cover": "typescript-challenge-pack.jpg",
       "sizeBytes": 1174973,
-      "packType": "challenges"
+      "packType": "challenges",
+      "releaseStatus": "UNREVIEWED"
     },
     {
       "id": "challenges-python-handwritten",
       "title": "Python Challenges",
       "language": "python",
-      "file": "challenges-python-handwritten.json",
-      "cover": "challenges-python-handwritten.jpg",
+      "file": "python-challenges.json",
+      "cover": "python-challenges.jpg",
       "sizeBytes": 827243,
-      "packType": "challenges"
+      "packType": "challenges",
+      "releaseStatus": "UNREVIEWED"
     },
     {
       "id": "challenges-go-handwritten",
       "title": "Go Challenges",
       "language": "go",
-      "file": "challenges-go-handwritten.json",
-      "cover": "challenges-go-handwritten.jpg",
+      "file": "go-challenges.json",
+      "cover": "go-challenges.jpg",
       "sizeBytes": 1124296,
-      "packType": "challenges"
+      "packType": "challenges",
+      "releaseStatus": "BETA"
     },
     {
       "id": "challenges-rust-handwritten",
       "title": "Rust Challenges",
       "language": "rust",
-      "file": "challenges-rust-handwritten.json",
-      "cover": "challenges-rust-handwritten.jpg",
+      "file": "rust-challenges.json",
+      "cover": "rust-challenges.jpg",
       "sizeBytes": 884521,
-      "packType": "challenges"
+      "packType": "challenges",
+      "releaseStatus": "BETA"
     },
     {
       "id": "challenges-reactnative-handwritten",
       "title": "React Native Challenges",
       "language": "reactnative",
-      "file": "challenges-reactnative-handwritten.json",
-      "cover": "challenges-reactnative-handwritten.jpg",
+      "file": "react-native-challenges.json",
+      "cover": "react-native-challenges.jpg",
       "sizeBytes": 157056,
-      "packType": "challenges"
+      "packType": "challenges",
+      "releaseStatus": "UNREVIEWED"
     }
   ]
 }

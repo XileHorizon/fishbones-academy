@@ -1,5 +1,10 @@
 import manifestRaw from "./courses-manifest.json";
-import type { CourseManifest, CourseManifestEntry, FullCourse } from "./types";
+import type {
+  CourseManifest,
+  CourseManifestEntry,
+  FullCourse,
+  ReleaseStatus,
+} from "./types";
 import { languageById } from "./languages";
 
 /// Embedded manifest — kept in the bundle so the catalog renders even
@@ -89,6 +94,40 @@ export interface CatalogCourse extends CourseManifestEntry {
   /// Human-readable estimated time. ~12min/lesson average from the
   /// app's own per-lesson telemetry.
   approxMinutes: number;
+  /// Always-defined editorial tier (manifest's optional value
+  /// normalised, with `UNREVIEWED` as the default). The catalog
+  /// page groups cards by this; the tier vocabulary mirrors the
+  /// kata desktop app so the same book reads identically across
+  /// surfaces.
+  releaseStatus: ReleaseStatus;
+}
+
+/// Editorial-tier section ordering for the catalog. BETA renders at
+/// the top (most polished); UNREVIEWED renders at the bottom (drafts).
+export const RELEASE_SECTION_ORDER: ReadonlyArray<{
+  status: ReleaseStatus;
+  label: string;
+  blurb: string;
+}> = [
+  {
+    status: "BETA",
+    label: "Beta",
+    blurb: "Polished and in final testing — feedback welcome.",
+  },
+  {
+    status: "ALPHA",
+    label: "Alpha",
+    blurb: "In the collection — content stable, polishing in progress.",
+  },
+  {
+    status: "UNREVIEWED",
+    label: "Unreviewed",
+    blurb: "Early drafts — content still expanding.",
+  },
+];
+
+function normaliseReleaseStatus(s: string | undefined): ReleaseStatus {
+  return s === "BETA" || s === "ALPHA" ? s : "UNREVIEWED";
 }
 
 function approximateLessons(entry: CourseManifestEntry): number {
@@ -99,22 +138,40 @@ function approximateLessons(entry: CourseManifestEntry): number {
   return Math.max(8, Math.round(kb / 5));
 }
 
-export const CATALOG: CatalogCourse[] = manifest.courses.map((entry) => {
-  const lang = languageById(entry.language);
-  const topic: CourseTopic =
-    entry.packType === "challenges"
-      ? "challenges"
-      : TOPIC_OVERRIDES[entry.id] ?? "languages";
-  const lessons = approximateLessons(entry);
-  return {
-    ...entry,
-    topic,
-    difficulty: DIFFICULTY_OVERRIDES[entry.id],
-    languageLabel: lang?.name ?? entry.language,
-    approxLessons: lessons,
-    approxMinutes: lessons * 12,
-  };
-});
+/// Some manifests (synced from older bundles, or merged from
+/// multiple sources) have leaked duplicate entries with the same
+/// `id`. The catalog renders strictly one card per id; the first
+/// occurrence wins so manual ordering in the manifest is respected.
+function dedupeById(entries: CourseManifestEntry[]): CourseManifestEntry[] {
+  const seen = new Set<string>();
+  const out: CourseManifestEntry[] = [];
+  for (const e of entries) {
+    if (seen.has(e.id)) continue;
+    seen.add(e.id);
+    out.push(e);
+  }
+  return out;
+}
+
+export const CATALOG: CatalogCourse[] = dedupeById(manifest.courses).map(
+  (entry) => {
+    const lang = languageById(entry.language);
+    const topic: CourseTopic =
+      entry.packType === "challenges"
+        ? "challenges"
+        : TOPIC_OVERRIDES[entry.id] ?? "languages";
+    const lessons = approximateLessons(entry);
+    return {
+      ...entry,
+      topic,
+      difficulty: DIFFICULTY_OVERRIDES[entry.id],
+      languageLabel: lang?.name ?? entry.language,
+      approxLessons: lessons,
+      approxMinutes: lessons * 12,
+      releaseStatus: normaliseReleaseStatus(entry.releaseStatus),
+    };
+  },
+);
 
 export function findCatalogCourse(id: string): CatalogCourse | undefined {
   return CATALOG.find((c) => c.id === id);
