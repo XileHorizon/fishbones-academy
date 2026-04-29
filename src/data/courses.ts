@@ -30,11 +30,9 @@ export type CourseTopic =
 const TOPIC_OVERRIDES: Record<string, CourseTopic> = {
   "the-rust-programming-language": "languages",
 
-  "svelte-5-complete": "frameworks",
   "solidjs-fundamentals": "frameworks",
   "htmx-fundamentals": "frameworks",
   "astro-fundamentals": "frameworks",
-  "bun-complete": "frameworks",
 
   "react-native": "mobile",
 
@@ -59,8 +57,6 @@ const DIFFICULTY_OVERRIDES: Record<string, CourseDifficulty> = {
   "htmx-fundamentals": "easy",
   "astro-fundamentals": "easy",
   "solidjs-fundamentals": "easy",
-  "svelte-5-complete": "medium",
-  "bun-complete": "medium",
   "the-rust-programming-language": "medium",
   "react-native": "medium",
   "viem-ethers": "medium",
