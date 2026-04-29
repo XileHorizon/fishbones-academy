@@ -192,16 +192,6 @@
       "releaseStatus": "UNREVIEWED"
     },
     {
-      "id": "bun-complete",
-      "title": "Bun: The Complete Runtime",
-      "language": "bun",
-      "file": "bun-the-complete-runtime.json",
-      "cover": "bun-the-complete-runtime.jpg",
-      "sizeBytes": 241049,
-      "packType": "course",
-      "releaseStatus": "UNREVIEWED"
-    },
-    {
       "id": "react-native",
       "title": "React Native",
       "language": "reactnative",
