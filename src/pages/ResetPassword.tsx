@@ -270,13 +270,19 @@ export function ResetPassword() {
       <div className="reset-card">
         <h1 className="reset-card__title">Reset your password</h1>
 
-        {phase === "error" && !token ? (
+        {phase === "error" ? (
           <>
             <p className="reset-card__blurb reset-card__blurb--error">
-              {errorMsg}
+              {errorMsg ?? "Something went wrong. Please try again."}
             </p>
+            {/* Two CTAs depending on what kind of error we're in:
+                - Missing token (stranded link)        → back to /learn
+                - Invalid / expired / consumed token   → request a new
+                  reset (the SignInDialog's forgot-password mode lives
+                  on /learn). Both end up at /learn anyway, but the
+                  copy makes the next step clear. */}
             <Link to="/learn" className="reset-card__cta">
-              Back to Fishbones
+              {token ? "Request a new reset link" : "Back to Fishbones"}
             </Link>
           </>
         ) : phase === "success" ? (
@@ -312,7 +318,12 @@ export function ResetPassword() {
               error={confirmMismatch ? "Passwords don't match" : null}
             />
 
-            {errorMsg && phase !== "error" && (
+            {/* Inline form error — fires for 400 (password length)
+                and network failures, both of which keep phase ===
+                "form". 401 / missing-token errors set phase to
+                "error" and render the dedicated error view above
+                instead, so this branch never renders for those. */}
+            {errorMsg && (
               <p className="reset-card__error">{errorMsg}</p>
             )}
 
