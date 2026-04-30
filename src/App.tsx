@@ -36,6 +36,9 @@ const NotFound = lazy(() =>
 // into the main chunk is negligible compared to the round-trip a lazy
 // import would add.
 import { OAuthDone } from "./pages/OAuthDone";
+const ResetPassword = lazy(() =>
+  import("./pages/ResetPassword").then((m) => ({ default: m.ResetPassword })),
+);
 
 export function App() {
   // Title + description per route. Cheap and works without a meta
@@ -70,6 +73,7 @@ export function App() {
             <Route path="/support" element={<Support />} />
             <Route path="/donate" element={<Support />} />
             <Route path="/oauth/done" element={<OAuthDone />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
