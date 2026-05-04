@@ -21,7 +21,20 @@
     "noUnusedParameters": true,
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    "noUncheckedSideEffectImports": true,
+
+    "baseUrl": ".",
+    "paths": {
+      "@base/*": ["node_modules/@mattmattmattmatt/base/*"],
+      "@app/*": ["../../Apps/Fishbones/src/*"]
+    }
   },
+  // Only include marketing-site src for typechecking. App-source
+  // resolution still works via the path alias above; we just don't
+  // typecheck the app files (their own tsc -b run in
+  // Apps/Fishbones owns that). Including them here would make
+  // both copies of @types/react reachable simultaneously, which
+  // TypeScript sees as "two unrelated React.Ref types" and rejects
+  // any cross-package JSX.
   "include": ["src"]
 }

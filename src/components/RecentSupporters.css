@@ -1,0 +1,142 @@
+/* Recent supporters — leaderboard-style list shown below TipActivity
+   on /support. Mirrors TipActivity's glass-morphism but tightens
+   each row to a single-line "badge · address · amount" layout so the
+   social-proof reads at a glance. */
+
+.recent-supporters {
+  margin-top: 36px;
+  padding: 24px;
+  border-radius: 14px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0)) ,
+    rgba(15, 17, 23, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: blur(8px) saturate(140%);
+  backdrop-filter: blur(8px) saturate(140%);
+  box-shadow:
+    0 12px 28px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.recent-supporters__head {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 16px;
+}
+
+.recent-supporters__title {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.recent-supporters__sub {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.recent-supporters__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.recent-supporters__row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 4px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.recent-supporters__row:first-child {
+  border-top: 0;
+}
+
+.recent-supporters__name {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 13px;
+  color: var(--color-text-primary);
+  text-decoration: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: color 120ms ease;
+}
+
+.recent-supporters__name:hover {
+  color: #ffba66;
+  text-decoration: underline;
+  text-decoration-color: rgba(255, 186, 102, 0.4);
+  text-underline-offset: 3px;
+}
+
+.recent-supporters__amount {
+  font-variant-numeric: tabular-nums;
+  font-size: 13px;
+  font-weight: 600;
+  color: #ffba66;
+  white-space: nowrap;
+}
+
+/* Empty + skeleton states match TipActivity's vibe so the page reads
+   as one coherent surface. */
+.recent-supporters__empty {
+  padding: 16px 4px 4px;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--color-text-secondary);
+}
+
+.recent-supporters__empty p {
+  margin: 0 0 6px;
+}
+
+.recent-supporters__empty-note {
+  font-size: 11.5px;
+  color: var(--color-text-tertiary);
+}
+
+.recent-supporters__row--skeleton {
+  pointer-events: none;
+}
+
+.recent-supporters__skel {
+  display: inline-block;
+  height: 14px;
+  border-radius: 4px;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.04) 0%,
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(255, 255, 255, 0.04) 100%
+  );
+  background-size: 200% 100%;
+  animation: recent-supporters-shimmer 1.4s ease-in-out infinite;
+}
+
+.recent-supporters__skel--badge {
+  width: 36px;
+  height: 22px;
+  border-radius: 999px;
+}
+
+.recent-supporters__skel--name {
+  width: 70%;
+}
+
+.recent-supporters__skel--amount {
+  width: 80px;
+}
+
+@keyframes recent-supporters-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}

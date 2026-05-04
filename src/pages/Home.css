@@ -1,17 +1,142 @@
 /* ─── Hero ───────────────────────────────────────────── */
 
+/* The hero now hosts a full-bleed specimen-plate background. We DROP
+   the max-width on .home-hero itself so the background image can span
+   edge-to-edge, then re-apply the constraint to .home-hero__inner so
+   the text column still aligns with the section content below. This
+   reverses the earlier "give .home-hero the .section max-width"
+   change — the new background needs full width, so alignment moves
+   one level inward. */
 .home-hero {
   position: relative;
   padding: 96px var(--site-section-pad-x) 64px;
+  /* Hide any horizontal overflow from the bg's transform breakout
+     so it doesn't spawn a horizontal scrollbar on narrow viewports. */
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* Full-bleed brand specimen plate. Layered ladder:
+     z-index 0 = the artwork itself (this rule)
+     z-index 1 = the dark gradient overlay (::after)
+     z-index 2+ = .home-hero__inner content (handled below)
+   We use background-image (not <img>) so we don't have to wrestle
+   with object-fit + responsive crop. background-attachment: scroll
+   (default) is intentional — `fixed` parallax stutters on Safari
+   and breaks at the iOS Safari address-bar resize. */
+/* Particle field overlay sits between the dimmed bg artwork and
+   the hero text. Pointer events stay on the canvas for the mouse
+   parallax to work, but the canvas is decorative — clicks pass
+   through to nothing important. */
+.home-hero__particles {
+  position: absolute !important;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Allow the particle canvas's children to receive mousemove */
+.home-hero__particles canvas {
+  pointer-events: auto !important;
+}
+
+.home-hero__bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-image: url("/hero-fishbones.jpg");
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  /* Dim the artwork so the cream-parchment edges don't fight the
+     dark site bg, and so the hero text reads at AAA contrast. The
+     ::after gradient does the heavy lifting of edge-blending; this
+     opacity is a baseline knock-down. */
+  opacity: 0.7;
+  /* Slight blur to take the high-frequency edges off the parchment
+     texture + gear engraving so white hero text stops fighting the
+     artwork's micro-detail. The transform: scale prevents the
+     blurred fuzzy-edge halo from showing inside the hero — without
+     the scale, blur fades pixels to transparent at the element
+     boundary, leaving a visible feathered seam against the dark
+     site bg. 1.04 is just enough to push the soft edge outside the
+     overflow:hidden clip on .home-hero. */
+  filter: blur(4px);
+  transform: scale(1.04);
+  /* Will-change tells the compositor to promote this to its own
+     layer so the blur doesn't recompute on every scroll. */
+  will-change: transform;
+}
+
+/* Edge-blender + readability gradient. Two roles in one overlay:
+     1. Top: small dark wash so the eyebrow/title pop against any
+        bright spots in the artwork.
+     2. Bottom: heavier dark wash that fades the artwork into the
+        site's dark bg, hiding the parchment-edge seam where the
+        cream image meets the dark page.
+   Sides taper to transparent so the artwork's decorative border
+   ornaments stay visible on wide viewports. */
+.home-hero__bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  /* Two stacked gradients:
+       1. Vertical (top→bottom): darken edges so artwork blends
+          into the dark site bg.
+       2. Horizontal (left→right): heavier dark wash on the LEFT
+          where the hero text column lives, fading to lighter on
+          the right where the artwork should breathe. This is what
+          actually rescues white-on-cream text legibility — the
+          blur only softens, the wash provides the contrast. */
+  background:
+    linear-gradient(
+      180deg,
+      rgba(10, 10, 11, 0.5) 0%,
+      rgba(10, 10, 11, 0.3) 35%,
+      rgba(10, 10, 11, 0.55) 70%,
+      rgba(10, 10, 11, 0.97) 100%
+    ),
+    linear-gradient(
+      90deg,
+      rgba(10, 10, 11, 0.65) 0%,
+      rgba(10, 10, 11, 0.35) 45%,
+      rgba(10, 10, 11, 0.1) 75%,
+      rgba(10, 10, 11, 0) 100%
+    );
+  pointer-events: none;
 }
 
 .home-hero__inner {
+  position: relative;
+  z-index: 2;
   max-width: var(--site-max-width);
   margin: 0 auto;
+  /* Side padding on the inner so the constrained text column
+     aligns with the section content below it (which uses the same
+     --site-section-pad-x inside its max-width container). */
+  padding: 0 var(--site-section-pad-x);
   display: grid;
   grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
   gap: 56px;
   align-items: center;
+}
+
+/* Single-column variant — used now that we've dropped the
+   HeroTerminal in favour of the artwork. The text column gets the
+   left half of the hero; the right half stays empty so the fish
+   skeleton's body/tail composition shows through unobstructed.
+   On viewports < 1000px the responsive media query collapses to
+   full-width copy, which is fine since the artwork is centered and
+   still visible behind everything. */
+.home-hero__inner--single {
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+}
+.home-hero__inner--single::after {
+  /* Empty grid cell so the title column doesn't expand into the
+     full hero width — keeps the text out of the busiest part of
+     the artwork (the fish's mid-body). */
+  content: "";
+  display: block;
 }
 
 .home-hero__eyebrow {
@@ -84,8 +209,14 @@
 /* ─── Stats strip ────────────────────────────────────── */
 
 .home-stats {
+  position: relative;
+  z-index: 2;
   max-width: var(--site-max-width);
-  margin: 64px auto 0;
+  /* Side margin matches the inner's side padding so the strip
+     aligns with the constrained text column above it. */
+  margin: 64px var(--site-section-pad-x) 0;
+  margin-left: auto;
+  margin-right: auto;
   padding: 22px 32px;
   background: var(--color-bg-secondary);
   border: 1px solid var(--color-border-default);
@@ -181,6 +312,21 @@
 
 .home-row-head .section__title { margin-bottom: 8px; }
 .home-row-head .section__subtitle { margin-bottom: 0; max-width: 540px; }
+
+/* Centered variant — used for section headers that don't have a
+   sibling action button on the right. The flex-end alignment of
+   the parent makes single-child rows look bottom-anchored, so we
+   override to a centered block layout when this modifier is set. */
+.home-row-head--centered {
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.home-row-head--centered .section__eyebrow {
+  margin-bottom: 12px;
+}
 
 .home-courses {
   display: grid;

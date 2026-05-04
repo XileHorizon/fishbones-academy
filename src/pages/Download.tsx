@@ -12,6 +12,7 @@ import {
   ShieldOff,
 } from "lucide-react";
 import { GithubMark } from "../components/icons/GithubMark";
+import { DownloadButton } from "../components/DownloadButton/DownloadButton";
 import "./Download.css";
 
 interface ReleaseAsset {
@@ -90,9 +91,8 @@ export function Download() {
           <span className="section__eyebrow">Get Fishbones</span>
           <h1 className="section__title">Free. Open source. No accounts.</h1>
           <p className="download-hero__lede">
-            Two ways to run Fishbones — both free. Sample courses in your browser
-            today, or install the desktop app for ingestion, native runtimes, and
-            the local AI tutor. There is no paid tier.
+            Two ways to run Fishbones — both free, both MIT. Browser is the
+            sampler. Desktop adds ingest, native runtimes, and a local AI tutor.
           </p>
         </div>
       </header>
@@ -138,13 +138,14 @@ export function Download() {
             "Pop-out workbench, multi-monitor friendly",
             "Bundled .fishbones archives — re-share courses",
           ]}
-          cta={{
-            href: release?.html_url ?? FALLBACK_URL,
-            label: versionLabel ? `Download ${versionLabel}` : "Download for your OS",
-            primary: true,
-            icon: DownloadIcon,
-            external: true,
-          }}
+          // Custom CTA: a split-button DownloadButton that auto-detects
+          // the visitor's OS and links DIRECTLY to the latest .dmg/
+          // .msi/.AppImage asset, with a caret for picking older
+          // versions or alternative platform builds. Replaces the
+          // earlier `Download for your OS` link that pointed at the
+          // GitHub releases tag page (one extra click + scroll for
+          // the user to actually start the download).
+          ctaCustom={<DownloadButton />}
           ctaSecondary={{
             href: "https://github.com/InfamousVague/Fishbones",
             label: "View source",
@@ -248,6 +249,7 @@ function Tier({
   summary,
   features,
   cta,
+  ctaCustom,
   ctaSecondary,
   highlight = false,
 }: {
@@ -257,7 +259,12 @@ function Tier({
   price: string;
   summary: string;
   features: string[];
-  cta: { href: string; label: string; primary: boolean; icon: typeof Apple; external?: boolean };
+  /// Standard link CTA. Provide either this OR `ctaCustom`, not both.
+  cta?: { href: string; label: string; primary: boolean; icon: typeof Apple; external?: boolean };
+  /// Slot for an arbitrary CTA element (e.g. the DownloadButton split
+  /// button used by the desktop tier — needs version-picker behaviour
+  /// the simple link can't express).
+  ctaCustom?: React.ReactNode;
   ctaSecondary?: { href: string; label: string; external?: boolean };
   highlight?: boolean;
 }) {
@@ -280,23 +287,25 @@ function Tier({
         ))}
       </ul>
       <div className="download-tier__cta-row">
-        {cta.external ? (
-          <a
-            href={cta.href}
-            className={cta.primary ? "btn btn--primary" : "btn btn--ghost"}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <cta.icon size={14} /> {cta.label}
-          </a>
-        ) : (
-          <Link
-            to={cta.href}
-            className={cta.primary ? "btn btn--primary" : "btn btn--ghost"}
-          >
-            <cta.icon size={14} /> {cta.label}
-          </Link>
-        )}
+        {ctaCustom
+          ? ctaCustom
+          : cta && (cta.external ? (
+              <a
+                href={cta.href}
+                className={cta.primary ? "btn btn--primary" : "btn btn--ghost"}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <cta.icon size={14} /> {cta.label}
+              </a>
+            ) : (
+              <Link
+                to={cta.href}
+                className={cta.primary ? "btn btn--primary" : "btn btn--ghost"}
+              >
+                <cta.icon size={14} /> {cta.label}
+              </Link>
+            ))}
         {ctaSecondary &&
           (ctaSecondary.external ? (
             <a

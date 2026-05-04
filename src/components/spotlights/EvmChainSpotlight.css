@@ -1,0 +1,442 @@
+/* EVM chain spotlight — replica of the in-app ChainDock floating
+   panel. Same dark cyber-instrument aesthetic, ticking block
+   number, animated tx feed.
+
+   Layout intentionally MIRRORED from WorkbenchSpotlight: copy on
+   the right, dock on the left. So a learner scrolling down sees
+   "code → output" then "output → chain", a left-right rhythm. */
+
+.evm-spotlight {
+  position: relative;
+  padding: 96px var(--site-section-pad-x);
+  background:
+    radial-gradient(
+      900px 600px at 20% 30%,
+      rgba(108, 140, 255, 0.06),
+      transparent 70%
+    ),
+    var(--color-bg-primary);
+  isolation: isolate;
+}
+
+.evm-spotlight__inner {
+  max-width: var(--site-max-width);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: 64px;
+  align-items: center;
+}
+
+@media (max-width: 1000px) {
+  .evm-spotlight__inner {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+}
+
+/* ─── Copy column (mirrors WorkbenchSpotlight tokens) ─────── */
+
+.evm-spotlight__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #a78bfa; /* a slightly different purple-blue so EVM reads
+                     as a distinct chapter from Workbench (#6c8cff) */
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(167, 139, 250, 0.1);
+  border: 1px solid rgba(167, 139, 250, 0.25);
+  margin-bottom: 20px;
+}
+
+.evm-spotlight__title {
+  font-size: clamp(28px, 4vw, 44px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+  line-height: 1.1;
+  margin: 0 0 18px;
+}
+
+.evm-spotlight__title em {
+  font-style: italic;
+  color: #a78bfa;
+}
+
+.evm-spotlight__lede {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+  margin: 0 0 22px;
+  max-width: 520px;
+}
+
+.evm-spotlight__lede code {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 13.5px;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #c9d1d9;
+}
+
+.evm-spotlight__bullets {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.evm-spotlight__bullets li {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+.evm-spotlight__bullets code {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 12.5px;
+  padding: 0 5px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #c9d1d9;
+}
+
+.evm-spotlight__dot {
+  flex-shrink: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: #a78bfa;
+  margin-top: 7px;
+  box-shadow: 0 0 8px rgba(167, 139, 250, 0.5);
+}
+
+.evm-spotlight__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #a78bfa;
+  background: rgba(167, 139, 250, 0.14);
+  border: 1px solid rgba(167, 139, 250, 0.4);
+  text-decoration: none;
+  transition: background 120ms ease, transform 120ms ease, box-shadow 120ms ease;
+}
+
+.evm-spotlight__cta:hover {
+  background: rgba(167, 139, 250, 0.22);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(167, 139, 250, 0.3);
+}
+
+.evm-spotlight__cta-arrow {
+  transition: transform 120ms ease;
+}
+
+.evm-spotlight__cta:hover .evm-spotlight__cta-arrow {
+  transform: translateX(2px);
+}
+
+/* ─── Dock panel ─────────────────────────────────────────── */
+
+.evm-dock {
+  position: relative;
+  background: #0d1117;
+  border-radius: 14px;
+  border: 1px solid rgba(167, 139, 250, 0.25);
+  box-shadow:
+    0 32px 80px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(167, 139, 250, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  overflow: hidden;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+
+.evm-dock::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: 16px;
+  background: linear-gradient(
+    135deg,
+    rgba(167, 139, 250, 0.4),
+    transparent 50%,
+    rgba(108, 140, 255, 0.3)
+  );
+  z-index: -1;
+  filter: blur(10px);
+  opacity: 0.5;
+  animation: evm-glow-pulse 7s ease-in-out infinite;
+}
+
+@keyframes evm-glow-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.7; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .evm-dock::before { animation: none; }
+}
+
+/* ─── Dock header ────────────────────────────────────────── */
+
+.evm-dock__header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: linear-gradient(180deg, #161b22 0%, #0d1117 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.evm-dock__title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #c9d1d9;
+}
+
+.evm-dock__title-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: #3fb950;
+  box-shadow: 0 0 8px rgba(63, 185, 80, 0.6);
+  animation: evm-status-pulse 2s ease-in-out infinite;
+}
+
+@keyframes evm-status-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.evm-dock__meta {
+  margin-left: auto;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  font-size: 11px;
+}
+
+.evm-dock__block {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 600;
+  color: #a78bfa;
+  font-variant-numeric: tabular-nums;
+}
+
+.evm-dock__gas {
+  color: #8b949e;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ─── Panels (accounts, txs, contracts) ──────────────────── */
+
+.evm-dock__panel {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.evm-dock__panel:last-of-type {
+  border-bottom: none;
+}
+
+.evm-dock__panel-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #6e7681;
+  background: rgba(255, 255, 255, 0.015);
+}
+
+.evm-dock__panel-meta {
+  margin-left: auto;
+  font-size: 9.5px;
+  color: #6e7681;
+  text-transform: lowercase;
+  letter-spacing: 0;
+}
+
+/* Accounts list */
+
+.evm-dock__accounts {
+  display: flex;
+  flex-direction: column;
+}
+
+.evm-dock__account {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 14px;
+  font-size: 11.5px;
+  color: #c9d1d9;
+  border-top: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.evm-dock__account:first-child {
+  border-top: none;
+}
+
+.evm-dock__account-avatar {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+}
+
+.evm-dock__account-addr {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+.evm-dock__account-balance {
+  margin-left: auto;
+  color: #8b949e;
+  font-variant-numeric: tabular-nums;
+  font-size: 11px;
+}
+
+/* Tx feed */
+
+.evm-dock__txs {
+  display: flex;
+  flex-direction: column;
+  min-height: 196px; /* keeps the panel from collapsing as txs come/go */
+}
+
+.evm-dock__tx {
+  display: grid;
+  grid-template-columns: 50px 1.4fr 1fr 50px;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 14px;
+  font-size: 11px;
+  color: #c9d1d9;
+  border-top: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.evm-dock__tx:first-child {
+  border-top: none;
+}
+
+.evm-dock__tx-kind {
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 2px 5px;
+  border-radius: 3px;
+  text-align: center;
+}
+
+.evm-dock__tx-kind--call {
+  background: rgba(108, 140, 255, 0.15);
+  color: #6c8cff;
+}
+
+.evm-dock__tx-kind--deploy {
+  background: rgba(167, 139, 250, 0.15);
+  color: #a78bfa;
+}
+
+.evm-dock__tx-fn {
+  font-family: inherit;
+  letter-spacing: -0.01em;
+}
+
+.evm-dock__tx-to {
+  color: #8b949e;
+  font-size: 10.5px;
+  letter-spacing: -0.01em;
+}
+
+.evm-dock__tx-block {
+  text-align: right;
+  color: #6e7681;
+  font-variant-numeric: tabular-nums;
+  font-size: 10.5px;
+}
+
+/* Contracts list */
+
+.evm-dock__contracts {
+  display: flex;
+  flex-direction: column;
+}
+
+.evm-dock__contract {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 7px 14px;
+  font-size: 11.5px;
+  color: #c9d1d9;
+  border-top: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.evm-dock__contract:first-child {
+  border-top: none;
+}
+
+.evm-dock__contract-name {
+  font-weight: 600;
+  color: #c9d1d9;
+}
+
+.evm-dock__contract-addr {
+  color: #8b949e;
+  font-variant-numeric: tabular-nums;
+}
+
+.evm-dock__contract-block {
+  color: #6e7681;
+  font-size: 10.5px;
+}
+
+/* Faucet */
+
+.evm-dock__faucet {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  padding: 10px 0;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  background: linear-gradient(
+    180deg,
+    rgba(167, 139, 250, 0.12) 0%,
+    rgba(167, 139, 250, 0.06) 100%
+  );
+  color: #a78bfa;
+  border: none;
+  border-top: 1px solid rgba(167, 139, 250, 0.25);
+  cursor: pointer;
+  pointer-events: none; /* visual only */
+}

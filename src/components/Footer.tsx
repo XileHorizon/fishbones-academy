@@ -9,7 +9,8 @@ export function Footer() {
         <div className="site-footer__brand">
           <Link to="/" className="site-footer__brand-link">
             <img
-              src="/fishbones_skinny_white.png"
+              // ?v=2 cache-bust — see Nav.tsx note. Same logo asset.
+              src="/fishbones_skinny_white.png?v=2"
               alt="Fishbones"
               className="site-footer__brand-icon"
             />
@@ -18,7 +19,7 @@ export function Footer() {
             </span>
           </Link>
           <p className="site-footer__tagline">
-            Turn any technical book into a course you can ship code in.
+            Every book has a course inside it. Crack it open.
           </p>
         </div>
 

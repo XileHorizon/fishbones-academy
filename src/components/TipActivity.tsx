@@ -26,9 +26,9 @@ import "./TipActivity.css";
 
 // ────────────────────── Normalized shape ──────────────────────
 
-type Chain = "btc" | "eth" | "usdc" | "sol" | "xrp";
+export type Chain = "btc" | "eth" | "usdc" | "sol" | "xrp";
 
-interface TipEvent {
+export interface TipEvent {
   chain: Chain;
   /** Tx hash / signature, full string. Used as React key + explorer link. */
   hash: string;
@@ -53,7 +53,7 @@ interface ChainState {
 // truth on this site. If you swap a wallet, both the popover deck and
 // the activity feed update together.
 
-interface ResolvedMethod {
+export interface ResolvedMethod {
   chain: Chain;
   method: TipMethod;
 }
@@ -320,7 +320,7 @@ function timeAgo(unixSeconds: number): string {
   return new Date(unixSeconds * 1000).toLocaleDateString();
 }
 
-const CHAIN_LABEL: Record<Chain, string> = {
+export const CHAIN_LABEL: Record<Chain, string> = {
   btc: "BTC",
   eth: "ETH",
   usdc: "USDC",
@@ -343,7 +343,22 @@ export interface TipActivityProps {
   limit?: number;
 }
 
-export function TipActivity({ limit = 20 }: TipActivityProps) {
+export interface UseTipEventsResult {
+  events: TipEvent[];
+  loading: boolean;
+  errors: Array<{ chain: Chain; message: string }>;
+  /** Trigger a re-fetch across every chain. Resets the loading flag. */
+  refresh: () => void;
+  /** Resolved tip methods (chain + address) — re-exposed so callers
+      can size copy ("across {n} addresses"). */
+  methods: ResolvedMethod[];
+}
+
+/// Hook variant of the per-chain fetcher loop. Both `TipActivity`
+/// (transaction feed) and `RecentSupporters` (per-supporter list)
+/// consume this so they share a single network round-trip per
+/// mount of either component.
+export function useTipEvents(limit = 20): UseTipEventsResult {
   const methods = useMemo(() => resolveMethods(), []);
   const [perChain, setPerChain] = useState<Record<Chain, ChainState>>(() => ({
     btc: { events: [], error: null },
@@ -423,6 +438,11 @@ export function TipActivity({ limit = 20 }: TipActivityProps) {
     .filter(([, s]) => s.error)
     .map(([chain, s]) => ({ chain, message: s.error as string }));
 
+  return { events, loading, errors, refresh, methods };
+}
+
+export function TipActivity({ limit = 20 }: TipActivityProps) {
+  const { events, loading, errors, refresh, methods } = useTipEvents(limit);
   const totalEvents = events.length;
 
   return (
@@ -529,7 +549,7 @@ export function TipActivity({ limit = 20 }: TipActivityProps) {
 
 // ────────────────────── Bits ──────────────────────
 
-function ChainBadge({ chain }: { chain: Chain }): ReactNode {
+export function ChainBadge({ chain }: { chain: Chain }): ReactNode {
   return (
     <span
       className="tip-activity__chain-badge"

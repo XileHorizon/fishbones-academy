@@ -43,7 +43,10 @@ export function Nav() {
       <div className="nav__inner">
         <Link to="/" className="nav__brand" aria-label="Fishbones Academy home">
           <img
-            src="/fishbones_skinny_white.png"
+            // ?v=2 cache-bust so clients holding the old flat-white
+            // wordmark (cached aggressively by Caddy + the browser
+            // disk cache) refetch the new bone-textured render.
+            src="/fishbones_skinny_white.png?v=2"
             alt="Fishbones"
             className="nav__brand-icon"
           />

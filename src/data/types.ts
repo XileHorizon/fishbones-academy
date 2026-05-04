@@ -28,10 +28,28 @@ export interface CourseManifest {
   courses: CourseManifestEntry[];
 }
 
+/// Every lesson kind the desktop app ships. The marketing site renders
+/// the lesson list off the same JSON the runtime reads, so this union
+/// must stay in sync with `src/data/types.ts::Lesson` in the desktop
+/// app — drifting here re-introduces the React #130 black screen we
+/// hit on courses with `cloze` / `puzzle` / `micropuzzle` lessons.
+export type CourseLessonKind =
+  | "reading"
+  | "exercise"
+  | "mixed"
+  | "quiz"
+  | "cloze"
+  | "puzzle"
+  | "micropuzzle";
+
 export interface CourseLesson {
   id: string;
   title: string;
-  kind: "reading" | "exercise" | "mixed" | "quiz";
+  /// Kind hint. Typed as a union for the canonical set, but we widen
+  /// the consumer side to `string` everywhere we render so an unknown
+  /// kind from a freshly-ingested course falls back to a generic
+  /// pill instead of trying to render `undefined` as a component.
+  kind: CourseLessonKind;
   body?: string;
   objectives?: string[];
   difficulty?: "easy" | "medium" | "hard";

@@ -10,6 +10,9 @@ import {
   FileText,
   Layers,
   PlayCircle,
+  Puzzle,
+  SquareDashed,
+  type LucideIcon,
 } from "lucide-react";
 import { fetchFullCourse, findCatalogCourse } from "../data/courses";
 import type { CourseChapter, CourseLesson, FullCourse } from "../data/types";
@@ -21,19 +24,40 @@ import {
 } from "../lib/openInFishbones";
 import "./CourseDetail.css";
 
-const KIND_LABEL: Record<CourseLesson["kind"], string> = {
+/// Per-kind labels and glyphs for the chapter / lesson rows. The
+/// runtime widens to `string` because freshly-ingested courses can
+/// land here with a kind that wasn't in the union when the site was
+/// built — we'd rather render a "Lesson" fallback row than throw
+/// React error #130 (renders `undefined` as a component). The
+/// `iconForKind` / `labelForKind` helpers are the only safe way to
+/// look these up.
+const KIND_LABEL: Record<string, string> = {
   reading: "Reading",
   exercise: "Exercise",
   mixed: "Mixed",
   quiz: "Quiz",
+  cloze: "Fill in the blank",
+  puzzle: "Puzzle",
+  micropuzzle: "Micropuzzle",
 };
 
-const KIND_ICON: Record<CourseLesson["kind"], typeof BookOpen> = {
+const KIND_ICON: Record<string, LucideIcon> = {
   reading: BookOpen,
   exercise: Code2,
   mixed: Layers,
   quiz: FileText,
+  cloze: SquareDashed,
+  puzzle: Puzzle,
+  micropuzzle: Puzzle,
 };
+
+function iconForKind(kind: string): LucideIcon {
+  return KIND_ICON[kind] ?? FileText;
+}
+
+function labelForKind(kind: string): string {
+  return KIND_LABEL[kind] ?? "Lesson";
+}
 
 type CourseFetchState =
   | { kind: "loading"; id: string }
@@ -364,21 +388,45 @@ export function CourseDetail() {
             <div className="course-detail__sidebar-card">
               <h3 className="course-detail__sidebar-title">Lesson kinds</h3>
               <ul className="course-detail__kind-list">
-                {(["reading", "exercise", "mixed", "quiz"] as const).map((k) => {
-                  const count =
-                    chapters.reduce(
-                      (acc, ch) => acc + ch.lessons.filter((l) => l.kind === k).length,
-                      0,
-                    ) || (k === "reading" ? Math.floor(lessonCount / 2) : null);
-                  if (count === null || count === 0) return null;
-                  const Icon = KIND_ICON[k];
-                  return (
-                    <li key={k}>
-                      <Icon size={13} /> {KIND_LABEL[k]} <span>·</span>{" "}
-                      <strong>{count}</strong>
-                    </li>
-                  );
-                })}
+                {/* Build the per-kind tally from whatever kinds the
+                    course actually contains, instead of the legacy
+                    fixed list — the catalog now ships cloze /
+                    puzzle / micropuzzle lessons too, and pinning
+                    this to a fixed quartet under-reported them. */}
+                {(() => {
+                  const counts = new Map<string, number>();
+                  for (const ch of chapters) {
+                    for (const l of ch.lessons) {
+                      counts.set(l.kind, (counts.get(l.kind) ?? 0) + 1);
+                    }
+                  }
+                  // Stable display order: known kinds first, then any
+                  // unknown ones in alphabetical order.
+                  const ordered = [
+                    "reading",
+                    "exercise",
+                    "mixed",
+                    "quiz",
+                    "cloze",
+                    "puzzle",
+                    "micropuzzle",
+                  ];
+                  const remaining = [...counts.keys()]
+                    .filter((k) => !ordered.includes(k))
+                    .sort();
+                  const final = [...ordered, ...remaining];
+                  return final.map((k) => {
+                    const count = counts.get(k) ?? 0;
+                    if (count === 0) return null;
+                    const Icon = iconForKind(k);
+                    return (
+                      <li key={k}>
+                        <Icon size={13} /> {labelForKind(k)} <span>·</span>{" "}
+                        <strong>{count}</strong>
+                      </li>
+                    );
+                  });
+                })()}
               </ul>
             </div>
           </aside>
@@ -413,7 +461,7 @@ function ChapterOutline({
           </header>
           <ul className="course-detail__lessons">
             {ch.lessons.slice(0, 4).map((l) => {
-              const Icon = KIND_ICON[l.kind];
+              const Icon = iconForKind(l.kind);
               return (
                 <li key={l.id} className="course-detail__lesson">
                   <Icon size={12} />
@@ -421,7 +469,7 @@ function ChapterOutline({
                   <span
                     className={`course-detail__lesson-kind course-detail__lesson-kind--${l.kind}`}
                   >
-                    {KIND_LABEL[l.kind]}
+                    {labelForKind(l.kind)}
                   </span>
                   {/* Per-lesson "Open" actions, hover-revealed so they
                       don't compete with the lesson title's hierarchy.

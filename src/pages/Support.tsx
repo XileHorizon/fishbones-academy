@@ -8,6 +8,7 @@ import { ArrowRight } from "lucide-react";
 import { GithubMark } from "../components/icons/GithubMark";
 import { CryptoSupport } from "../components/CryptoSupport";
 import { TipActivity } from "../components/TipActivity";
+import { RecentSupporters } from "../components/RecentSupporters";
 import "./Support.css";
 
 export function Support() {
@@ -55,6 +56,10 @@ export function Support() {
         {/* fetches independently — a single chain failing doesn't */}
         {/* block the rest of the feed. */}
         <TipActivity />
+        {/* Donor-focused list framed as social proof. Shares the */}
+        {/* same `useTipEvents` hook so we don't double-fetch the */}
+        {/* explorer endpoints — both lists render off one round-trip. */}
+        <RecentSupporters />
       </section>
     </div>
   );

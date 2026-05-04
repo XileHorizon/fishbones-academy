@@ -1,0 +1,399 @@
+/* Workbench spotlight — animated Solidity editor + test console.
+   Two-column layout on desktop (copy left, editor right); stacks
+   on mobile. The editor is the visual centerpiece — drop-shadow,
+   subtle border-glow, dark theme matching Shiki's github-dark. */
+
+.ws-spotlight {
+  position: relative;
+  padding: 96px var(--site-section-pad-x);
+  background:
+    radial-gradient(
+      900px 600px at 80% 20%,
+      rgba(108, 140, 255, 0.06),
+      transparent 70%
+    ),
+    var(--color-bg-primary);
+  isolation: isolate;
+}
+
+.ws-spotlight__inner {
+  max-width: var(--site-max-width);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+  gap: 64px;
+  align-items: center;
+}
+
+@media (max-width: 1000px) {
+  .ws-spotlight__inner {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+}
+
+/* ─── Copy column ───────────────────────────────────────── */
+
+.ws-spotlight__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #6c8cff;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(108, 140, 255, 0.1);
+  border: 1px solid rgba(108, 140, 255, 0.25);
+  margin-bottom: 20px;
+}
+
+.ws-spotlight__title {
+  font-size: clamp(28px, 4vw, 44px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+  line-height: 1.1;
+  margin: 0 0 18px;
+}
+
+.ws-spotlight__title em {
+  font-style: italic;
+  color: #6c8cff;
+}
+
+.ws-spotlight__lede {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+  margin: 0 0 22px;
+  max-width: 480px;
+}
+
+.ws-spotlight__bullets {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ws-spotlight__bullets li {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+.ws-spotlight__dot {
+  flex-shrink: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: #6c8cff;
+  margin-top: 7px;
+  box-shadow: 0 0 8px rgba(108, 140, 255, 0.5);
+}
+
+.ws-spotlight__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #6c8cff;
+  background: rgba(108, 140, 255, 0.14);
+  border: 1px solid rgba(108, 140, 255, 0.4);
+  text-decoration: none;
+  transition: background 120ms ease, transform 120ms ease, box-shadow 120ms ease;
+}
+
+.ws-spotlight__cta:hover {
+  background: rgba(108, 140, 255, 0.22);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(108, 140, 255, 0.3);
+}
+
+.ws-spotlight__cta-arrow {
+  transition: transform 120ms ease;
+}
+
+.ws-spotlight__cta:hover .ws-spotlight__cta-arrow {
+  transform: translateX(2px);
+}
+
+/* ─── Editor mock ───────────────────────────────────────── */
+
+.ws-editor {
+  position: relative;
+  background: #0d1117;
+  border-radius: 14px;
+  border: 1px solid rgba(108, 140, 255, 0.25);
+  box-shadow:
+    0 32px 80px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(108, 140, 255, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  overflow: hidden;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+
+/* Soft outer glow that pulses while the animation runs. */
+.ws-editor::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: 16px;
+  background: linear-gradient(
+    135deg,
+    rgba(108, 140, 255, 0.4),
+    transparent 50%,
+    rgba(108, 140, 255, 0.2)
+  );
+  z-index: -1;
+  filter: blur(10px);
+  opacity: 0.5;
+  animation: ws-glow-pulse 6s ease-in-out infinite;
+}
+
+@keyframes ws-glow-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.7; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ws-editor::before { animation: none; }
+}
+
+.ws-editor__chrome {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  background: linear-gradient(180deg, #161b22 0%, #0d1117 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.ws-editor__dots {
+  display: flex;
+  gap: 6px;
+}
+
+.ws-editor__dots span {
+  width: 11px;
+  height: 11px;
+  border-radius: 999px;
+}
+
+.ws-editor__dots span:nth-child(1) { background: #ff5f57; }
+.ws-editor__dots span:nth-child(2) { background: #febc2e; }
+.ws-editor__dots span:nth-child(3) { background: #28c940; }
+
+.ws-editor__filename {
+  font-size: 12px;
+  color: #c9d1d9;
+  font-weight: 500;
+  margin-left: 4px;
+}
+
+.ws-editor__lang-pill {
+  margin-left: auto;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #6c8cff;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: rgba(108, 140, 255, 0.12);
+  border: 1px solid rgba(108, 140, 255, 0.25);
+}
+
+/* ─── Code pane ─────────────────────────────────────────── */
+
+.ws-editor__code {
+  position: relative;
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  padding: 14px 0;
+  background: #0d1117;
+  font-size: 13px;
+  line-height: 1.55;
+  min-height: 240px;
+}
+
+.ws-editor__gutter {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding-right: 14px;
+  user-select: none;
+  color: #484f58;
+}
+
+.ws-editor__gutter-line {
+  font-size: 11px;
+  opacity: 0.3;
+  transition: opacity 200ms ease;
+}
+
+.ws-editor__gutter-line--shown {
+  opacity: 1;
+}
+
+/* The Shiki output. We mask it with clip-path that reveals only the
+   typed-so-far portion. Each line is ~1.55em tall; clip-path uses
+   --ws-lines-shown (full lines visible) + --ws-last-line-chars
+   (chars revealed on the in-progress line). */
+.ws-editor__highlight {
+  position: relative;
+  overflow: hidden;
+  /* The CSS variable lets us tie the clip-path height to the number
+     of fully-typed lines. Each line is ~20px in our 13/1.55 setup. */
+  --ws-line-height: 20.15px;
+  clip-path: inset(
+    0
+    /* Right inset hides untyped portion of the active line. The ch
+       unit approximates monospace character width. */
+    calc((100% - var(--ws-last-line-chars, 0) * 0.62em) * 0)
+    /* Bottom inset hides all lines beyond what's been typed. */
+    calc(100% - (var(--ws-lines-shown, 0)) * var(--ws-line-height))
+    0
+  );
+  transition: clip-path 60ms linear;
+}
+
+/* Shiki injects a <pre><code> with its own padding/font-size we want
+   to neutralise so the gutter alignment is accurate. */
+.ws-editor__highlight pre {
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  font-family: inherit !important;
+  font-size: inherit !important;
+  line-height: inherit !important;
+}
+
+.ws-editor__highlight code {
+  font-family: inherit !important;
+  font-size: inherit !important;
+  line-height: inherit !important;
+}
+
+/* Blinking caret follows the typing position. Positioned via CSS
+   variables that the React component updates each frame. */
+.ws-editor__caret {
+  position: absolute;
+  top: calc(14px + var(--ws-caret-line, 0) * 20.15px);
+  left: calc(44px + var(--ws-caret-col, 0) * 0.62em);
+  width: 2px;
+  height: 17px;
+  background: #6c8cff;
+  animation: ws-caret-blink 0.9s step-end infinite;
+  pointer-events: none;
+}
+
+@keyframes ws-caret-blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+/* ─── Console pane ───────────────────────────────────────── */
+
+.ws-editor__console {
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  background: #0a0d12;
+}
+
+.ws-editor__console-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.ws-editor__run-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  background: rgba(108, 140, 255, 0.14);
+  color: #6c8cff;
+  border: 1px solid rgba(108, 140, 255, 0.3);
+  cursor: pointer;
+  pointer-events: none; /* visual only */
+}
+
+.ws-editor__run-btn:disabled {
+  opacity: 0.5;
+}
+
+.ws-editor__console-meta {
+  margin-left: auto;
+  font-size: 11px;
+  color: #6e7681;
+}
+
+.ws-editor__console-body {
+  padding: 12px 14px;
+  min-height: 160px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  font-size: 12px;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+
+.ws-console-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #c9d1d9;
+}
+
+.ws-console-line__glyph {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  font-size: 11px;
+  color: #6e7681;
+}
+
+.ws-console-line__glyph--ok {
+  color: #3fb950;
+}
+
+.ws-console-line--info .ws-console-line__text {
+  color: #8b949e;
+}
+
+.ws-console-line__pill {
+  margin-left: auto;
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  color: #8b949e;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.ws-console-line__pill--pass {
+  color: #3fb950;
+  background: rgba(63, 185, 80, 0.1);
+  border-color: rgba(63, 185, 80, 0.3);
+}

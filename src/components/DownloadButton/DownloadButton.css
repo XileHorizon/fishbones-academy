@@ -1,0 +1,238 @@
+/* DownloadButton — split-button download CTA with version dropdown.
+ * The wrapper is a single inline-flex unit so it lays out alongside
+ * other CTAs in the desktop tier's button row without breaking it. */
+
+.download-button {
+  position: relative;
+  display: inline-flex;
+  align-items: stretch;
+  /* Match the existing `.btn--primary` corner radius so this reads
+   * as the same visual family. */
+  border-radius: 8px;
+  /* Box-shadow + bg-tone gives the split button a single cohesive
+   * "this is one control" feel even though it's two clickables. */
+  background: var(--color-fg, #fafafa);
+  color: var(--color-bg, #0a0a0a);
+}
+
+.download-button__primary,
+.download-button__caret {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 14px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  text-decoration: none;
+  /* Snug height matches `.btn` baseline; padding on either side of
+   * the divider keeps the press target generous. */
+  min-height: 38px;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.download-button__primary {
+  /* The body of the split button. Rounds only on the LEFT so the
+   * divider seam stays sharp between primary + caret. */
+  border-radius: 8px 0 0 8px;
+  padding-left: 16px;
+  padding-right: 14px;
+}
+
+.download-button__caret {
+  /* The carat half. Mirror corner radius so the right edge stays
+   * round. The tiny inset border-left is the divider line — uses
+   * the foreground color at low opacity so it reads as a hairline
+   * regardless of theme. */
+  border-radius: 0 8px 8px 0;
+  border-left: 1px solid rgba(0, 0, 0, 0.18);
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.download-button__primary:hover,
+.download-button__caret:hover,
+.download-button__caret--open {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+/* ─── Dropdown panel ─────────────────────────────────────────── */
+
+.download-button__pop {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 50;
+  min-width: 320px;
+  max-width: 420px;
+  /* Theme-agnostic dark surface — matches the TipPopover deck so
+   * both nav-level dropdowns look like siblings. Hard-coded color
+   * since the marketing site doesn't lean on a token system here. */
+  background: #16161a;
+  color: #f5f5f7;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  /* Bound the height so a many-version repo doesn't push the dropdown
+   * off-screen on small viewports. Scrolls inside. */
+  max-height: min(70vh, 520px);
+  overflow-y: auto;
+}
+
+.download-button__pop-empty {
+  padding: 14px 12px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.65);
+  text-align: center;
+}
+
+.download-button__pop-empty a {
+  color: inherit;
+  text-decoration: underline;
+}
+
+.download-button__pop-all {
+  margin-top: 4px;
+  padding: 8px 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.65);
+  text-decoration: none;
+  text-align: center;
+  border-radius: 6px;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.download-button__pop-all:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #fafafa;
+}
+
+/* ─── One release row ────────────────────────────────────────── */
+
+.download-button__release {
+  padding: 8px 10px;
+  border-radius: 6px;
+}
+
+.download-button__release--latest {
+  background: rgba(108, 140, 255, 0.1);
+}
+
+.download-button__release-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.download-button__release-tag {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.download-button__release-badge {
+  display: inline-block;
+  padding: 1px 6px;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-radius: 999px;
+  background: rgba(108, 140, 255, 0.25);
+  color: #a8c2ff;
+}
+
+.download-button__release-badge--pre {
+  background: rgba(255, 180, 80, 0.18);
+  color: #ffce8a;
+}
+
+.download-button__release-date {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ─── Platform pills inside a release row ────────────────────── */
+
+.download-button__release-platforms {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.download-button__platform {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 9px;
+  font-size: 11.5px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  text-decoration: none;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.download-button__platform:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.18);
+  color: #fafafa;
+}
+
+/* Platforms without a build on this version: dimmed, not clickable.
+ * Useful for old releases that pre-date the cross-platform CI
+ * — those rows show macOS only and the Linux/Windows pills appear
+ * greyed-out so the absence reads intentional. */
+.download-button__platform--missing {
+  opacity: 0.32;
+  text-decoration: line-through;
+  cursor: not-allowed;
+}
+
+.download-button__platform-size {
+  margin-left: 2px;
+  font-size: 10px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.5);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ─── Hero variant — used on the welcome screen ──────────────── */
+
+.download-button--hero {
+  /* Beefier so it lands as the primary CTA on the welcome card. */
+  font-size: 15px;
+}
+
+.download-button--hero .download-button__primary,
+.download-button--hero .download-button__caret {
+  min-height: 46px;
+  font-size: 14px;
+}
+
+.download-button--hero .download-button__primary {
+  padding-left: 22px;
+  padding-right: 18px;
+}
