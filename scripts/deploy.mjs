@@ -136,13 +136,21 @@ function rsyncToVps() {
   // Match the GH workflow's command verbatim except for portability:
   // BSD rsync (macOS) doesn't grok --info=stats2, so we use --stats
   // which both BSD and GNU rsync support.
+  //
+  // `--exclude=audio/` is critical: the Fishbones lesson-audio
+  // pipeline (see Apps/Fishbones/scripts/upload-lesson-audio.mjs)
+  // pushes pre-generated MP3s to /var/www/fishbones-academy/audio/.
+  // Those files don't ship inside the academy site's `dist/`, so
+  // without the exclude `--delete` would wipe the entire audio dir
+  // on every site deploy — meaning every push of marketing-copy or
+  // /learn/ embed would silently nuke the narration tracks.
   const sshOpts = `ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 -p ${VPS_PORT}`;
   const target = `${VPS_USER}@${VPS_HOST}:${VPS_TARGET_DIR}/`;
   run(
-    `sshpass -e rsync -a --delete --stats -e "${sshOpts}" dist/ "${target}"`,
+    `sshpass -e rsync -a --delete --exclude=audio/ --stats -e "${sshOpts}" dist/ "${target}"`,
     { env: { SSHPASS: pwd } },
   );
-  console.log(`[deploy] synced dist/ → ${target}`);
+  console.log(`[deploy] synced dist/ → ${target} (audio/ preserved)`);
 }
 
 if (!RSYNC_ONLY) {
