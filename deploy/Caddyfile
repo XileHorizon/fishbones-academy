@@ -1,11 +1,11 @@
-# Caddy block for fishbones.academy. Drop into /etc/caddy/Caddyfile on
+# Caddy block for libre.academy. Drop into /etc/caddy/Caddyfile on
 # the production VPS (or include it from there). Caddy auto-issues a
 # Let's Encrypt cert as soon as DNS points at this box.
 #
 # Mirrors the layout of the mattssoftware.com block — same VPS, same
 # Caddy install, just a separate site block per domain.
 
-fishbones.academy, www.fishbones.academy {
+libre.academy, www.libre.academy {
     root * /var/www/fishbones-academy
     encode zstd gzip
 

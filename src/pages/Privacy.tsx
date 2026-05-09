@@ -19,7 +19,7 @@ export function Privacy() {
 
         <h2>What this site logs</h2>
         <p>
-          fishbones.academy is a static site served from a single VPS via
+          libre.academy is a static site served from a single VPS via
           Caddy. Caddy keeps standard access logs (IP, timestamp, requested
           path, user agent) for ~7 days for operational purposes — diagnosing
           outages, banning abusive scrapers. We don't run third-party

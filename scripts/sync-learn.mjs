@@ -2,7 +2,7 @@
 /// Build the Fishbones web variant from the upstream Fishbones repo and
 /// stage the resulting `dist-web/` under `public/learn/`. Vite's `public/`
 /// is copied verbatim into `dist/` at build, so the learn app ends up
-/// at fishbones.academy/learn/ in production.
+/// at libre.academy/learn/ in production.
 ///
 /// Resolution order for the Fishbones checkout:
 ///   1. $FISHBONES_SRC env var
@@ -62,7 +62,7 @@ console.log(`[sync-learn] using Fishbones source at ${fishbonesRoot}`);
 
 if (!args.has("--use-existing")) {
   // FISHBONES_BASE pins Fishbones' Vite `base` to /learn/ (the path
-  // we mount the embed at on fishbones.academy). Without this,
+  // we mount the embed at on libre.academy). Without this,
   // Fishbones defaults to its legacy mattssoftware path
   // /fishbones/learn/, which produces asset URLs that 404 here
   // because nothing's served at that path on this host.
@@ -151,7 +151,7 @@ async function ensureStubIfEmpty() {
   <body>
     <main>
       <h1>The browser app is being staged.</h1>
-      <p>Run <code>npm run sync:learn</code> against a Fishbones checkout to embed the live build here. <a href="/">Back to fishbones.academy →</a></p>
+      <p>Run <code>npm run sync:learn</code> against a Fishbones checkout to embed the live build here. <a href="/">Back to libre.academy →</a></p>
     </main>
   </body>
 </html>

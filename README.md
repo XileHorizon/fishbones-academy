@@ -1,14 +1,14 @@
-# fishbones.academy
+# libre.academy
 
 Marketing + onboarding site for [Fishbones](https://github.com/InfamousVague/Fishbones) — the
 interactive coding course platform that turns any technical book into a course.
 
-This repo is the **standalone** `fishbones.academy` site. It's separate from:
+This repo is the **standalone** `libre.academy` site. It's separate from:
 
 - `InfamousVague/Fishbones` (the desktop app + browser variant — the actual product)
 - `InfamousVague/mattssoftware` (the personal-portfolio site that also embeds Fishbones)
 
-The site has no dependency on the Matt's-Software framing — fishbones.academy is its own
+The site has no dependency on the Matt's-Software framing — libre.academy is its own
 marketing surface.
 
 ## What's in here
@@ -77,7 +77,7 @@ The site auto-detects the kata checkout at `../../Apps/kata` (the typical
 
 ## Embedded learn app (`/learn/*`)
 
-The browser variant of Fishbones lives at `fishbones.academy/learn/`. It's a
+The browser variant of Fishbones lives at `libre.academy/learn/`. It's a
 separate Vite app inside the kata repo (`npm run build:web` produces
 `dist-web/`), copied verbatim into `public/learn/`. The Caddyfile in this
 repo rewrites deep `/learn/*` paths back to `/learn/index.html` so kata's
@@ -124,7 +124,7 @@ The VPS sync step needs a `VPS_SSH_PASSWORD` repo secret; see
 - **Vultr VPS** (`149.28.120.197`) — same machine as `mattssoftware.com` and
   `tap.mattssoftware.com`. Caddy serves both sites from
   `/var/www/<site>/` with per-domain blocks.
-- **DNS** — `fishbones.academy` (apex) + `www.fishbones.academy` should
+- **DNS** — `libre.academy` (apex) + `www.libre.academy` should
   point at the VPS A record. Caddy issues a Let's Encrypt cert
   automatically once the DNS resolves.
 

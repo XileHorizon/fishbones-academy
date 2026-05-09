@@ -1,4 +1,4 @@
-name: Deploy fishbones.academy
+name: Deploy libre.academy
 
 # When this fires:
 #   - push to main          — normal flow, embeds Fishbones by default

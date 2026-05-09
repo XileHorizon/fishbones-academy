@@ -130,7 +130,7 @@ In rough order:
 ```bash
 cd /Users/matt/Development/Web/fishbones-academy
 git add -A
-git commit -m "Initial scaffold of fishbones.academy"
+git commit -m "Initial scaffold of libre.academy"
 
 # Then in your browser or via gh:
 gh repo create InfamousVague/fishbones-academy --public --source=. --remote=origin --push
@@ -154,12 +154,12 @@ go through the public-repo path (no PAT required).
 
 ### 3. DNS
 
-Buy `fishbones.academy` (likely Gandi if you keep the existing
+Buy `libre.academy` (likely Gandi if you keep the existing
 registrar setup) and point both records at the VPS:
 
 ```
-fishbones.academy.       A   149.28.120.197
-www.fishbones.academy.   A   149.28.120.197
+libre.academy.       A   149.28.120.197
+www.libre.academy.   A   149.28.120.197
 ```
 
 Drop the TTL to 300s for the first hour, then back to 3600s after
@@ -197,7 +197,7 @@ Edit kata's `.github/workflows/notify-marketing.yml` (or whatever
 file already pings mattssoftware) to also fire at this repo:
 
 ```yaml
-- name: Notify fishbones.academy
+- name: Notify libre.academy
   run: |
     gh api repos/InfamousVague/fishbones-academy/dispatches \
       -f event_type=fishbones-updated
@@ -211,18 +211,18 @@ without waiting for the nightly cron.
 After deploy, open these and confirm they all 200:
 
 ```
-https://fishbones.academy/                    # Home
-https://fishbones.academy/courses             # Catalog
-https://fishbones.academy/courses/javascript-crash-course  # Detail
-https://fishbones.academy/languages           # Lang overview
-https://fishbones.academy/languages/python    # Per-lang
-https://fishbones.academy/download            # Get started
-https://fishbones.academy/about               # Manifesto
-https://fishbones.academy/docs                # Auto-redirects to docs/start/introduction
-https://fishbones.academy/learn/              # Embedded app
-https://fishbones.academy/starter-courses/javascript-crash-course.json  # JSON 200, Cache-Control header
-https://fishbones.academy/privacy
-https://fishbones.academy/terms
+https://libre.academy/                    # Home
+https://libre.academy/courses             # Catalog
+https://libre.academy/courses/javascript-crash-course  # Detail
+https://libre.academy/languages           # Lang overview
+https://libre.academy/languages/python    # Per-lang
+https://libre.academy/download            # Get started
+https://libre.academy/about               # Manifesto
+https://libre.academy/docs                # Auto-redirects to docs/start/introduction
+https://libre.academy/learn/              # Embedded app
+https://libre.academy/starter-courses/javascript-crash-course.json  # JSON 200, Cache-Control header
+https://libre.academy/privacy
+https://libre.academy/terms
 ```
 
 ---

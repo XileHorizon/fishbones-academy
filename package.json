@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "Marketing + onboarding site for Fishbones — fishbones.academy",
+  "description": "Marketing + onboarding site for Fishbones — libre.academy",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",

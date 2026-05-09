@@ -4,7 +4,7 @@
 // drop-in nav widget with kebab-case classes, inline SVG icons (no
 // `@base/primitives/icon` dep), and self-contained dark colors that
 // don't lean on any host CSS variables. That way the same file lands
-// cleanly on both fishbones.academy and mattssoftware.com without
+// cleanly on both libre.academy and mattssoftware.com without
 // either site having to share a token system.
 //
 // Visual contract (kept aligned with desktop TipDropdown + the

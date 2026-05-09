@@ -3,7 +3,7 @@
 // in the URL. Lives in a popup window opened by SignInDialog; the
 // only job is to postMessage the payload back to `window.opener`
 // and close the popup. The opener (the SignInDialog effect on the
-// fishbones.academy/learn build) calls `cloud.applyOAuthToken(token)`,
+// libre.academy/learn build) calls `cloud.applyOAuthToken(token)`,
 // /me materialises the user, and the dialog auto-closes.
 //
 // The popup runs on the same origin as the opener (the SignInDialog

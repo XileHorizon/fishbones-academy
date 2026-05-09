@@ -42,7 +42,7 @@ const ResetPassword = lazy(() =>
 
 export function App() {
   // Title + description per route. Cheap and works without a meta
-  // framework — fishbones.academy is a small static site, not an
+  // framework — libre.academy is a small static site, not an
   // SEO-critical doc system.
   const { pathname } = useLocation();
   useEffect(() => {

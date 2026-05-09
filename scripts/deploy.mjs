@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/// One-shot deploy of fishbones.academy.
+/// One-shot deploy of libre.academy.
 ///
 /// Stitches together every step the live site depends on so a tier
 /// bump or course-content change goes from "edited a file" → live in
@@ -165,4 +165,4 @@ if (!RSYNC_ONLY) {
 
 step("rsync to VPS", rsyncToVps);
 
-console.log("\n[deploy] Done. Visit https://fishbones.academy/ to verify.");
+console.log("\n[deploy] Done. Visit https://libre.academy/ to verify.");

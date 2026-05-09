@@ -1,4 +1,4 @@
-/// Public-facing docs for fishbones.academy. We author these here
+/// Public-facing docs for libre.academy. We author these here
 /// rather than re-using kata's in-app docs (src/docs/pages.ts) because
 /// the in-app docs are heavy on Tauri-side architecture detail that
 /// doesn't fit a "what's Fishbones, how do I use it" surface for
@@ -27,7 +27,7 @@ toward a streak that doesn't reset for taking the weekend off.
 
 The same app runs two ways:
 
-- **In your browser**, at [fishbones.academy/learn](/learn/). Sixteen+
+- **In your browser**, at [libre.academy/learn](/learn/). Sixteen+
   starter courses, no install, runs against a local IndexedDB.
 - **As a desktop app**, distributed for macOS, Linux, and Windows. The
   desktop build adds PDF / EPUB ingestion, native toolchain runners

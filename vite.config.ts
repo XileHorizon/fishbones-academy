@@ -2,7 +2,7 @@ import { defineConfig } from "vite";
 import { resolve } from "path";
 import react from "@vitejs/plugin-react";
 
-// fishbones.academy — Vite config.
+// libre.academy — Vite config.
 //
 // Two non-trivial things happening here:
 //

@@ -1,4 +1,4 @@
-# Contributing to fishbones.academy
+# Contributing to libre.academy
 
 This is the marketing + onboarding site. The actual app lives at
 [InfamousVague/Fishbones](https://github.com/InfamousVague/Fishbones).
@@ -6,7 +6,7 @@ This is the marketing + onboarding site. The actual app lives at
 ## What goes here
 
 This repo:
-- Marketing copy + visual identity for fishbones.academy
+- Marketing copy + visual identity for libre.academy
 - Catalog browsing UI + course-detail previews (read-only)
 - Language overview pages
 - Public-facing docs (orientation; not deep architecture docs)
