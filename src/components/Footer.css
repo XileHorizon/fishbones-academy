@@ -24,11 +24,11 @@
   text-decoration: none;
 }
 .site-footer__brand-icon {
-  /* Squircle Libre app icon. Slightly smaller than the nav (20 vs 28)
-     because the footer copy density makes the brand sit denser on the
-     row. Width pinned so non-square fallbacks don't stretch the row. */
+  /* Wide ribbon-snake "Libre" wordmark — height pinned, width
+     auto-flows. Slightly smaller than the nav (24 vs 32) so the
+     footer's denser copy doesn't push it visually heavy. */
   height: 24px;
-  width: 24px;
+  width: auto;
   display: block;
   flex-shrink: 0;
 }

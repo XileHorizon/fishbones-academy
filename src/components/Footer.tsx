@@ -8,15 +8,14 @@ export function Footer() {
       <div className="site-footer__inner">
         <div className="site-footer__brand">
           <Link to="/" className="site-footer__brand-link">
-            {/* Mirrors Nav: squircle icon + text wordmark lockup. */}
+            {/* Mirrors Nav: wide ribbon-snake "Libre" wordmark + .academy. */}
             <img
-              src="/libre_app_icon.png?v=1"
-              alt=""
+              src="/libre_wide.png?v=4"
+              alt="Libre"
               className="site-footer__brand-icon"
-              aria-hidden
             />
             <span>
-              Libre<span className="site-footer__brand-tld">.academy</span>
+              <span className="site-footer__brand-tld">.academy</span>
             </span>
           </Link>
           <p className="site-footer__tagline">

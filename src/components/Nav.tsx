@@ -42,18 +42,16 @@ export function Nav() {
     <header className={`nav${scrolled ? " nav--scrolled" : ""}`}>
       <div className="nav__inner">
         <Link to="/" className="nav__brand" aria-label="Libre home">
-          {/* Icon + text wordmark lockup. The squircle app icon
-              carries the visual identity; the text is the readable
-              brand name. Cleaner than embedding the wordmark image
-              twice and scales sharply at any pixel ratio. */}
+          {/* Wide ribbon-snake "Libre" wordmark + ".academy" TLD.
+              The wide PNG already spells "Libre" with the snake-as-L,
+              so the inline span supplies just the suffix. */}
           <img
-            src="/libre_app_icon.png?v=1"
-            alt=""
+            src="/libre_wide.png?v=4"
+            alt="Libre"
             className="nav__brand-icon"
-            aria-hidden
           />
           <span className="nav__brand-mark">
-            Libre<span className="nav__brand-tld">.academy</span>
+            <span className="nav__brand-tld">.academy</span>
           </span>
         </Link>
 

@@ -49,11 +49,12 @@
 }
 
 .nav__brand-icon {
-  /* Squircle Libre app icon — sits to the left of the text wordmark.
-     28px reads as a comfortable site-header lockup; rounded corners
-     are baked into the source PNG so no extra clipping is needed. */
-  height: 28px;
-  width: 28px;
+  /* Wide ribbon-snake "Libre" wordmark — height pinned, width
+     auto-flows so the natural ~2.4:1 aspect ratio reads cleanly.
+     The bottom of the wordmark sits on the same baseline as the
+     ".academy" TLD descenders thanks to the parent's flex-end. */
+  height: 32px;
+  width: auto;
   display: block;
   flex-shrink: 0;
 }
