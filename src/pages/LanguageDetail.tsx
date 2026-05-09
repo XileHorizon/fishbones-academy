@@ -39,7 +39,7 @@ export function LanguageDetail() {
             <span className="pill">{runLabel}</span>
             {lang.runNote && <span className="pill pill--mono">{lang.runNote}</span>}
           </div>
-          <h1 className="lang-detail__title">{lang.name} on Fishbones</h1>
+          <h1 className="lang-detail__title">{lang.name} on Libre</h1>
           <p className="lang-detail__lede">{lang.blurb}</p>
           <div className="lang-detail__actions">
             {lang.inBrowser ? (

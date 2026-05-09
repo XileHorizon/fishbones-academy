@@ -56,10 +56,10 @@ export function About() {
         <div className="about-hero__inner">
           <span className="section__eyebrow">About</span>
           <h1 className="section__title">
-            Fishbones is built for people who actually finish chapters.
+            Libre is built for people who actually finish chapters.
           </h1>
           <p className="about-hero__lede">
-            We started Fishbones because we kept failing to finish technical
+            We started Libre because we kept failing to finish technical
             books. Reading without doing didn't stick. Doing without a
             curriculum didn't ladder. The platforms that promised both wanted
             our email address and our credit card and our weekends.

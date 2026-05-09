@@ -233,7 +233,7 @@ export function CourseDetail() {
                   className="btn btn--primary btn--lg"
                   onClick={() => void openInFishbones(catalogEntry.id)}
                 >
-                  <ExternalLink size={16} /> Open in Fishbones
+                  <ExternalLink size={16} /> Open in Libre
                 </button>
                 <a
                   href={`/learn/?courseId=${encodeURIComponent(catalogEntry.id)}`}
@@ -257,7 +257,7 @@ export function CourseDetail() {
                   onClick={() => void openInFishbones(catalogEntry.id)}
                   title="Requires the desktop app — installs from the Download page"
                 >
-                  <ExternalLink size={14} /> Open in Fishbones
+                  <ExternalLink size={14} /> Open in Libre
                 </button>
               </>
             )}
@@ -359,7 +359,7 @@ export function CourseDetail() {
                 className="btn btn--ghost btn--lg course-detail__sidebar-btn"
                 onClick={() => void openInFishbones(catalogEntry.id)}
               >
-                <ExternalLink size={14} /> Open in Fishbones
+                <ExternalLink size={14} /> Open in Libre
               </button>
               {/* Soft "no app yet?" affordance — only shows when we
                   haven't seen the desktop app respond on this device.
@@ -369,7 +369,7 @@ export function CourseDetail() {
                   to="/download"
                   className="course-detail__sidebar-hint"
                 >
-                  <DownloadIcon size={11} /> Don't have it? Download Fishbones
+                  <DownloadIcon size={11} /> Don't have it? Download Libre
                 </Link>
               )}
             </div>
@@ -491,7 +491,7 @@ function ChapterOutline({
                   <a
                     className="course-detail__lesson-action course-detail__lesson-action--app"
                     href={fishbonesOpenUrl(courseId, l.id)}
-                    title="Open this lesson in the Fishbones desktop app"
+                    title="Open this lesson in the Libre desktop app"
                     onClick={(e) => e.stopPropagation()}
                   >
                     <ExternalLink size={11} />

@@ -11,13 +11,13 @@ export function Terms() {
       <div className="md-body legal-page__body">
         <h2>Short version</h2>
         <p>
-          Fishbones is free, MIT-licensed software. Use it. Build with it.
+          Libre is free, MIT-licensed software. Use it. Build with it.
           Fork it. Don't blame us if it breaks.
         </p>
 
         <h2>License</h2>
         <p>
-          The Fishbones desktop app, the browser variant, and this site are
+          The Libre desktop app, the browser variant, and this site are
           released under the{" "}
           <a
             href="https://github.com/InfamousVague/Fishbones/blob/main/LICENSE"
@@ -51,10 +51,10 @@ export function Terms() {
 
         <h2>Trademarks</h2>
         <p>
-          "Fishbones" and the Fishbones fish-skeleton mark are trademarks of
-          their authors. You can refer to them when discussing the project,
-          forking the project, or building integrations. Don't pass off your
-          unrelated software as Fishbones.
+          "Libre" and the ribbon-snake Libre mark are trademarks of their
+          authors. You can refer to them when discussing the project, forking
+          the project, or building integrations. Don't pass off your
+          unrelated software as Libre.
         </p>
 
         <h2>Changes</h2>

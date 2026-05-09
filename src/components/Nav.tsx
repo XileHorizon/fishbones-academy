@@ -41,13 +41,13 @@ export function Nav() {
   return (
     <header className={`nav${scrolled ? " nav--scrolled" : ""}`}>
       <div className="nav__inner">
-        <Link to="/" className="nav__brand" aria-label="Fishbones Academy home">
+        <Link to="/" className="nav__brand" aria-label="Libre home">
           <img
-            // ?v=2 cache-bust so clients holding the old flat-white
+            // ?v=3 cache-bust so clients holding the prior fishbones
             // wordmark (cached aggressively by Caddy + the browser
-            // disk cache) refetch the new bone-textured render.
-            src="/fishbones_skinny_white.png?v=2"
-            alt="Fishbones"
+            // disk cache) refetch the ribbon-snake "Libre" wordmark.
+            src="/libre_wide.png?v=3"
+            alt="Libre"
             className="nav__brand-icon"
           />
           <span className="nav__brand-mark">
@@ -73,7 +73,7 @@ export function Nav() {
             href="https://github.com/InfamousVague/Fishbones"
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="View Fishbones on GitHub"
+            aria-label="View Libre on GitHub"
           >
             <GithubMark size={16} />
             <span>GitHub</span>

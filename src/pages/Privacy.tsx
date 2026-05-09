@@ -11,7 +11,7 @@ export function Privacy() {
       <div className="md-body legal-page__body">
         <h2>Short version</h2>
         <p>
-          Fishbones is open source and local-first. We don't run analytics on
+          Libre is open source and local-first. We don't run analytics on
           this site. The desktop and browser apps don't ship telemetry or
           error reporters. Cloud sync is opt-in and stores only the small
           JSON-shaped record of your progress.
@@ -54,7 +54,7 @@ export function Privacy() {
         <h2>Cloud sync (opt-in)</h2>
         <p>
           If you sign in for cloud sync, the app sends your lesson completion
-          records and your XP/streak counters to the Fishbones sync server.
+          records and your XP/streak counters to the Libre sync server.
           Lesson contents (the actual courses) stay on your disk. The server
           source is open and self-hostable.
         </p>

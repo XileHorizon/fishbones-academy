@@ -81,7 +81,7 @@ const FEATURE_ROWS = [
     eyebrow: "Real runtimes",
     title: "Real editor. Twenty-six languages. Zero setup.",
     body:
-      "JavaScript and Python run in-browser in a Web Worker (or Pyodide). Solidity compiles via solc-js + executes on an in-process EVM. Rust and Go proxy out to the official playgrounds. C, C++, Java, Kotlin, C#, Swift, Zig and Assembly drive your local toolchain via the desktop app's subprocess shells. The compiler probe runs on app start — if you're missing one, Fishbones offers a one-click brew install.",
+      "JavaScript and Python run in-browser in a Web Worker (or Pyodide). Solidity compiles via solc-js + executes on an in-process EVM. Rust and Go proxy out to the official playgrounds. C, C++, Java, Kotlin, C#, Swift, Zig and Assembly drive your local toolchain via the desktop app's subprocess shells. The compiler probe runs on app start — if you're missing one, Libre offers a one-click brew install.",
     bullets: [
       "Web Workers + Pyodide for JS, TS, Python",
       "@ethereumjs/vm + viem stack for Solidity (in-process, snapshot/revert)",
@@ -144,7 +144,7 @@ export function Home() {
               Every book has a course inside it. Crack it open.
             </h1>
             <p className="home-hero__lede">
-              Fishbones is an interactive coding course platform. Read prose, write
+              Libre is an interactive coding course platform. Read prose, write
               code in a real editor, watch hidden tests grade your work, level up.
               Twenty-six languages, no setup, no signup wall.
             </p>

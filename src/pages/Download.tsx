@@ -88,10 +88,10 @@ export function Download() {
     <div className="download-page">
       <header className="download-hero">
         <div className="download-hero__inner">
-          <span className="section__eyebrow">Get Fishbones</span>
+          <span className="section__eyebrow">Get Libre</span>
           <h1 className="section__title">Free. Open source. No accounts.</h1>
           <p className="download-hero__lede">
-            Two ways to run Fishbones — both free, both MIT. Browser is the
+            Two ways to run Libre — both free, both MIT. Browser is the
             sampler. Desktop adds ingest, native runtimes, and a local AI tutor.
           </p>
         </div>
@@ -227,7 +227,7 @@ export function Download() {
           Honestly free. We're not setting up a paid tier.
         </h2>
         <p className="section__subtitle section__subtitle--centered">
-          Fishbones is open source. The desktop app is free. The cloud sync server
+          Libre is open source. The desktop app is free. The cloud sync server
           is free. The browser preview is free. There's no roadmap for any of that
           to change.
         </p>

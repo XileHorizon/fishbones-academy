@@ -94,7 +94,7 @@ export function Courses() {
           <div className="courses-page__cover">
             <img
               src="/fishbones-specimen.jpg"
-              alt="Fishbones — naturalist specimen plate"
+              alt="Libre — catalogue cover"
               draggable={false}
             />
           </div>

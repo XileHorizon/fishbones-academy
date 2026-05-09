@@ -9,9 +9,9 @@ export function Footer() {
         <div className="site-footer__brand">
           <Link to="/" className="site-footer__brand-link">
             <img
-              // ?v=2 cache-bust — see Nav.tsx note. Same logo asset.
-              src="/fishbones_skinny_white.png?v=2"
-              alt="Fishbones"
+              // ?v=3 cache-bust — see Nav.tsx note. Same logo asset.
+              src="/libre_wide.png?v=3"
+              alt="Libre"
               className="site-footer__brand-icon"
             />
             <span>

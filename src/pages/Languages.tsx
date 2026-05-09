@@ -43,7 +43,7 @@ export function Languages() {
         />
         <Group
           title="Via hosted sandboxes"
-          blurb="Compiled languages with a public playground. Fishbones proxies your code to play.rust-lang.org / play.golang.org, returns the verdict in the same console."
+          blurb="Compiled languages with a public playground. Libre proxies your code to play.rust-lang.org / play.golang.org, returns the verdict in the same console."
           languages={sandbox}
           counts={courseCounts}
         />

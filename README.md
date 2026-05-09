@@ -1,12 +1,14 @@
 # libre.academy
 
-Marketing + onboarding site for [Fishbones](https://github.com/InfamousVague/Fishbones) — the
+Marketing + onboarding site for [Libre](https://github.com/InfamousVague/Fishbones) — the
 interactive coding course platform that turns any technical book into a course.
+(The GitHub repo is still named `Fishbones` — that's the project's pre-rebrand
+identifier and is left alone to keep links stable.)
 
 This repo is the **standalone** `libre.academy` site. It's separate from:
 
-- `InfamousVague/Fishbones` (the desktop app + browser variant — the actual product)
-- `InfamousVague/mattssoftware` (the personal-portfolio site that also embeds Fishbones)
+- `InfamousVague/Fishbones` (the Libre desktop app + browser variant — the actual product)
+- `InfamousVague/mattssoftware` (the personal-portfolio site that also embeds Libre)
 
 The site has no dependency on the Matt's-Software framing — libre.academy is its own
 marketing surface.

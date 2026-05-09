@@ -21,7 +21,7 @@ export function Support() {
             Keep the open-source work going.
           </h1>
           <p className="support-hero__lede">
-            Fishbones — the desktop app, the browser version, the cloud sync
+            Libre — the desktop app, the browser version, the cloud sync
             server, this site — is MIT licensed and built without a budget.
             If a course or chapter helped you, a few sats or a fraction of an
             ETH keeps the next one shipping.

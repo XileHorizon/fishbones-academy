@@ -282,7 +282,7 @@ export function ResetPassword() {
                   on /learn). Both end up at /learn anyway, but the
                   copy makes the next step clear. */}
             <Link to="/learn" className="reset-card__cta">
-              {token ? "Request a new reset link" : "Back to Fishbones"}
+              {token ? "Request a new reset link" : "Back to Libre"}
             </Link>
           </>
         ) : phase === "success" ? (
