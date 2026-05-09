@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generatedAt": "2026-05-09T21:47:56.758Z",
+  "generatedAt": "2026-05-09T23:38:41.016Z",
   "archiveBaseUrl": "https://mattssoftware.com/fishbones/courses",
   "courses": [
     {
@@ -129,6 +129,7 @@
       "packType": "course",
       "releaseStatus": "BETA",
       "tier": "core",
+      "hidden": true,
       "lessonCount": 51
     },
     {

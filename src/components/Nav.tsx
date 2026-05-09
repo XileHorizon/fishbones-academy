@@ -42,16 +42,18 @@ export function Nav() {
     <header className={`nav${scrolled ? " nav--scrolled" : ""}`}>
       <div className="nav__inner">
         <Link to="/" className="nav__brand" aria-label="Libre home">
+          {/* Icon + text wordmark lockup. The squircle app icon
+              carries the visual identity; the text is the readable
+              brand name. Cleaner than embedding the wordmark image
+              twice and scales sharply at any pixel ratio. */}
           <img
-            // ?v=3 cache-bust so clients holding the prior fishbones
-            // wordmark (cached aggressively by Caddy + the browser
-            // disk cache) refetch the ribbon-snake "Libre" wordmark.
-            src="/libre_wide.png?v=3"
-            alt="Libre"
+            src="/libre_app_icon.png?v=1"
+            alt=""
             className="nav__brand-icon"
+            aria-hidden
           />
           <span className="nav__brand-mark">
-            <span className="nav__brand-tld">.academy</span>
+            Libre<span className="nav__brand-tld">.academy</span>
           </span>
         </Link>
 

@@ -86,14 +86,16 @@ export function Courses() {
   return (
     <div className="courses-page">
       <header className="courses-page__head section section--narrow">
-        {/* Two-column hero. The Fishbones specimen plate sits on the
-            left as the catalogue's "shelf-end" book, the headline +
-            subtitle stack on the right. Below 720px the row stacks so
-            the book lands on top, like the CourseDetail hero does. */}
+        {/* Two-column hero. The Libre app icon sits on the left as
+            the catalogue's "shelf-end" book — squircle icon centered
+            inside the cover frame with the brand gradient behind it
+            so it reads as a deliberate brand element, not a stretched
+            avatar. Below 720px the row stacks so the icon lands on
+            top, like the CourseDetail hero does. */}
         <div className="courses-page__head-row">
-          <div className="courses-page__cover">
+          <div className="courses-page__cover courses-page__cover--brand">
             <img
-              src="/fishbones-specimen.jpg"
+              src="/libre_app_icon.png"
               alt="Libre — catalogue cover"
               draggable={false}
             />

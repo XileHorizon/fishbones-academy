@@ -32,11 +32,27 @@
     inset 0 0 0 1px rgba(255, 255, 255, 0.05);
 }
 
+/* Brand-cover variant — squircle Libre icon inside the cover frame
+   with the brand cream/orange gradient backdrop and the icon padded
+   so the squircle reads as a centerpiece, not a stretched avatar. */
+.courses-page__cover--brand {
+  background:
+    radial-gradient(120% 90% at 30% 20%, rgba(255, 191, 130, 0.55), transparent 60%),
+    linear-gradient(160deg, #fef3e8 0%, #fcdcc1 55%, #f6b89a 100%);
+}
+
 .courses-page__cover img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
+}
+
+.courses-page__cover--brand img {
+  /* Pad the icon so the squircle sits as a brand object inside the
+     frame, not edge-bleeding to the cover border. */
+  object-fit: contain;
+  padding: 22px;
 }
 
 .courses-page__head-text {

@@ -120,21 +120,37 @@ export function Home() {
 
   return (
     <div className="home">
-      {/* ─── Hero ────────────────────────────────────────── */}
+      {/* ─── Hero ──────────────────────────────────────────
+          Layered top-to-bottom:
+            1. Particle field — ambient drifting dots
+            2. LibreHeader.png — the ribbon-snake brand artwork,
+               centered as the hero centerpiece
+            3. Eyebrow → headline → lede → CTAs → hint
+            4. Stats strip
+          The artwork carries the visual identity; the copy
+          underneath delivers the value prop without fighting it. */}
       <section className="home-hero">
-        <div className="home-hero__bg" aria-hidden />
         {/* Ambient particle overlay — drifting blue dots that
-            respond to the cursor with gentle parallax. Sits between
-            the bg artwork and the content layer. Intentionally low
-            count (80) so it reads as atmosphere not noise. */}
+            respond to the cursor with gentle parallax. Sits behind
+            the artwork + content. Intentionally low count (80) so
+            it reads as atmosphere not noise. */}
         <ParticleField className="home-hero__particles" count={80} />
 
-        <div className="home-hero__inner home-hero__inner--single">
+        <div className="home-hero__inner home-hero__inner--stacked">
+          <motion.img
+            src="/libre_header.png"
+            alt="Libre — interactive coding course platform"
+            className="home-hero__artwork"
+            initial={{ opacity: 0, y: 24, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.9, ease: "easeOut" }}
+            draggable={false}
+          />
           <motion.div
             className="home-hero__copy"
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
+            transition={{ duration: 0.8, delay: 0.15, ease: "easeOut" }}
           >
             <span className="home-hero__eyebrow">
               <span className="home-hero__pulse" /> A naturalist's field guide to

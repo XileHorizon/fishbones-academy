@@ -1,37 +1,27 @@
 /* ─── Hero ───────────────────────────────────────────── */
 
-/* The hero now hosts a full-bleed specimen-plate background. We DROP
-   the max-width on .home-hero itself so the background image can span
-   edge-to-edge, then re-apply the constraint to .home-hero__inner so
-   the text column still aligns with the section content below. This
-   reverses the earlier "give .home-hero the .section max-width"
-   change — the new background needs full width, so alignment moves
-   one level inward. */
+/* The hero stacks the LibreHeader.png brand artwork above the value-
+   prop copy. No more dim-background-with-overlay pattern — the
+   artwork is meant to be SEEN, not used as wallpaper, so it sits as
+   its own banner with the headline + CTAs underneath. Particle
+   field stays as low-key ambient depth. */
 .home-hero {
   position: relative;
-  padding: 96px var(--site-section-pad-x) 64px;
-  /* Hide any horizontal overflow from the bg's transform breakout
-     so it doesn't spawn a horizontal scrollbar on narrow viewports. */
+  padding: 64px var(--site-section-pad-x) 64px;
+  /* Hide horizontal overflow from particle parallax / artwork
+     transforms so they don't spawn a horizontal scrollbar. */
   overflow: hidden;
   isolation: isolate;
 }
 
-/* Full-bleed brand specimen plate. Layered ladder:
-     z-index 0 = the artwork itself (this rule)
-     z-index 1 = the dark gradient overlay (::after)
-     z-index 2+ = .home-hero__inner content (handled below)
-   We use background-image (not <img>) so we don't have to wrestle
-   with object-fit + responsive crop. background-attachment: scroll
-   (default) is intentional — `fixed` parallax stutters on Safari
-   and breaks at the iOS Safari address-bar resize. */
-/* Particle field overlay sits between the dimmed bg artwork and
-   the hero text. Pointer events stay on the canvas for the mouse
+/* Particle field overlay — sits behind the artwork + copy as
+   ambient depth. Pointer events stay on the canvas for the mouse
    parallax to work, but the canvas is decorative — clicks pass
    through to nothing important. */
 .home-hero__particles {
   position: absolute !important;
   inset: 0;
-  z-index: 1;
+  z-index: 0;
   pointer-events: none;
 }
 
@@ -40,103 +30,61 @@
   pointer-events: auto !important;
 }
 
-.home-hero__bg {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  background-image: url("/hero-fishbones.jpg");
-  background-size: cover;
-  background-position: center center;
-  background-repeat: no-repeat;
-  /* Dim the artwork so the cream-parchment edges don't fight the
-     dark site bg, and so the hero text reads at AAA contrast. The
-     ::after gradient does the heavy lifting of edge-blending; this
-     opacity is a baseline knock-down. */
-  opacity: 0.7;
-  /* Slight blur to take the high-frequency edges off the parchment
-     texture + gear engraving so white hero text stops fighting the
-     artwork's micro-detail. The transform: scale prevents the
-     blurred fuzzy-edge halo from showing inside the hero — without
-     the scale, blur fades pixels to transparent at the element
-     boundary, leaving a visible feathered seam against the dark
-     site bg. 1.04 is just enough to push the soft edge outside the
-     overflow:hidden clip on .home-hero. */
-  filter: blur(4px);
-  transform: scale(1.04);
-  /* Will-change tells the compositor to promote this to its own
-     layer so the blur doesn't recompute on every scroll. */
-  will-change: transform;
-}
-
-/* Edge-blender + readability gradient. Two roles in one overlay:
-     1. Top: small dark wash so the eyebrow/title pop against any
-        bright spots in the artwork.
-     2. Bottom: heavier dark wash that fades the artwork into the
-        site's dark bg, hiding the parchment-edge seam where the
-        cream image meets the dark page.
-   Sides taper to transparent so the artwork's decorative border
-   ornaments stay visible on wide viewports. */
-.home-hero__bg::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  /* Two stacked gradients:
-       1. Vertical (top→bottom): darken edges so artwork blends
-          into the dark site bg.
-       2. Horizontal (left→right): heavier dark wash on the LEFT
-          where the hero text column lives, fading to lighter on
-          the right where the artwork should breathe. This is what
-          actually rescues white-on-cream text legibility — the
-          blur only softens, the wash provides the contrast. */
-  background:
-    linear-gradient(
-      180deg,
-      rgba(10, 10, 11, 0.5) 0%,
-      rgba(10, 10, 11, 0.3) 35%,
-      rgba(10, 10, 11, 0.55) 70%,
-      rgba(10, 10, 11, 0.97) 100%
-    ),
-    linear-gradient(
-      90deg,
-      rgba(10, 10, 11, 0.65) 0%,
-      rgba(10, 10, 11, 0.35) 45%,
-      rgba(10, 10, 11, 0.1) 75%,
-      rgba(10, 10, 11, 0) 100%
-    );
-  pointer-events: none;
-}
-
 .home-hero__inner {
   position: relative;
   z-index: 2;
   max-width: var(--site-max-width);
   margin: 0 auto;
-  /* Side padding on the inner so the constrained text column
-     aligns with the section content below it (which uses the same
-     --site-section-pad-x inside its max-width container). */
+  /* Side padding on the inner so the content stays aligned with
+     the section content below (same --site-section-pad-x). */
   padding: 0 var(--site-section-pad-x);
-  display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
-  gap: 56px;
-  align-items: center;
 }
 
-/* Single-column variant — used now that we've dropped the
-   HeroTerminal in favour of the artwork. The text column gets the
-   left half of the hero; the right half stays empty so the fish
-   skeleton's body/tail composition shows through unobstructed.
-   On viewports < 1000px the responsive media query collapses to
-   full-width copy, which is fine since the artwork is centered and
-   still visible behind everything. */
-.home-hero__inner--single {
-  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+/* Stacked variant — artwork on top, copy below. This is the layout
+   that ships with the new ribbon-snake LibreHeader artwork. */
+.home-hero__inner--stacked {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 36px;
 }
-.home-hero__inner--single::after {
-  /* Empty grid cell so the title column doesn't expand into the
-     full hero width — keeps the text out of the busiest part of
-     the artwork (the fish's mid-body). */
-  content: "";
+
+/* Hero artwork — the ribbon-snake "Libre" brand banner. Capped
+   at ~880px so it stays balanced inside the constrained text
+   column on wide displays, and at 100% on narrow ones it stretches
+   to whatever room is available. The `mix-blend-mode: lighten`
+   keeps the cream backdrop from creating a hard rectangle on the
+   dark site bg — the bright pixels survive but the cream falls
+   away. We pair it with a subtle radial mask + drop-shadow so the
+   ribbon sits in front of the dark bg with depth, not as a
+   pasted-on rectangle. */
+.home-hero__artwork {
   display: block;
+  width: 100%;
+  max-width: 880px;
+  height: auto;
+  /* Tasteful glow — picks up the orange ribbon and casts a soft
+     halo into the dark site bg. Two layered shadows: a tight one
+     for ground contact, a loose warm one for atmosphere. */
+  filter:
+    drop-shadow(0 18px 40px rgba(243, 114, 57, 0.25))
+    drop-shadow(0 4px 12px rgba(0, 0, 0, 0.25));
+  /* Radial mask: keeps the ribbon punchy in the centre and feathers
+     the cream backdrop into transparency at the edges, eliminating
+     the hard rectangle seam against the site's dark bg. */
+  -webkit-mask-image: radial-gradient(
+    ellipse 80% 90% at center,
+    rgba(0, 0, 0, 1) 50%,
+    rgba(0, 0, 0, 0.85) 75%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  mask-image: radial-gradient(
+    ellipse 80% 90% at center,
+    rgba(0, 0, 0, 1) 50%,
+    rgba(0, 0, 0, 0.85) 75%,
+    rgba(0, 0, 0, 0) 100%
+  );
 }
 
 .home-hero__eyebrow {
@@ -187,7 +135,7 @@
   line-height: 1.55;
   color: var(--color-text-secondary);
   max-width: 560px;
-  margin-bottom: 28px;
+  margin: 0 auto 28px;
 }
 
 .home-hero__actions {
@@ -195,6 +143,7 @@
   flex-wrap: wrap;
   gap: 10px;
   margin-bottom: 16px;
+  justify-content: center;
 }
 
 .home-hero__hint {
@@ -634,7 +583,7 @@
 
 @media (max-width: 1000px) {
   .home-hero { padding-top: 80px; }
-  .home-hero__inner { grid-template-columns: 1fr; gap: 40px; }
+  .home-hero__inner--stacked { gap: 28px; }
   .home-row__layout { grid-template-columns: 1fr; gap: 32px; }
   .home-row__layout--reverse > .home-row__copy,
   .home-row__layout--reverse > .home-row__visual { order: initial; }
@@ -646,6 +595,7 @@
 @media (max-width: 540px) {
   .home-features { grid-template-columns: 1fr; }
   .home-hero__title { font-size: 38px; }
+  .home-hero__artwork { max-width: 100%; }
   .home-stats { grid-template-columns: 1fr; }
   .home-stats__item::before { display: none !important; }
 }

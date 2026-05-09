@@ -44,12 +44,13 @@
 }
 
 .nav__brand-icon {
-  /* Skinny fishbones wordmark — kept on its own row so the natural
-     aspect ratio (~2.7:1) reads cleanly. Height pins the size and
-     width auto-flows. */
-  height: 22px;
-  width: auto;
+  /* Squircle Libre app icon — sits to the left of the text wordmark.
+     28px reads as a comfortable site-header lockup; rounded corners
+     are baked into the source PNG so no extra clipping is needed. */
+  height: 28px;
+  width: 28px;
   display: block;
+  flex-shrink: 0;
 }
 
 .nav__brand-mark {

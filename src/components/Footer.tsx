@@ -8,14 +8,15 @@ export function Footer() {
       <div className="site-footer__inner">
         <div className="site-footer__brand">
           <Link to="/" className="site-footer__brand-link">
+            {/* Mirrors Nav: squircle icon + text wordmark lockup. */}
             <img
-              // ?v=3 cache-bust — see Nav.tsx note. Same logo asset.
-              src="/libre_wide.png?v=3"
-              alt="Libre"
+              src="/libre_app_icon.png?v=1"
+              alt=""
               className="site-footer__brand-icon"
+              aria-hidden
             />
             <span>
-              <span className="site-footer__brand-tld">.academy</span>
+              Libre<span className="site-footer__brand-tld">.academy</span>
             </span>
           </Link>
           <p className="site-footer__tagline">
