@@ -198,6 +198,15 @@
   --color-accent-hover: #222225;
   --color-accent-subtle: #ECECEF;
   --color-accent-text: #09090B;
+  /* Warm-orange brand accent — picks up the amber palette the app
+     side uses (--fb-bone-amber #c9a76b) but pulled a shade warmer
+     for a more saturated marketing read. Used selectively on TLD
+     ".academy" text, primary CTA hover states, and accent rules
+     so the all-monochrome page picks up some warmth without
+     becoming busy. */
+  --color-accent-warm: #e8954a;
+  --color-accent-warm-hover: #d4814b;
+  --color-accent-warm-subtle: rgba(232, 149, 74, 0.12);
   --color-overlay: rgba(0,0,0,0.04);
   --color-overlay-heavy: rgba(0,0,0,0.08);
   --color-skeleton: #ECECEF;
@@ -244,6 +253,13 @@
   --color-accent-hover: #ECECEF;
   --color-accent-subtle: #222225;
   --color-accent-text: #FAFAFA;
+  /* Warm-orange brand accent — slightly brighter on dark so it
+     pops against the deep background; same hue family as the
+     light-theme value so the warm ".academy" / hover states feel
+     stable across themes. */
+  --color-accent-warm: #f0a464;
+  --color-accent-warm-hover: #e8954a;
+  --color-accent-warm-subtle: rgba(240, 164, 100, 0.18);
   --color-overlay: rgba(255,255,255,0.03);
   --color-overlay-heavy: rgba(255,255,255,0.06);
   --color-skeleton: #222225;

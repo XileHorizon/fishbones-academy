@@ -35,7 +35,12 @@
 
 .nav__brand {
   display: inline-flex;
-  align-items: center;
+  /* Bottom-align the icon + wordmark so the ".academy" descender
+     line sits at the icon's bottom edge rather than floating
+     mid-icon. The "Libre" baseline rides the same horizontal as
+     ".academy"; flex-end makes the icon and the entire brand-mark
+     text-line share that bottom. */
+  align-items: flex-end;
   gap: 10px;
   color: var(--color-text-primary);
   font-weight: 700;
@@ -54,14 +59,24 @@
 }
 
 .nav__brand-mark {
+  /* The wordmark line aligns its descender bottom to the icon
+     bottom. Inline-flex with `align-items: baseline` keeps "Libre"
+     and ".academy" sharing the same baseline within the wordmark. */
   display: inline-flex;
   align-items: baseline;
   font-size: 18px;
   font-weight: 700;
   letter-spacing: -0.01em;
+  line-height: 1;
 }
 
-.nav__brand-tld { color: var(--color-text-secondary); font-weight: 600; }
+.nav__brand-tld {
+  /* Warm-orange accent on the TLD (was monochrome secondary).
+     Carries a hint of brand warmth into the header lockup; the
+     "Libre" stays in primary text for legibility. */
+  color: var(--color-accent-warm, #e8954a);
+  font-weight: 600;
+}
 
 .nav__links {
   display: flex;
@@ -84,13 +99,32 @@
 }
 
 .nav__link:hover {
-  color: var(--color-text-primary);
-  background: var(--color-bg-secondary);
+  /* Warm-orange hover. Was monochrome (text-primary on bg-secondary);
+     warming it adds a bit of brand identity to the nav without
+     making the inactive state look loud. */
+  color: var(--color-accent-warm);
+  background: var(--color-accent-warm-subtle);
 }
 
 .nav__link--active {
-  color: var(--color-text-primary);
-  background: var(--color-bg-secondary);
+  /* Active nav link picks up the warm accent as both text + a
+     thin underscore rule, so the current section reads at a
+     glance. The subtle warm tint on hover (above) makes the
+     active state feel like the brighter sibling rather than a
+     different colour family. */
+  color: var(--color-accent-warm);
+  background: transparent;
+  position: relative;
+}
+.nav__link--active::after {
+  content: "";
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 4px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--color-accent-warm);
 }
 
 .nav__link--icon { padding: 8px 10px; }
@@ -108,13 +142,15 @@
   font-weight: 600;
   letter-spacing: -0.005em;
   text-decoration: none;
-  transition: opacity 0.15s ease, transform 0.15s ease;
+  transition: opacity 0.15s ease, transform 0.15s ease, background 0.15s ease;
 }
 
 .nav__cta:hover {
-  opacity: 0.92;
+  /* CTA hover: shift fill to the warm accent — bigger brand moment
+     than the link-hover above since this is a primary action. */
+  background: var(--color-accent-warm);
+  color: #1f2330;
   transform: translateY(-1px);
-  color: var(--color-bg-primary);
 }
 
 .nav__menu-btn {

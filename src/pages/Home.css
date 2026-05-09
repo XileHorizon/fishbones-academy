@@ -103,17 +103,21 @@
 }
 
 .home-hero__pulse {
+  /* Re-tinted from "MIT-license sage green" to the warm-orange
+     brand accent so the eyebrow row reads as on-brand rather than
+     a generic OSS green-light. Same pulse timing and ring shape;
+     just the colour swaps. */
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #86efac;
-  box-shadow: 0 0 0 0 rgba(134, 239, 172, 0.6);
+  background: var(--color-accent-warm);
+  box-shadow: 0 0 0 0 var(--color-accent-warm-subtle);
   animation: hero-pulse 1.8s ease-out infinite;
 }
 
 @keyframes hero-pulse {
-  0% { box-shadow: 0 0 0 0 rgba(134, 239, 172, 0.55); }
-  100% { box-shadow: 0 0 0 10px rgba(134, 239, 172, 0); }
+  0% { box-shadow: 0 0 0 0 var(--color-accent-warm-subtle); }
+  100% { box-shadow: 0 0 0 10px transparent; }
 }
 
 .home-hero__title {
@@ -122,8 +126,12 @@
   letter-spacing: -0.03em;
   line-height: 1.04;
   color: var(--color-text-primary);
-  /* Slight gradient — keeps it monochrome but adds depth without color. */
-  background: linear-gradient(180deg, #ffffff 0%, #c4c4cc 130%);
+  /* Subtle warm-orange wash on the gradient — keeps the headline
+     mostly white but introduces a hint of brand warmth at the
+     bottom of the gradient where descenders sit. The wash is
+     small (130% stop = below the actual letterforms) so it
+     doesn't fight readability; just adds a glow seam. */
+  background: linear-gradient(180deg, #ffffff 0%, #ffe6c8 90%, #e8954a 130%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
