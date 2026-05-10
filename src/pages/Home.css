@@ -59,32 +59,34 @@
    away. We pair it with a subtle radial mask + drop-shadow so the
    ribbon sits in front of the dark bg with depth, not as a
    pasted-on rectangle. */
+/* Hero artwork — now framed as a deliberate "big card" rather
+   than feathered into the dark bg via a radial mask. The card
+   chrome (border, radius, shadow, padding) sets the artwork
+   off as a tile that visually dominates the hero without
+   blending into the surrounding section. */
 .home-hero__artwork {
   display: block;
   width: 100%;
   max-width: 880px;
   height: auto;
-  /* Tasteful glow — picks up the orange ribbon and casts a soft
-     halo into the dark site bg. Two layered shadows: a tight one
-     for ground contact, a loose warm one for atmosphere. */
-  filter:
-    drop-shadow(0 18px 40px rgba(243, 114, 57, 0.25))
-    drop-shadow(0 4px 12px rgba(0, 0, 0, 0.25));
-  /* Radial mask: keeps the ribbon punchy in the centre and feathers
-     the cream backdrop into transparency at the edges, eliminating
-     the hard rectangle seam against the site's dark bg. */
-  -webkit-mask-image: radial-gradient(
-    ellipse 80% 90% at center,
-    rgba(0, 0, 0, 1) 50%,
-    rgba(0, 0, 0, 0.85) 75%,
-    rgba(0, 0, 0, 0) 100%
-  );
-  mask-image: radial-gradient(
-    ellipse 80% 90% at center,
-    rgba(0, 0, 0, 1) 50%,
-    rgba(0, 0, 0, 0.85) 75%,
-    rgba(0, 0, 0, 0) 100%
-  );
+  /* Card surface — slim 1px border in the same ribbon-orange tone
+     as the artwork's accent so the frame reads as part of the
+     brand instead of a generic hairline. The radius matches the
+     "Download" / "Open the app" buttons below to keep the hero's
+     corner-vocabulary consistent. */
+  padding: 18px;
+  background: rgba(255, 246, 230, 0.04);
+  border: 1px solid rgba(243, 114, 57, 0.32);
+  border-radius: 24px;
+  /* Two-layer shadow does the same "ground contact + warm halo"
+     job the previous filter-based drop shadows did, but as box
+     shadows so they paint behind the card surface (not the
+     artwork's alpha mask). Inner highlight on the top edge gives
+     the card a subtle glass-like top lip. */
+  box-shadow:
+    0 1px 0 0 rgba(255, 255, 255, 0.06) inset,
+    0 18px 40px rgba(243, 114, 57, 0.25),
+    0 6px 18px rgba(0, 0, 0, 0.4);
 }
 
 .home-hero__eyebrow {
