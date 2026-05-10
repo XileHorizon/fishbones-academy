@@ -41,18 +41,16 @@ export function Nav() {
   return (
     <header className={`nav${scrolled ? " nav--scrolled" : ""}`}>
       <div className="nav__inner">
-        <Link to="/" className="nav__brand" aria-label="Libre home">
-          {/* Wide ribbon-snake "Libre" wordmark + ".academy" TLD.
-              The wide PNG already spells "Libre" with the snake-as-L,
-              so the inline span supplies just the suffix. */}
+        <Link to="/" className="nav__brand" aria-label="Libre.academy home">
+          {/* Single-glyph "Libre.academy" wordmark — the
+              ribbon-snake "Libre" + ".academy" suffix come together
+              in one PNG, so the lockup ships as one image with no
+              paired text span needed. */}
           <img
-            src="/libre_wide.png?v=4"
-            alt="Libre"
+            src="/libreacademy.png?v=1"
+            alt="Libre.academy"
             className="nav__brand-icon"
           />
-          <span className="nav__brand-mark">
-            <span className="nav__brand-tld">.academy</span>
-          </span>
         </Link>
 
         <nav className="nav__links" aria-label="Primary">

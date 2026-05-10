@@ -8,15 +8,13 @@ export function Footer() {
       <div className="site-footer__inner">
         <div className="site-footer__brand">
           <Link to="/" className="site-footer__brand-link">
-            {/* Mirrors Nav: wide ribbon-snake "Libre" wordmark + .academy. */}
+            {/* Single-glyph "Libre.academy" wordmark — same asset
+                + lockup as the top nav. */}
             <img
-              src="/libre_wide.png?v=4"
-              alt="Libre"
+              src="/libreacademy.png?v=1"
+              alt="Libre.academy"
               className="site-footer__brand-icon"
             />
-            <span>
-              <span className="site-footer__brand-tld">.academy</span>
-            </span>
           </Link>
           <p className="site-footer__tagline">
             Every book has a course inside it. Crack it open.

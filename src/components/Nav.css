@@ -49,11 +49,11 @@
 }
 
 .nav__brand-icon {
-  /* Wide ribbon-snake "Libre" wordmark — height pinned, width
-     auto-flows so the natural ~2.4:1 aspect ratio reads cleanly.
-     The bottom of the wordmark sits on the same baseline as the
-     ".academy" TLD descenders thanks to the parent's flex-end. */
-  height: 32px;
+  /* Single-glyph "Libre.academy" wordmark — height pinned at 38px
+     so the ".academy" suffix inside the asset (smaller than the
+     "Libre" portion) stays legible; width auto-flows the natural
+     ~2.85:1 ratio of the source PNG. */
+  height: 38px;
   width: auto;
   display: block;
   flex-shrink: 0;

@@ -24,10 +24,10 @@
   text-decoration: none;
 }
 .site-footer__brand-icon {
-  /* Wide ribbon-snake "Libre" wordmark — height pinned, width
-     auto-flows. Slightly smaller than the nav (24 vs 32) so the
-     footer's denser copy doesn't push it visually heavy. */
-  height: 24px;
+  /* Single-glyph "Libre.academy" wordmark — height pinned at 28px
+     so the ".academy" suffix stays legible at the smaller footer
+     scale; width auto-flows the natural ~2.85:1 ratio. */
+  height: 28px;
   width: auto;
   display: block;
   flex-shrink: 0;
