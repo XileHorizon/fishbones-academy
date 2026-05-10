@@ -49,11 +49,11 @@
 }
 
 .nav__brand-icon {
-  /* Single-glyph "Libre.academy" wordmark — height pinned at 38px
-     so the ".academy" suffix inside the asset (smaller than the
-     "Libre" portion) stays legible; width auto-flows the natural
-     ~2.85:1 ratio of the source PNG. */
-  height: 38px;
+  /* Single-glyph "Libre.academy" wordmark — height pinned at 44px
+     (bumped 15% from the previous 38px so the ".academy" suffix
+     inside the asset reads with more presence in the header).
+     Width auto-flows the natural ~2.85:1 ratio of the source PNG. */
+  height: 44px;
   width: auto;
   display: block;
   flex-shrink: 0;
