@@ -86,16 +86,16 @@ export function Courses() {
   return (
     <div className="courses-page">
       <header className="courses-page__head section section--narrow">
-        {/* Two-column hero. The Libre app icon sits on the left as
-            the catalogue's "shelf-end" book — squircle icon centered
-            inside the cover frame with the brand gradient behind it
-            so it reads as a deliberate brand element, not a stretched
-            avatar. Below 720px the row stacks so the icon lands on
-            top, like the CourseDetail hero does. */}
+        {/* Two-column hero. A "generic" ribbon-snake book cover sits
+            on the left as the catalogue's "shelf-end" book — full-art
+            cover (no padding / no brand-gradient frame) so it reads
+            as a representative member of the same shelf below it,
+            not as the Libre brand mark. Below 720px the row stacks
+            so the cover lands on top, like the CourseDetail hero does. */}
         <div className="courses-page__head-row">
-          <div className="courses-page__cover courses-page__cover--brand">
+          <div className="courses-page__cover">
             <img
-              src="/libre_app_icon.png"
+              src="/generic-snake-book-cover.png"
               alt="Libre — catalogue cover"
               draggable={false}
             />
