@@ -176,8 +176,16 @@ jobs:
           fi
           sudo apt-get update -qq
           sudo apt-get install -y -qq sshpass rsync
-          sshpass -e rsync -a --delete \
+          # `--exclude=audio/` is load-bearing. The Fishbones lesson-
+          # audio pipeline (Apps/Fishbones/scripts/upload-lesson-
+          # audio.mjs) pushes pre-generated MP3s to
+          # /var/www/fishbones-academy/audio/. Without this exclude,
+          # `--delete` wipes the entire audio dir on every CI deploy
+          # — lessons across the app stop playing TTS until someone
+          # manually re-uploads. The local `scripts/deploy.mjs` has
+          # the matching exclude; keep both in lockstep.
+          sshpass -e rsync -a --delete --exclude=audio/ \
             -e "ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 -p ${VPS_PORT}" \
             dist/ \
             "${VPS_USER}@${VPS_HOST}:${VPS_TARGET_DIR}/"
-          echo "Synced dist/ to ${VPS_USER}@${VPS_HOST}:${VPS_TARGET_DIR}/"
+          echo "Synced dist/ to ${VPS_USER}@${VPS_HOST}:${VPS_TARGET_DIR}/ (audio/ preserved)"
