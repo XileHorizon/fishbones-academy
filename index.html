@@ -2,8 +2,13 @@
 <html lang="en" data-theme="dark" data-theme-name="default-dark">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/favicon.png" />
-    <link rel="apple-touch-icon" href="/favicon.png" />
+    <!-- Favicon + apple-touch-icon. `?v=` is a cache-bust knob —
+         browsers cache the favicon aggressively (often surviving
+         hard reloads), so bumping this on any icon swap forces
+         returning visitors to refetch on their next page load.
+         Bump the number whenever /favicon.png changes. -->
+    <link rel="icon" type="image/png" href="/favicon.png?v=2" />
+    <link rel="apple-touch-icon" href="/favicon.png?v=2" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="theme-color" content="#09090b" />
     <title>Libre — Turn any technical book into a course</title>
