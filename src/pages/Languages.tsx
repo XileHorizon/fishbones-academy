@@ -25,25 +25,28 @@ export function Languages() {
   return (
     <div className="languages-page">
       <header className="languages-page__head section section--narrow">
-        <span className="section__eyebrow">Languages</span>
-        <h1 className="section__title">Sixteen languages. One editor. One workflow.</h1>
+        <span className="section__eyebrow">Programming languages</span>
+        <h1 className="section__title">
+          Learn 26 programming languages — free, in your browser.
+        </h1>
         <p className="section__subtitle">
-          Pick a language and the right runtime fires up automatically.
-          Browser-runnable languages are sampleable today; the rest are a
-          desktop-app install away.
+          Every language Libre Academy supports, with its real runtime and
+          a free course library. Browser-runnable languages start the first
+          lesson with one click; compiled languages run via hosted
+          sandboxes or the optional desktop app.
         </p>
       </header>
 
       <section className="section">
         <Group
           title="In your browser"
-          blurb="No setup. No install. The lessons grade themselves in a Web Worker, an iframe, or Pyodide — pick a course and start the first one."
+          blurb="No setup. No install. Lessons grade themselves in a Web Worker, an iframe, or Pyodide — pick a course and start writing code in 30 seconds."
           languages={browser}
           counts={courseCounts}
         />
         <Group
           title="Via hosted sandboxes"
-          blurb="Compiled languages with a public playground. Libre proxies your code to play.rust-lang.org / play.golang.org, returns the verdict in the same console."
+          blurb="Compiled languages with an official playground. Libre Academy proxies your code to play.rust-lang.org / play.golang.org and returns the verdict in the same console."
           languages={sandbox}
           counts={courseCounts}
         />

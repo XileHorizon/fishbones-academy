@@ -11,16 +11,16 @@ export function Terms() {
       <div className="md-body legal-page__body">
         <h2>Short version</h2>
         <p>
-          Libre is free, MIT-licensed software. Use it. Build with it.
-          Fork it. Don't blame us if it breaks.
+          Libre Academy is free, MIT-licensed software. Use it. Build with
+          it. Fork it. Don't blame us if it breaks.
         </p>
 
         <h2>License</h2>
         <p>
-          The Libre desktop app, the browser variant, and this site are
-          released under the{" "}
+          The Libre Academy desktop app, the browser variant, and this site
+          are released under the{" "}
           <a
-            href="https://github.com/InfamousVague/Fishbones/blob/main/LICENSE"
+            href="https://github.com/InfamousVague/Libre.academy/blob/main/LICENSE"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -51,10 +51,10 @@ export function Terms() {
 
         <h2>Trademarks</h2>
         <p>
-          "Libre" and the ribbon-snake Libre mark are trademarks of their
-          authors. You can refer to them when discussing the project, forking
-          the project, or building integrations. Don't pass off your
-          unrelated software as Libre.
+          "Libre Academy" and the ribbon-snake Libre mark are trademarks of
+          their authors. You can refer to them when discussing the project,
+          forking the project, or building integrations. Don't pass off
+          your unrelated software as Libre Academy.
         </p>
 
         <h2>Changes</h2>

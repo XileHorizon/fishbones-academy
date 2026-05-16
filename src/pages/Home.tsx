@@ -19,98 +19,112 @@ import { BookCarousel } from "../components/spotlights/BookCarousel";
 import "./Home.css";
 
 /// Homepage architecture:
-///   1. Hero with specimen plate + ambient ParticleField overlay
-///   2. WorkbenchSpotlight  — animated Solidity Counter editor
-///   3. EvmChainSpotlight   — replica of the in-app ChainDock with
-///                            ticking blocks + animated tx feed.
-///                            Threaded to the workbench by referencing
-///                            the same Counter contract.
-///   4. BookCarousel        — auto-scrolling marquee of every cover
-///   5. FEATURES strip      — restyled 4-card grid of headline features
-///   6. Long-form rows      — Real runtimes / Bring your own book /
-///                            Local-first (kept from the previous
-///                            page, restyled to match new aesthetic)
-///   7. Final CTA
+///   1. Hero (SEO H1: "Free interactive coding courses…") with
+///      LibreHeader.png + ambient ParticleField overlay
+///   2. WorkbenchSpotlight  — animated in-browser code editor demo
+///   3. BookCarousel        — auto-scrolling marquee of every course
+///   4. EvmChainSpotlight   — replica of the in-app ChainDock
+///   5. FEATURES strip      — interactive lessons / editor / hidden
+///                            tests / AI tutor (Codecademy-comparable
+///                            head terms tuned for the same query
+///                            family)
+///   6. Long-form rows      — Runs in your browser / Bring your own
+///                            book / Free + open source
+///   7. Final CTA           — "Start learning free"
 ///
-/// (The skill-tree spotlight that previously sat between the
-/// EvmChain and BookCarousel was retired — the in-app trees are
-/// reachable via the /learn CTA in the hero, and the homepage was
-/// quieter without it.)
+/// SEO strategy: lead with the head term ("Free interactive coding
+/// courses") in the <title>, H1, og:title and og:description so
+/// Google sees consistent topical signal. Body copy expands on the
+/// differentiator (26 languages, in-browser editor, hidden tests,
+/// open source, no signup wall) — the things Codecademy /
+/// freeCodeCamp / Scrimba can't all claim simultaneously.
 ///
-/// Story arc: try → specialise → master → explore → commit. The first
-/// three sections show what coding HERE feels like; the carousel
-/// shows breadth; the long-form rows give the spec sheet for engaged
-/// readers; the CTA closes.
+/// Story arc: hook (free + interactive) → proof (editor demo +
+/// course breadth + advanced runtimes) → spec sheet (why it's
+/// different from the other free-courses sites) → CTA.
 
+/// Feature cards target the "what do I get when I sign up?" question
+/// that visitors land with after a "learn to code free" search. Each
+/// card pairs the SEO-friendly head term ("Interactive lessons",
+/// "In-browser code editor", "Hidden test grading", "AI tutor") with
+/// a body that says HOW it works rather than just what it is. The
+/// vocabulary deliberately mirrors what Codecademy / freeCodeCamp /
+/// Scrimba listings use — so a query like "interactive code editor
+/// online free" is more likely to surface the right card.
 const FEATURES = [
   {
     icon: BookOpen,
-    title: "Reading lessons",
+    title: "Interactive lessons",
     body:
-      "Markdown prose with Shiki syntax highlighting, inline glossary popovers, and a 'You'll learn' card that previews the takeaway before you read.",
+      "Read short prose chunks with syntax-highlighted snippets, inline glossary popovers, and a 'You'll learn' card up front so you know what's coming. Every lesson ends in a hands-on exercise — no passive video watching.",
   },
   {
     icon: Code2,
-    title: "Workbench",
+    title: "In-browser code editor",
     body:
-      "Real Monaco editor (the engine VS Code runs on) wired to per-language test runners. Click Run, get pass/fail, no tab-switching.",
+      "A real Monaco editor (the engine VS Code is built on) opens next to every lesson. Click Run, see test output instantly. No tab-switching, no localhost setup, no Docker.",
   },
   {
     icon: Layers,
-    title: "Challenge packs",
+    title: "Hidden-test grading",
     body:
-      "Curated kata-style problem sets per language. Difficulty tags, topic groups, hidden tests. Or generate your own — 20 to 200 in one shot.",
+      "Hundreds of curated coding exercises across 26 languages, each with hidden tests that pass-or-fail your work the same way a real interview screen does. Difficulty tags, topic groups, instant feedback.",
   },
   {
     icon: Cpu,
-    title: "AI tutor",
+    title: "Free AI tutor",
     body:
-      "A floating tutor that knows the lesson body, your starter code, and the hidden tests. Default model runs locally via Ollama. No keys, no bills.",
+      "A floating tutor reads the lesson, your code, and the hidden tests so it can answer in context. Defaults to a local Ollama model — no API keys, no usage bills, no signup wall.",
   },
 ];
 
+/// Stat strip sits under the hero. Numbers compete with Codecademy's
+/// homepage ("50+ million learners") not on raw scale but on the
+/// stuff Codecademy can't claim: more languages, browser-native,
+/// free forever. Headline numbers stay rounded so they don't look
+/// stale between releases.
 const STATS = [
-  { value: "26+", label: "Languages" },
-  { value: "47", label: "Books on the shelf" },
-  { value: "1,500+", label: "Lessons in browser" },
-  { value: "$0", label: "Forever" },
+  { value: "26+", label: "Languages covered" },
+  { value: "47", label: "Free courses" },
+  { value: "1,500+", label: "Interactive lessons" },
+  { value: "$0", label: "No paywall, ever" },
 ];
 
 const FEATURE_ROWS = [
   {
-    eyebrow: "Real runtimes",
-    title: "Real editor. Twenty-six languages. Zero setup.",
+    eyebrow: "Runs in your browser",
+    title: "Twenty-six programming languages. Zero installs.",
     body:
-      "JavaScript and Python run in-browser in a Web Worker (or Pyodide). Solidity compiles via solc-js + executes on an in-process EVM. Rust and Go proxy out to the official playgrounds. C, C++, Java, Kotlin, C#, Swift, Zig and Assembly drive your local toolchain via the desktop app's subprocess shells. The compiler probe runs on app start — if you're missing one, Libre offers a one-click brew install.",
+      "JavaScript, TypeScript and Python run in-browser via Web Workers and Pyodide. Solidity compiles with solc-js and executes on an in-process EVM. Rust and Go proxy to the official playgrounds. C, C++, Java, Kotlin, C#, Swift, Zig and Assembly run on your local toolchain through the optional desktop app — and if a compiler is missing, Libre Academy offers a one-click install.",
     bullets: [
-      "Web Workers + Pyodide for JS, TS, Python",
-      "@ethereumjs/vm + viem stack for Solidity (in-process, snapshot/revert)",
-      "Iframe sandboxes for React, Three.js, Svelte, Astro, Solid, HTMX",
-      "Native `zig test` / `cargo test` / `go test` on the desktop app",
+      "JavaScript, TypeScript, Python — Web Workers + Pyodide",
+      "Solidity + EVM smart contracts — full in-browser chain",
+      "React, Three.js, Svelte, Astro, Solid, HTMX — sandboxed iframes",
+      "Rust, Go, C, C++, Java, Kotlin, C#, Swift, Zig, Assembly — desktop",
     ],
   },
   {
     eyebrow: "Bring your own book",
-    title: "Catalogue any book on your shelf.",
+    title: "Turn any technical book into a course.",
     body:
-      "The desktop build runs your technical books through a Claude-powered ingest pipeline. It chunks chapters, drafts lessons, and generates starter code, hidden tests, and exercises. Every lesson the pipeline produces is verified by running it before it lands in your library — failed validations get demoted to reading lessons, not silently shipped.",
+      "The optional desktop app runs technical books and docs sites through a Claude-powered ingest pipeline. It chunks chapters, drafts interactive lessons, and generates starter code, hidden tests, and worked solutions. Every generated lesson is verified by running it before it lands in your library — failed validations demote to reading lessons rather than silently ship.",
     bullets: [
-      "PDF + EPUB ingest with Claude-structured chapter outlines",
+      "Import PDF + EPUB — Claude structures the chapter outline",
       "Auto-generates starter code, solutions, hidden tests, hints",
       "Docs-site crawler turns any HTML reference into a course",
-      "Bundle and re-share your course as a portable .fishbones archive",
+      "Bundle + re-share your course as a portable .academy file",
     ],
   },
   {
-    eyebrow: "Local-first",
-    title: "Stays on your desk. Stays yours.",
+    eyebrow: "Free + open source",
+    title: "No paywall. No signup wall. No data harvesting.",
     body:
-      "Progress lives in SQLite (desktop) or IndexedDB (browser). The AI tutor defaults to a local Ollama instance — Anthropic's API is opt-in. We don't ship analytics. We don't ship error reporters. The sync server is a small, free-to-use companion service for mirroring your XP across machines, and it stores nothing else.",
+      "Libre Academy is free forever — MIT licensed, no premium tier, no upsell. Progress lives in your browser's IndexedDB (or SQLite on the desktop app). The AI tutor defaults to a local Ollama model so your conversations stay on your machine. No analytics, no error reporters, no tracking pixels. Sign up only if you want to sync XP between devices — and even then, all we store is a tiny JSON progress record.",
     bullets: [
-      "Free + open source (MIT)",
-      "No signup wall, no payment surface",
-      "Optional cloud sync — small JSON progress records, opt-in",
-      "AI tutor runs against local Ollama by default",
+      "Free forever — MIT licensed source on GitHub",
+      "No account required to learn — sample any course in 30 seconds",
+      "Optional cloud sync — just XP + completion timestamps",
+      "AI tutor defaults to local Ollama, never a third-party API",
     ],
   },
 ];
@@ -139,7 +153,7 @@ export function Home() {
         <div className="home-hero__inner home-hero__inner--stacked">
           <motion.img
             src="/libre_header.png"
-            alt="Libre — interactive coding course platform"
+            alt="Libre Academy — free interactive coding courses"
             className="home-hero__artwork"
             initial={{ opacity: 0, y: 24, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -153,28 +167,38 @@ export function Home() {
             transition={{ duration: 0.8, delay: 0.15, ease: "easeOut" }}
           >
             <span className="home-hero__eyebrow">
-              <span className="home-hero__pulse" /> A naturalist's field guide to
-              code · MIT licensed
+              <span className="home-hero__pulse" /> Free · Interactive · Open
+              source · MIT licensed
             </span>
+            {/* H1: leads with the SEO head term ("Free interactive
+                coding courses") so the rendered text matches the page
+                <title> and the og:title — Googlebot heavily weights
+                consistency across those three. Second clause
+                ("26 languages, in your browser") packs the
+                differentiator into the same line for snippet
+                previews. */}
             <h1 className="home-hero__title">
-              Every book has a course inside it. Crack it open.
+              Free interactive coding courses in 26 languages — right in your
+              browser.
             </h1>
             <p className="home-hero__lede">
-              Libre is an interactive coding course platform. Read prose, write
-              code in a real editor, watch hidden tests grade your work, level up.
-              Twenty-six languages, no setup, no signup wall.
+              Libre Academy is the open source way to learn to code online. Read
+              short lessons, write code in a real editor, and watch hidden tests
+              grade your work in real time. No setup, no signup wall, no paywall
+              — just twenty-six languages and forty-seven free courses ready to
+              run.
             </p>
             <div className="home-hero__actions">
-              <Link to="/learn" className="btn btn--primary btn--lg">
-                <PlayCircle size={16} /> Try it now
+              <a href="/learn" className="btn btn--primary btn--lg">
+                <PlayCircle size={16} /> Start learning free
                 <ArrowRight size={14} />
-              </Link>
-              <Link to="/download" className="btn btn--ghost btn--lg">
-                Get the desktop app
+              </a>
+              <Link to="/courses" className="btn btn--ghost btn--lg">
+                Browse all courses
               </Link>
             </div>
             <p className="home-hero__hint">
-              Forty-seven titles on the shelf. Sample any one without signing up.
+              No credit card. No email. Sample any course in 30 seconds.
             </p>
           </motion.div>
         </div>
@@ -213,10 +237,20 @@ export function Home() {
       {/* ─── Feature cards ──────────────────────────────── */}
       <section className="section section--tight" id="features">
         <div className="home-row-head home-row-head--centered">
-          <span className="section__eyebrow">What's inside</span>
+          <span className="section__eyebrow">What you get, for free</span>
+          {/* H2 mirrors the H1 head term ("interactive coding
+              courses") to reinforce topical relevance for that
+              query family. Subtitle below carries the differentiator
+              ("real editor, hidden tests") so the section reads as
+              "here's why it's different from other free-courses
+              sites" not just "here are some features." */}
           <h2 className="section__title section__title--centered">
-            Built like the editor you'd use anyway.
+            Everything you need to learn to code online — free.
           </h2>
+          <p className="section__subtitle section__subtitle--centered">
+            Interactive lessons, a real in-browser code editor, and
+            hidden-test grading on every exercise. No signup. No upsell.
+          </p>
         </div>
         <div className="home-features">
           {FEATURES.map((f, i) => (
@@ -275,17 +309,19 @@ export function Home() {
       {/* ─── Final CTA ──────────────────────────────────── */}
       <section className="section section--narrow home-final">
         <h2 className="section__title section__title--centered">
-          There's a specimen plate with your name on it.
+          Start learning to code — free, today.
         </h2>
         <p className="section__subtitle section__subtitle--centered">
-          Sample one in 30 seconds. Install the desktop app to ingest your own.
+          Twenty-six languages, forty-seven courses, fifteen-hundred-plus
+          interactive lessons. No signup, no credit card. Just pick a course and
+          start writing code.
         </p>
         <div className="home-final__actions">
-          <Link to="/learn" className="btn btn--primary btn--lg">
-            <PlayCircle size={16} /> Try it now
-          </Link>
-          <Link to="/download" className="btn btn--ghost btn--lg">
-            Get the desktop app <ArrowRight size={14} />
+          <a href="/learn" className="btn btn--primary btn--lg">
+            <PlayCircle size={16} /> Start learning free
+          </a>
+          <Link to="/courses" className="btn btn--ghost btn--lg">
+            Browse all courses <ArrowRight size={14} />
           </Link>
         </div>
       </section>

@@ -1,7 +1,7 @@
-/// The 16+ languages Fishbones supports. Each entry says how lessons in
-/// that language run on the desktop app — Browser (Web Worker / Pyodide /
-/// iframe), Sandbox (proxied to a hosted compiler), or Local (shells out
-/// to a system toolchain).
+/// The 26+ languages Libre Academy supports. Each entry says how
+/// lessons in that language run on the desktop app — Browser
+/// (Web Worker / Pyodide / iframe), Sandbox (proxied to a hosted
+/// compiler), or Local (shells out to a system toolchain).
 ///
 /// `slug` is the URL fragment for /languages/<slug>; `id` matches the
 /// `LanguageId` union in kata's data/types.ts so a course's `language`

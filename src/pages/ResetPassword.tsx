@@ -18,7 +18,7 @@
 // dependency would be more friction than it's worth.
 
 import { useEffect, useId, useMemo, useState } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import "./ResetPassword.css";
 
 const RELAY_URL = "https://api.mattssoftware.com";
@@ -200,7 +200,6 @@ type Phase = "form" | "submitting" | "success" | "error";
 
 export function ResetPassword() {
   const [params] = useSearchParams();
-  const navigate = useNavigate();
   const token = params.get("token") ?? "";
 
   const [password, setPassword] = useState("");
@@ -225,11 +224,18 @@ export function ResetPassword() {
   // Auto-redirect after a successful confirm. 4 seconds gives the
   // user time to read the success message before the page changes
   // out from under them.
+  //
+  // Use `window.location.assign` rather than the router's `navigate`
+  // because `/learn` isn't a SPA route — Caddy rewrites it to the
+  // embedded learn-app's index.html. A client-side router push would
+  // hit the SPA's catch-all NotFound and never trigger the rewrite.
   useEffect(() => {
     if (phase !== "success") return;
-    const t = window.setTimeout(() => navigate("/learn"), 4000);
+    const t = window.setTimeout(() => {
+      window.location.assign("/learn");
+    }, 4000);
     return () => window.clearTimeout(t);
-  }, [phase, navigate]);
+  }, [phase]);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -281,9 +287,14 @@ export function ResetPassword() {
                   reset (the SignInDialog's forgot-password mode lives
                   on /learn). Both end up at /learn anyway, but the
                   copy makes the next step clear. */}
-            <Link to="/learn" className="reset-card__cta">
+            {/* Full-page nav rather than client-side <Link> — the
+                `/learn` path is served by Caddy's rewrite to the
+                embedded app's index.html, NOT by the marketing SPA's
+                router. A <Link> click would hit the SPA's catch-all
+                NotFound before the rewrite gets a chance. */}
+            <a href="/learn" className="reset-card__cta">
               {token ? "Request a new reset link" : "Back to Libre"}
-            </Link>
+            </a>
           </>
         ) : phase === "success" ? (
           <>
@@ -291,9 +302,9 @@ export function ResetPassword() {
               Password updated. Redirecting to the sign-in page in a few
               seconds — or click below to go now.
             </p>
-            <Link to="/learn" className="reset-card__cta">
+            <a href="/learn" className="reset-card__cta">
               Sign in with new password
-            </Link>
+            </a>
           </>
         ) : (
           <form className="reset-form" onSubmit={onSubmit}>

@@ -99,17 +99,28 @@ await cp(fishbonesDist, LEARN_DEST, { recursive: true });
 console.log("[sync-learn] done.");
 
 function resolveFishbonesRoot() {
-  const env = process.env.FISHBONES_SRC;
+  // Env-var override accepts both the new `LIBRE_SRC` name and the
+  // legacy `FISHBONES_SRC` so existing CI / local shells with the
+  // old variable set still work without coordination.
+  const env = process.env.LIBRE_SRC ?? process.env.FISHBONES_SRC;
   if (env) {
     if (existsSync(join(env, "package.json"))) return env;
     console.error(
-      `[sync-learn] FISHBONES_SRC=${env} doesn't look like a Fishbones checkout (no package.json).`,
+      `[sync-learn] LIBRE_SRC=${env} doesn't look like a Libre checkout (no package.json).`,
     );
     process.exit(1);
   }
+  // Search the rebranded path first, then the pre-rebrand paths as
+  // fallbacks. The project moved from `Apps/Fishbones` →
+  // `Apps/Libre.academy` during the rebrand; checkouts that still
+  // sit on the old name continue to resolve via the trailing
+  // entries.
   const candidates = [
+    resolve(SITE_ROOT, "..", "..", "Apps", "Libre.academy"),
     resolve(SITE_ROOT, "..", "..", "Apps", "Fishbones"),
+    resolve(SITE_ROOT, "..", "Libre.academy"),
     resolve(SITE_ROOT, "..", "Fishbones"),
+    resolve(SITE_ROOT, "..", "..", "Libre.academy"),
     resolve(SITE_ROOT, "..", "..", "Fishbones"),
   ];
   return candidates.find((p) => existsSync(join(p, "package.json")));

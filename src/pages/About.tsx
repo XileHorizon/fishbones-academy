@@ -40,7 +40,7 @@ const PRINCIPLES = [
   {
     title: "Bring your own books.",
     body:
-      "The desktop app's ingest pipeline turns PDFs, EPUBs, and docs sites into structured courses with hidden tests. Re-share the result as a portable .fishbones archive.",
+      "The desktop app's ingest pipeline turns PDFs, EPUBs, and docs sites into structured courses with hidden tests. Re-share the result as a portable .academy archive — anyone with Libre can install it in one click.",
   },
   {
     title: "Open source by default.",
@@ -54,15 +54,18 @@ export function About() {
     <div className="about-page">
       <header className="about-hero">
         <div className="about-hero__inner">
-          <span className="section__eyebrow">About</span>
+          <span className="section__eyebrow">About Libre Academy</span>
           <h1 className="section__title">
-            Libre is built for people who actually finish chapters.
+            Free, interactive coding courses — built for people who actually
+            finish chapters.
           </h1>
           <p className="about-hero__lede">
-            We started Libre because we kept failing to finish technical
-            books. Reading without doing didn't stick. Doing without a
-            curriculum didn't ladder. The platforms that promised both wanted
-            our email address and our credit card and our weekends.
+            Libre Academy is an open source platform for learning to code
+            online. We started it because we kept failing to finish technical
+            books — reading without doing didn't stick, doing without a
+            curriculum didn't ladder, and the platforms that promised both
+            wanted our email address and our credit card and our weekends.
+            So we built one that doesn't.
           </p>
         </div>
       </header>
@@ -101,7 +104,7 @@ export function About() {
         </p>
         <div className="about-final__actions">
           <a
-            href="https://github.com/InfamousVague/Fishbones"
+            href="https://github.com/InfamousVague/Libre.academy"
             className="btn btn--ghost btn--lg"
             target="_blank"
             rel="noopener noreferrer"

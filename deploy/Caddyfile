@@ -6,7 +6,7 @@
 # Caddy install, just a separate site block per domain.
 
 libre.academy, www.libre.academy {
-    root * /var/www/fishbones-academy
+    root * /var/www/libre-academy
     encode zstd gzip
 
     # ── Embedded learn app ──────────────────────────────────────────
@@ -52,7 +52,7 @@ libre.academy, www.libre.academy {
 # Pre-cutover testing block. Keep until DNS points at this box and
 # the cert is issued, then drop. Resolves to the VPS's IP via nip.io.
 # fishbones-test.149.28.120.197.nip.io:80 {
-#     root * /var/www/fishbones-academy
+#     root * /var/www/libre-academy
 #     encode zstd gzip
 #     try_files {path} /index.html
 #     file_server

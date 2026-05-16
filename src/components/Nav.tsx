@@ -68,20 +68,20 @@ export function Nav() {
           ))}
           <a
             className="nav__link nav__link--icon"
-            href="https://github.com/InfamousVague/Fishbones"
+            href="https://github.com/InfamousVague/Libre.academy"
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="View Libre on GitHub"
+            aria-label="View Libre Academy on GitHub"
           >
             <GithubMark size={16} />
             <span>GitHub</span>
           </a>
-          {/* Tip jar — port of the Fishbones desktop app's TipDropdown. */}
-          {/* Sits between GitHub + the main CTA so the affordance is */}
+          {/* Tip jar — port of the desktop app's TipDropdown. Sits */}
+          {/* between GitHub + the main CTA so the affordance is */}
           {/* visible from every page without competing with course nav. */}
           <TipPopover />
           <Link to="/courses" className="nav__cta">
-            Browse courses
+            Start learning free
           </Link>
         </nav>
 
@@ -112,14 +112,14 @@ export function Nav() {
           ))}
           <a
             className="nav__drawer-link"
-            href="https://github.com/InfamousVague/Fishbones"
+            href="https://github.com/InfamousVague/Libre.academy"
             target="_blank"
             rel="noopener noreferrer"
           >
             GitHub
           </a>
           <Link to="/courses" className="nav__drawer-cta">
-            Browse courses
+            Start learning free
           </Link>
         </div>
       )}

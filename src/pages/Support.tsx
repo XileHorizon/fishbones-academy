@@ -16,19 +16,19 @@ export function Support() {
     <div className="support-page">
       <header className="support-hero">
         <div className="support-hero__inner">
-          <span className="section__eyebrow">Support</span>
+          <span className="section__eyebrow">Support Libre Academy</span>
           <h1 className="section__title">
-            Keep the open-source work going.
+            Keep free coding courses free.
           </h1>
           <p className="support-hero__lede">
-            Libre — the desktop app, the browser version, the cloud sync
-            server, this site — is MIT licensed and built without a budget.
-            If a course or chapter helped you, a few sats or a fraction of an
-            ETH keeps the next one shipping.
+            Libre Academy — the desktop app, the browser version, the cloud
+            sync server, this site — is MIT licensed and built without a
+            budget. If a course or chapter helped you, a few sats or a
+            fraction of an ETH keeps the next one shipping.
           </p>
           <div className="support-hero__meta">
             <a
-              href="https://github.com/InfamousVague/Fishbones"
+              href="https://github.com/InfamousVague/Libre.academy"
               className="btn btn--ghost btn--sm"
               target="_blank"
               rel="noopener noreferrer"

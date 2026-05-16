@@ -55,14 +55,14 @@ const PLATFORMS: PlatformBuild[] = [
   },
 ];
 
-const FALLBACK_URL = "https://github.com/InfamousVague/Fishbones/releases/latest";
+const FALLBACK_URL = "https://github.com/InfamousVague/Libre.academy/releases/latest";
 
 export function Download() {
   const [release, setRelease] = useState<Release | null>(null);
 
   useEffect(() => {
     let cancelled = false;
-    fetch("https://api.github.com/repos/InfamousVague/Fishbones/releases/latest")
+    fetch("https://api.github.com/repos/InfamousVague/Libre.academy/releases/latest")
       .then((r) => (r.ok ? r.json() : null))
       .then((data: Release | null) => {
         if (cancelled) return;
@@ -88,11 +88,15 @@ export function Download() {
     <div className="download-page">
       <header className="download-hero">
         <div className="download-hero__inner">
-          <span className="section__eyebrow">Get Libre</span>
-          <h1 className="section__title">Free. Open source. No accounts.</h1>
+          <span className="section__eyebrow">Get Libre Academy</span>
+          <h1 className="section__title">
+            Free coding courses, on the web or on your desktop.
+          </h1>
           <p className="download-hero__lede">
-            Two ways to run Libre — both free, both MIT. Browser is the
-            sampler. Desktop adds ingest, native runtimes, and a local AI tutor.
+            Two ways to run Libre Academy — both free, both MIT licensed,
+            both interactive. The browser version is the fastest way to
+            sample any course. The desktop app adds ingest, native runtimes
+            for 26 languages, and a local AI tutor.
           </p>
         </div>
       </header>
@@ -116,7 +120,11 @@ export function Download() {
             label: "Open browser app",
             primary: true,
             icon: PlayCircle,
-            external: false,
+            // `/learn/` is Caddy-rewritten to the embedded app's
+            // index.html — NOT a marketing-SPA route. Force a
+            // same-tab full navigation so the request actually
+            // reaches Caddy instead of the client router 404ing.
+            fullNav: true,
           }}
           ctaSecondary={{
             href: "/courses",
@@ -136,7 +144,7 @@ export function Download() {
             "Native subprocess runners (C/C++/Java/Kotlin/C#/Swift/Asm)",
             "Local Ollama tutor (zero token cost)",
             "Pop-out workbench, multi-monitor friendly",
-            "Bundled .fishbones archives — re-share courses",
+            "Portable .academy archives — share courses with anyone",
           ]}
           // Custom CTA: a split-button DownloadButton that auto-detects
           // the visitor's OS and links DIRECTLY to the latest .dmg/
@@ -147,7 +155,7 @@ export function Download() {
           // the user to actually start the download).
           ctaCustom={<DownloadButton />}
           ctaSecondary={{
-            href: "https://github.com/InfamousVague/Fishbones",
+            href: "https://github.com/InfamousVague/Libre.academy",
             label: "View source",
             external: true,
           }}
@@ -211,7 +219,7 @@ export function Download() {
         <p className="download-platforms__hint">
           Or grab any build directly from{" "}
           <a
-            href="https://github.com/InfamousVague/Fishbones/releases/latest"
+            href="https://github.com/InfamousVague/Libre.academy/releases/latest"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -224,12 +232,12 @@ export function Download() {
       {/* ─── Final CTA ──────────────────────────────────── */}
       <section className="section section--narrow download-final">
         <h2 className="section__title section__title--centered">
-          Honestly free. We're not setting up a paid tier.
+          Honestly free. We're not building a paid tier.
         </h2>
         <p className="section__subtitle section__subtitle--centered">
-          Libre is open source. The desktop app is free. The cloud sync server
-          is free. The browser preview is free. There's no roadmap for any of that
-          to change.
+          Libre Academy is open source under MIT. The desktop app is free.
+          The cloud sync server is free. The browser version is free. There
+          is no roadmap, ever, for any of that to change.
         </p>
         <div className="download-final__actions">
           <Link to="/about" className="btn btn--ghost btn--lg">
@@ -260,12 +268,33 @@ function Tier({
   summary: string;
   features: string[];
   /// Standard link CTA. Provide either this OR `ctaCustom`, not both.
-  cta?: { href: string; label: string; primary: boolean; icon: typeof Apple; external?: boolean };
+  ///
+  /// Link mode resolution:
+  ///   - `external: true`  → `<a target="_blank">` (off-site, new tab)
+  ///   - `fullNav: true`   → `<a>` same tab, NO React Router. Use for
+  ///     paths the marketing SPA doesn't own — chiefly `/learn/`,
+  ///     which Caddy rewrites to the embedded app's index.html. A
+  ///     client-side `<Link>` to it would hit the SPA's 404 catch-all
+  ///     since `/learn/` isn't a defined route here.
+  ///   - neither           → `<Link>` (client-side SPA route)
+  cta?: {
+    href: string;
+    label: string;
+    primary: boolean;
+    icon: typeof Apple;
+    external?: boolean;
+    fullNav?: boolean;
+  };
   /// Slot for an arbitrary CTA element (e.g. the DownloadButton split
   /// button used by the desktop tier — needs version-picker behaviour
   /// the simple link can't express).
   ctaCustom?: React.ReactNode;
-  ctaSecondary?: { href: string; label: string; external?: boolean };
+  ctaSecondary?: {
+    href: string;
+    label: string;
+    external?: boolean;
+    fullNav?: boolean;
+  };
   highlight?: boolean;
 }) {
   return (
@@ -289,12 +318,23 @@ function Tier({
       <div className="download-tier__cta-row">
         {ctaCustom
           ? ctaCustom
-          : cta && (cta.external ? (
+          : cta &&
+            (cta.external ? (
               <a
                 href={cta.href}
                 className={cta.primary ? "btn btn--primary" : "btn btn--ghost"}
                 target="_blank"
                 rel="noopener noreferrer"
+              >
+                <cta.icon size={14} /> {cta.label}
+              </a>
+            ) : cta.fullNav ? (
+              // Same-tab full navigation — no React Router. The
+              // target (`/learn/`) is served by Caddy's rewrite, not
+              // a SPA route, so a `<Link>` would 404 in the client.
+              <a
+                href={cta.href}
+                className={cta.primary ? "btn btn--primary" : "btn btn--ghost"}
               >
                 <cta.icon size={14} /> {cta.label}
               </a>
@@ -314,6 +354,10 @@ function Tier({
               target="_blank"
               rel="noopener noreferrer"
             >
+              {ctaSecondary.label}
+            </a>
+          ) : ctaSecondary.fullNav ? (
+            <a href={ctaSecondary.href} className="btn btn--subtle">
               {ctaSecondary.label}
             </a>
           ) : (

@@ -18,10 +18,10 @@ import { fetchFullCourse, findCatalogCourse } from "../data/courses";
 import type { CourseChapter, CourseLesson, FullCourse } from "../data/types";
 import { renderMarkdown, truncateMarkdown } from "../lib/markdown";
 import {
-  fishbonesOpenUrl,
-  hasFishbonesInstalled,
-  openInFishbones,
-} from "../lib/openInFishbones";
+  libreOpenUrl,
+  hasLibreInstalled,
+  openInLibre,
+} from "../lib/openInLibre";
 import "./CourseDetail.css";
 
 /// Per-kind labels and glyphs for the chapter / lesson rows. The
@@ -80,21 +80,21 @@ export function CourseDetail() {
   );
 
   // Tri-state install hint. Read once from localStorage on mount and
-  // refresh after every "Open in Fishbones" click so a successful
+  // refresh after every "Open in Libre" click so a successful
   // probe in this session immediately promotes the deep-link CTA
   // without a page reload.
   const [hasApp, setHasApp] = useState<boolean | null>(() =>
-    hasFishbonesInstalled(),
+    hasLibreInstalled(),
   );
 
   // Re-poll the flag when the page becomes visible again. Covers the
   // "user clicked Open, was bounced into the app, came back to this
-  // tab" cycle — the localStorage flag was set inside openInFishbones
+  // tab" cycle — the localStorage flag was set inside openInLibre
   // but our React state hasn't refreshed.
   useEffect(() => {
     const onVisibility = () => {
       if (document.visibilityState !== "visible") return;
-      const cur = hasFishbonesInstalled();
+      const cur = hasLibreInstalled();
       setHasApp((prev) => (prev !== cur ? cur : prev));
     };
     document.addEventListener("visibilitychange", onVisibility);
@@ -231,7 +231,7 @@ export function CourseDetail() {
                 <button
                   type="button"
                   className="btn btn--primary btn--lg"
-                  onClick={() => void openInFishbones(catalogEntry.id)}
+                  onClick={() => void openInLibre(catalogEntry.id)}
                 >
                   <ExternalLink size={16} /> Open in Libre
                 </button>
@@ -254,7 +254,7 @@ export function CourseDetail() {
                 <button
                   type="button"
                   className="btn btn--ghost btn--lg"
-                  onClick={() => void openInFishbones(catalogEntry.id)}
+                  onClick={() => void openInLibre(catalogEntry.id)}
                   title="Requires the desktop app — installs from the Download page"
                 >
                   <ExternalLink size={14} /> Open in Libre
@@ -357,7 +357,7 @@ export function CourseDetail() {
               <button
                 type="button"
                 className="btn btn--ghost btn--lg course-detail__sidebar-btn"
-                onClick={() => void openInFishbones(catalogEntry.id)}
+                onClick={() => void openInLibre(catalogEntry.id)}
               >
                 <ExternalLink size={14} /> Open in Libre
               </button>
@@ -476,7 +476,7 @@ function ChapterOutline({
                       Two flavours, mirroring the page-level CTAs:
                         - browser: /learn/?courseId=…&lessonId=…  (always
                           works, opens the embedded web app)
-                        - fishbones://: deep-link into the desktop app,
+                        - libre://: deep-link into the desktop app,
                           falls through with no harm if the scheme isn't
                           registered (browser shows its handler dialog,
                           user dismisses, page is unchanged) */}
@@ -490,7 +490,7 @@ function ChapterOutline({
                   </a>
                   <a
                     className="course-detail__lesson-action course-detail__lesson-action--app"
-                    href={fishbonesOpenUrl(courseId, l.id)}
+                    href={libreOpenUrl(courseId, l.id)}
                     title="Open this lesson in the Libre desktop app"
                     onClick={(e) => e.stopPropagation()}
                   >

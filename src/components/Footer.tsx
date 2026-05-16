@@ -17,7 +17,7 @@ export function Footer() {
             />
           </Link>
           <p className="site-footer__tagline">
-            Every book has a course inside it. Crack it open.
+            Free interactive coding courses. Twenty-six languages. Open source.
           </p>
         </div>
 
@@ -37,21 +37,21 @@ export function Footer() {
           <div className="site-footer__col">
             <h4 className="site-footer__col-title">Open source</h4>
             <a
-              href="https://github.com/InfamousVague/Fishbones"
+              href="https://github.com/InfamousVague/Libre.academy"
               target="_blank"
               rel="noopener noreferrer"
             >
               <GithubMark size={13} /> Repository
             </a>
             <a
-              href="https://github.com/InfamousVague/Fishbones/releases/latest"
+              href="https://github.com/InfamousVague/Libre.academy/releases/latest"
               target="_blank"
               rel="noopener noreferrer"
             >
               Releases
             </a>
             <a
-              href="https://github.com/InfamousVague/Fishbones/actions"
+              href="https://github.com/InfamousVague/Libre.academy/actions"
               target="_blank"
               rel="noopener noreferrer"
             >

@@ -11,20 +11,106 @@
     <link rel="apple-touch-icon" href="/favicon.png?v=2" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="theme-color" content="#09090b" />
-    <title>Libre — Turn any technical book into a course</title>
+
+    <!-- SEO: head terms target the "free interactive coding
+         courses" query family (Codecademy / freeCodeCamp / Scrimba
+         compete here). Body of the description mentions the
+         differentiator (26 languages, ingest your own books, runs
+         in-browser AND as a desktop app, no signup wall) so the
+         snippet still reads as substantive rather than keyword
+         stuffing. Title pattern is "<Brand> — <head term> · <hook>"
+         — most search UIs truncate around 60-70 chars, so the head
+         term sits before the truncation budget runs out. -->
+    <title>Libre Academy — Free Interactive Coding Courses</title>
     <meta
       name="description"
-      content="Libre is an interactive coding course platform. Read prose, write code, watch tests grade you. Sixteen languages, no setup, no accounts. Free and open source."
+      content="Learn to code online for free with interactive lessons in 26 languages. Read prose, write code in a real editor, and watch hidden tests grade your work. No setup, no signup, no paywall. Open source."
     />
-    <meta property="og:title" content="Libre" />
+    <meta
+      name="keywords"
+      content="learn to code, free coding courses, interactive coding lessons, learn programming online, free programming courses, learn JavaScript, learn Python, learn Rust, learn Solidity, code editor in browser, alternative to Codecademy, open source learning"
+    />
+    <link rel="canonical" href="https://libre.academy/" />
+
+    <!-- Open Graph: same head term up front, lede emphasises the
+         "free / interactive / 26 languages / no signup" combo so
+         link-unfurl previews on Twitter / Discord / Slack carry the
+         differentiator. -->
+    <meta property="og:site_name" content="Libre Academy" />
+    <meta property="og:title" content="Libre Academy — Free Interactive Coding Courses" />
     <meta
       property="og:description"
-      content="Turn any technical book into a course you can ship code in. Sixteen languages, runs in your browser or as a desktop app."
+      content="Learn to code for free. Interactive lessons in 26 languages, runs in your browser. Read prose, write code, hidden tests grade your work. No setup, no signup, open source."
     />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://libre.academy/" />
     <meta property="og:image" content="https://libre.academy/favicon.png" />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Libre Academy — Free Interactive Coding Courses" />
+    <meta
+      name="twitter:description"
+      content="Learn to code for free. Interactive lessons in 26 languages. Real editor, hidden tests. No signup, no paywall, open source."
+    />
+
+    <!-- JSON-LD structured data — helps search engines understand
+         this is an educational platform with a course catalog.
+         EducationalOrganization is the strongest schema match for a
+         free-courses site; the WebSite + SearchAction enables the
+         in-Google search-box affordance on branded queries. -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "EducationalOrganization",
+            "name": "Libre Academy",
+            "url": "https://libre.academy/",
+            "logo": "https://libre.academy/libre_app_icon.png",
+            "description": "Free interactive coding courses in 26 programming languages. Open source, no signup, runs in the browser.",
+            "sameAs": ["https://github.com/InfamousVague/Libre"]
+          },
+          {
+            "@type": "WebSite",
+            "name": "Libre Academy",
+            "url": "https://libre.academy/",
+            "potentialAction": {
+              "@type": "SearchAction",
+              "target": "https://libre.academy/courses?q={search_term_string}",
+              "query-input": "required name=search_term_string"
+            }
+          }
+        ]
+      }
+    </script>
+
+    <!-- Self-hosted Plausible analytics. Privacy-friendly (no
+         cookies, no fingerprinting, no PII) so it doesn't need a
+         consent banner. `script.outbound-links.js` auto-fires the
+         initial pageview and tracks outbound clicks; SPA route
+         changes are fired manually from React (see `src/lib/
+         analytics.ts` + the route-change effect in App.tsx).
+         Keeping the script on our own subdomain (`stats.libre.
+         academy`) means no third-party cookies, no ad-blocker
+         false positives, and corporate firewalls only need to
+         whitelist one host. -->
+    <script
+      defer
+      data-domain="libre.academy"
+      src="https://stats.libre.academy/js/script.outbound-links.js"
+    ></script>
+    <!-- Plausible's standard early-call buffer. Lets us call
+         `window.plausible("pageview")` from React before the
+         deferred script finishes loading — early calls queue on
+         `plausible.q` and the real implementation flushes them
+         once it installs itself. Without this, any pageview the
+         router fires during the script-load window is lost. -->
+    <script>
+      window.plausible =
+        window.plausible ||
+        function () {
+          (window.plausible.q = window.plausible.q || []).push(arguments);
+        };
+    </script>
   </head>
   <body>
     <div id="root"></div>

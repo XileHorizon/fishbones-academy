@@ -4,7 +4,7 @@ import "./HeroTerminal.css";
 
 /// Animated three-stage hero element. We progress through:
 ///   stage 0 — markdown source from a book (the "input")
-///   stage 1 — Fishbones structuring it into a lesson (the "transform")
+///   stage 1 — Libre Academy structuring it into a lesson (the "transform")
 ///   stage 2 — the rendered lesson + a passing test result (the "output")
 /// 4s per stage, looping. CSS handles the cross-fade between stages.
 export function HeroTerminal() {

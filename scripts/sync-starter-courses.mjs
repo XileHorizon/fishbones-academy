@@ -22,11 +22,16 @@ const DEST = join(SITE_ROOT, "public", "starter-courses");
 /// new packs, or sizeBytes drift between the two.
 const BUNDLED_MANIFEST = join(SITE_ROOT, "src", "data", "courses-manifest.json");
 
-const env = process.env.FISHBONES_SRC;
-// The Fishbones repo was renamed from "kata" → "Fishbones" — accept
-// both layouts so older clones / forks keep working without env var.
+// Env override — accept both the new `LIBRE_SRC` and legacy
+// `FISHBONES_SRC` names so existing CI keeps working.
+const env = process.env.LIBRE_SRC ?? process.env.FISHBONES_SRC;
+// The app repo went through two renames: kata → Fishbones →
+// Libre.academy. Each fallback rung covers checkouts that haven't
+// caught up yet.
 const candidates = [
   ...(env ? [env] : []),
+  resolve(SITE_ROOT, "..", "..", "Apps", "Libre.academy"),
+  resolve(SITE_ROOT, "..", "Libre.academy"),
   resolve(SITE_ROOT, "..", "..", "Apps", "Fishbones"),
   resolve(SITE_ROOT, "..", "Fishbones"),
   resolve(SITE_ROOT, "..", "..", "Apps", "kata"),

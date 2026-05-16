@@ -101,14 +101,21 @@ export function Courses() {
             />
           </div>
           <div className="courses-page__head-text">
-            <span className="section__eyebrow">Catalogue</span>
+            <span className="section__eyebrow">All courses</span>
+            {/* H1 carries the long-tail SEO target ("free coding
+                courses in <N> languages") instead of the breezier
+                "Pick something off the shelf" — this is the page
+                most users will land on from a query like
+                "free python courses online" so the head term
+                doing real work matters more here than tone. */}
             <h1 className="section__title">
-              Pick something off the shelf.
+              Free coding courses in 26 programming languages.
             </h1>
             <p className="section__subtitle">
-              Three flavors on the shelf: linear textbooks, framework
-              deep-dives, and kata-style challenge packs. Pick one and
-              start the first lesson — no signup, no install.
+              Forty-seven interactive courses to choose from — linear
+              textbooks, framework deep-dives, and kata-style challenge
+              packs. Every course runs in your browser. Pick one and
+              start writing code now. No signup, no install.
             </p>
           </div>
         </div>
@@ -271,6 +278,11 @@ export function Courses() {
                         {c.packType === "challenges" && (
                           <span className="courses-grid__cover-flag">
                             Challenges
+                          </span>
+                        )}
+                        {c.packType === "track" && (
+                          <span className="courses-grid__cover-flag">
+                            Track
                           </span>
                         )}
                       </div>

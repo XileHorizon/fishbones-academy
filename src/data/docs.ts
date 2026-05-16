@@ -1,9 +1,10 @@
 /// Public-facing docs for libre.academy. We author these here
-/// rather than re-using kata's in-app docs (src/docs/pages.ts) because
-/// the in-app docs are heavy on Tauri-side architecture detail that
-/// doesn't fit a "what's Fishbones, how do I use it" surface for
-/// marketing visitors. Anything more advanced links into the kata
-/// repo's own /docs route inside the app.
+/// rather than re-using the desktop app's in-app docs (src/docs/
+/// pages.ts) because the in-app docs are heavy on Tauri-side
+/// architecture detail that doesn't fit a "what's Libre Academy,
+/// how do I use it" surface for marketing visitors. Anything more
+/// advanced links into the desktop repo's own /docs route inside
+/// the app.
 ///
 /// Adding a page = appending an entry to the appropriate section.
 /// Markdown bodies are rendered via lib/markdown.ts (Shiki + GFM).
@@ -21,7 +22,7 @@ export interface DocSection {
   pages: DocPage[];
 }
 
-const introduction = `Fishbones is an interactive coding course platform. You read prose,
+const introduction = `Libre Academy is a free, interactive coding course platform. You read prose,
 write code in a real editor, watch hidden tests grade your work, and earn XP
 toward a streak that doesn't reset for taking the weekend off.
 
@@ -43,7 +44,7 @@ You're already comfortable with one programming language and want to
 pick up another, or you have a textbook on your shelf you've been
 meaning to actually finish. Passive video courses haven't worked for
 you. Random LeetCode problems feel disconnected from the books.
-Fishbones is structured like a book — chapters, lessons, exercises —
+Libre Academy is structured like a book — chapters, lessons, exercises —
 but every lesson can be run, tested, and graded in-place.
 
 ## What's in this docs site
@@ -54,7 +55,7 @@ Tauri internals, the ingest pipeline, and the runtime layer. Start
 here if you're brand new; jump there once you've installed.
 `;
 
-const browser = `The browser version of Fishbones lives at
+const browser = `The browser version of Libre Academy lives at
 [/learn/](/learn/). It's the desktop app's frontend running against
 IndexedDB for persistence — no server, no account, no telemetry.
 
@@ -85,13 +86,13 @@ browser variant — install the desktop app + sign in to get progress
 mirrored across machines.
 `;
 
-const desktop = `The desktop app gives you the full Fishbones — every language
+const desktop = `The desktop app gives you the full Libre Academy — every language
 runtime, the ingest pipeline that turns books into courses, and the
 local AI tutor.
 
 ## Install
 
-Grab the latest build from [GitHub Releases](https://github.com/InfamousVague/Fishbones/releases/latest).
+Grab the latest build from [GitHub Releases](https://github.com/InfamousVague/Libre.academy/releases/latest).
 Pick the bundle for your OS:
 
 - **macOS** — \`.dmg\` (Apple Silicon + Intel universal)
@@ -100,7 +101,7 @@ Pick the bundle for your OS:
 
 ## First launch
 
-Fishbones unpacks the bundled starter packs into your data dir and
+Libre Academy unpacks the bundled starter packs into your data dir and
 opens the Library. Pick a course, start the first lesson, and the
 sidebar populates with the chapter tree.
 
@@ -120,7 +121,7 @@ sidebar populates with the chapter tree.
 
 ## Optional cloud sync
 
-Fishbones offers a free, optional cloud sync to mirror your progress,
+Libre Academy offers a free, optional cloud sync to mirror your progress,
 XP, and streak across machines. It's off by default — you opt in via
 **Settings → Sign in**. The sync server stores only the small
 JSON-shaped progress record; lesson contents stay on disk.
@@ -129,7 +130,7 @@ The desktop app is **free** and **open source** (MIT). There is no
 paid tier.
 `;
 
-const lessons = `Every Fishbones lesson is one of four shapes. Each one rewards
+const lessons = `Every Libre Academy lesson is one of four shapes. Each one rewards
 differently; the totals add up to your level.
 
 ## Reading
@@ -200,14 +201,14 @@ Useful on multi-monitor setups: one screen for the prose, one for the
 code. Both windows stay synchronized as you type.
 `;
 
-const themes = `Fishbones ships **17 themes**. The default is **Fishbones Dark** —
+const themes = `Libre Academy ships **15 themes**. The default is **Libre Dark** —
 a monochrome glass treatment we use across the desktop app and this
-site. The other 16 are faithful (or close-to) ports of popular VS
+site. The other 14 are faithful (or close-to) ports of popular VS
 Code themes:
 
-- Synthwave, Tokyo Night, Catppuccin (Latte / Frappé / Macchiato /
-  Mocha), Rosé Pine, Ayu (Light / Mirage / Dark), Ubuntu Dark, Claude
-  Code Dark, Absent Contrast, Vesper, Word, Fishbones Light.
+- Synesthesia Synthwave, Tokyo Night, Catppuccin (Latte / Frappé /
+  Macchiato / Mocha), Rosé Pine, Ayu (Light / Mirage / Dark), Ubuntu
+  Dark, Claude Code Dark, Absent Contrast, Vesper, Word.
 
 Picking a theme repaints both the chrome AND Monaco's syntax
 highlighting — the editor never disagrees with the rest of the UI.
@@ -217,7 +218,7 @@ variant uses the system preference for now (a per-tab toggle is on
 the roadmap).
 `;
 
-const offline = `Fishbones is **local-first**. By default:
+const offline = `Libre Academy is **local-first**. By default:
 
 - Every course is a JSON file on disk (or in IndexedDB in the browser)
 - Progress, XP, and streak counters live in SQLite (desktop) /
@@ -237,7 +238,7 @@ A small set of **opt-in** things:
 - **Cloud sync**, if you sign in — small JSON progress records,
   nothing else
 - **The Rust + Go playgrounds** at play.rust-lang.org and
-  play.golang.org, since neither toolchain ships with Fishbones
+  play.golang.org, since neither toolchain ships with Libre Academy
 
 Everything else — including PDF ingest, lesson rendering, code
 execution for the in-browser languages — runs entirely on your
@@ -252,7 +253,7 @@ export const DOCS: DocSection[] = [
       {
         id: "introduction",
         title: "Introduction",
-        tagline: "What Fishbones is, and who it's for.",
+        tagline: "What Libre Academy is, and who it's for.",
         body: introduction,
       },
       {
@@ -271,7 +272,7 @@ export const DOCS: DocSection[] = [
   },
   {
     id: "using",
-    title: "Using Fishbones",
+    title: "Using Libre Academy",
     pages: [
       {
         id: "lessons",

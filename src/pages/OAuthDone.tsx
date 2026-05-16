@@ -1,10 +1,16 @@
-// /oauth/done — the relay redirects here after a Fishbones web sign-in
-// finishes, with `?session=…&status=ok&token=…` (or `&status=error&error=…&message=…`)
-// in the URL. Lives in a popup window opened by SignInDialog; the
-// only job is to postMessage the payload back to `window.opener`
-// and close the popup. The opener (the SignInDialog effect on the
-// libre.academy/learn build) calls `cloud.applyOAuthToken(token)`,
-// /me materialises the user, and the dialog auto-closes.
+// /oauth/done — the relay redirects here after a Libre Academy web
+// sign-in finishes, with `?session=…&status=ok&token=…` (or
+// `&status=error&error=…&message=…`) in the URL. Lives in a popup
+// window opened by SignInDialog; the only job is to postMessage the
+// payload back to `window.opener` and close the popup. The opener
+// (the SignInDialog effect on the libre.academy/learn build) calls
+// `cloud.applyOAuthToken(token)`, /me materialises the user, and the
+// dialog auto-closes.
+//
+// The postMessage discriminator is `"libre-oauth"` — it has to match
+// the listener filter in `Apps/Fishbones/src/components/dialogs/
+// SignInDialog/SignInDialog.tsx`. If you rename it on one side,
+// rename both or OAuth silently breaks.
 //
 // The popup runs on the same origin as the opener (the SignInDialog
 // always sends `return_to=${window.location.origin}/oauth/done`), so
@@ -14,7 +20,7 @@
 import { useEffect } from "react";
 
 interface Payload {
-  type: "fishbones-oauth";
+  type: "libre-oauth";
   session: string | null;
   token?: string;
   error?: string;
@@ -26,9 +32,9 @@ function readPayload(): Payload {
   const status = params.get("status");
   if (status === "ok") {
     const token = params.get("token");
-    if (token) return { type: "fishbones-oauth", session, token };
+    if (token) return { type: "libre-oauth", session, token };
     return {
-      type: "fishbones-oauth",
+      type: "libre-oauth",
       session,
       error: "Sign-in returned without a token",
     };
@@ -36,10 +42,10 @@ function readPayload(): Payload {
   if (status === "error") {
     const code = params.get("error") ?? "unknown_error";
     const message = params.get("message") ?? "Sign-in didn't complete.";
-    return { type: "fishbones-oauth", session, error: `${code}: ${message}` };
+    return { type: "libre-oauth", session, error: `${code}: ${message}` };
   }
   return {
-    type: "fishbones-oauth",
+    type: "libre-oauth",
     session,
     error: "Missing status — this page is opened by the OAuth flow.",
   };

@@ -79,7 +79,7 @@ export function Docs() {
           ))}
           <div className="docs__sidebar-foot">
             <a
-              href="https://github.com/InfamousVague/Fishbones"
+              href="https://github.com/InfamousVague/Libre.academy"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -133,7 +133,7 @@ export function Docs() {
               <p className="docs__edit">
                 More depth in the{" "}
                 <a
-                  href="https://github.com/InfamousVague/Fishbones"
+                  href="https://github.com/InfamousVague/Libre.academy"
                   target="_blank"
                   rel="noopener noreferrer"
                 >

@@ -16,7 +16,7 @@ export interface CourseManifestEntry {
   file: string;
   cover?: string;
   sizeBytes?: number;
-  packType?: "course" | "challenges";
+  packType?: "course" | "challenges" | "track";
   /// Editorial tier set in the on-disk `course.json`. Drives the
   /// section grouping in the catalog (BETA top, ALPHA middle,
   /// UNREVIEWED bottom).
@@ -69,5 +69,5 @@ export interface FullCourse {
   description?: string;
   language: string;
   chapters: CourseChapter[];
-  packType?: "course" | "challenges";
+  packType?: "course" | "challenges" | "track";
 }

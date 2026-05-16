@@ -21,6 +21,7 @@ const manifest = manifestRaw as CourseManifest;
 /// page reads as a CMS export.
 export type CourseTopic =
   | "languages"
+  | "tracks"
   | "frameworks"
   | "challenges"
   | "web3"
@@ -44,6 +45,7 @@ const TOPIC_OVERRIDES: Record<string, CourseTopic> = {
 
 export const COURSE_TOPICS: Array<{ id: CourseTopic; label: string }> = [
   { id: "languages", label: "Languages" },
+  { id: "tracks", label: "Tracks" },
   { id: "frameworks", label: "Frameworks" },
   { id: "mobile", label: "Mobile" },
   { id: "web3", label: "Web3" },
@@ -155,7 +157,9 @@ export const CATALOG: CatalogCourse[] = dedupeById(manifest.courses).map(
     const topic: CourseTopic =
       entry.packType === "challenges"
         ? "challenges"
-        : TOPIC_OVERRIDES[entry.id] ?? "languages";
+        : entry.packType === "track"
+          ? "tracks"
+          : TOPIC_OVERRIDES[entry.id] ?? "languages";
     const lessons = approximateLessons(entry);
     return {
       ...entry,

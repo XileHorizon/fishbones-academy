@@ -151,7 +151,7 @@ jobs:
 
       # ─── Production sync to the VPS (Caddy host) ────────
       #
-      # The site lives at /var/www/fishbones-academy on the same VPS
+      # The site lives at /var/www/libre-academy on the same VPS
       # as mattssoftware.com. Caddy's per-site block (see deploy/Caddyfile
       # in this repo) handles TLS via Let's Encrypt + the /learn/
       # rewrite for the embed.
@@ -167,7 +167,7 @@ jobs:
           VPS_HOST: 149.28.120.197
           VPS_USER: root
           VPS_PORT: "22"
-          VPS_TARGET_DIR: /var/www/fishbones-academy
+          VPS_TARGET_DIR: /var/www/libre-academy
           SSHPASS: ${{ secrets.VPS_SSH_PASSWORD }}
         run: |
           if [ -z "${SSHPASS}" ]; then
@@ -179,7 +179,7 @@ jobs:
           # `--exclude=audio/` is load-bearing. The Fishbones lesson-
           # audio pipeline (Apps/Fishbones/scripts/upload-lesson-
           # audio.mjs) pushes pre-generated MP3s to
-          # /var/www/fishbones-academy/audio/. Without this exclude,
+          # /var/www/libre-academy/audio/. Without this exclude,
           # `--delete` wipes the entire audio dir on every CI deploy
           # — lessons across the app stop playing TTS until someone
           # manually re-uploads. The local `scripts/deploy.mjs` has

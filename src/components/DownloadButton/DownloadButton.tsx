@@ -77,9 +77,9 @@ const PLATFORMS: ReadonlyArray<PlatformDef> = [
 ];
 
 const RELEASES_URL =
-  "https://api.github.com/repos/InfamousVague/Fishbones/releases";
+  "https://api.github.com/repos/InfamousVague/Libre.academy/releases";
 const GITHUB_RELEASES_PAGE =
-  "https://github.com/InfamousVague/Fishbones/releases";
+  "https://github.com/InfamousVague/Libre.academy/releases";
 const MAX_VERSIONS_IN_DROPDOWN = 8;
 
 /// Inspect navigator.userAgent + navigator.platform to guess the

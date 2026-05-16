@@ -50,7 +50,7 @@ const VPS_HOST = process.env.VPS_HOST ?? "149.28.120.197";
 const VPS_USER = process.env.VPS_USER ?? "root";
 const VPS_PORT = process.env.VPS_PORT ?? "22";
 const VPS_TARGET_DIR =
-  process.env.VPS_TARGET_DIR ?? "/var/www/fishbones-academy";
+  process.env.VPS_TARGET_DIR ?? "/var/www/libre-academy";
 
 function step(name, fn) {
   const started = Date.now();
@@ -107,9 +107,11 @@ function resolveVpsPassword() {
   if (process.env.SSHPASS) return process.env.SSHPASS;
   // Walk up to ~/Development to find the canonical .env files. The
   // academy lives at Web/fishbones-academy; siblings are
-  // Apps/Fishbones and Apps/tap.
+  // Apps/Libre.academy (post-rebrand), legacy Apps/Fishbones, and
+  // Apps/tap.
   const devRoot = resolve(SITE_ROOT, "..", "..");
   for (const candidate of [
+    join(devRoot, "Apps", "Libre.academy", "api", ".env"),
     join(devRoot, "Apps", "Fishbones", "api", ".env"),
     join(devRoot, "Apps", "tap", ".env"),
   ]) {
@@ -139,12 +141,18 @@ function rsyncToVps() {
   //
   // `--exclude=audio/` is critical: the Fishbones lesson-audio
   // pipeline (see Apps/Fishbones/scripts/upload-lesson-audio.mjs)
-  // pushes pre-generated MP3s to /var/www/fishbones-academy/audio/.
+  // pushes pre-generated MP3s to /var/www/libre-academy/audio/.
   // Those files don't ship inside the academy site's `dist/`, so
   // without the exclude `--delete` would wipe the entire audio dir
   // on every site deploy — meaning every push of marketing-copy or
   // /learn/ embed would silently nuke the narration tracks.
-  const sshOpts = `ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 -p ${VPS_PORT}`;
+  // `-T` disables pseudo-tty allocation — required when sshpass is
+  // driving the connection from a non-interactive shell (e.g. when
+  // this script is invoked from another tool, an agent harness, or
+  // a CI runner). Without it sshpass errors with "Failed to get a
+  // pseudo terminal: Device not configured" before any bytes get
+  // sent.
+  const sshOpts = `ssh -T -o StrictHostKeyChecking=no -o ConnectTimeout=15 -p ${VPS_PORT}`;
   const target = `${VPS_USER}@${VPS_HOST}:${VPS_TARGET_DIR}/`;
   run(
     `sshpass -e rsync -a --delete --exclude=audio/ --stats -e "${sshOpts}" dist/ "${target}"`,

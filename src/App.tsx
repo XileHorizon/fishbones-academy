@@ -1,8 +1,9 @@
-import { lazy, Suspense, useEffect } from "react";
+import { lazy, Suspense, useEffect, useRef } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 import { Nav } from "./components/Nav";
 import { Footer } from "./components/Footer";
 import { ScrollToTop } from "./components/ScrollToTop";
+import { trackPageview } from "./lib/analytics";
 
 const Home = lazy(() => import("./pages/Home").then((m) => ({ default: m.Home })));
 const Courses = lazy(() => import("./pages/Courses").then((m) => ({ default: m.Courses })));
@@ -48,6 +49,21 @@ export function App() {
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", "dark");
     document.documentElement.setAttribute("data-theme-name", "default-dark");
+  }, [pathname]);
+
+  // Plausible SPA pageview tracking. The hosted script in
+  // index.html auto-fires the FIRST pageview when it loads, so we
+  // skip the initial mount and only fire on subsequent route
+  // changes. The ref toggle is the standard pattern for this —
+  // without it every entry visit would double-count (once from
+  // the script's auto-fire, once from this effect's first run).
+  const firstRouteRef = useRef(true);
+  useEffect(() => {
+    if (firstRouteRef.current) {
+      firstRouteRef.current = false;
+      return;
+    }
+    trackPageview();
   }, [pathname]);
 
   return (
