@@ -2,14 +2,24 @@ import { useEffect, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { GithubMark } from "./icons/GithubMark";
+import { DiscordMark } from "./icons/DiscordMark";
 import TipPopover from "./TipPopover";
 import "./Nav.css";
+
+/// Public Discord invite — shared between the desktop nav row and
+/// the mobile drawer so the URL only lives in one place.
+const DISCORD_INVITE = "https://discord.gg/2yPVVfuFdW";
 
 const LINKS = [
   { to: "/courses", label: "Courses" },
   { to: "/languages", label: "Languages" },
   { to: "/docs", label: "Docs" },
-  { to: "/about", label: "About" },
+  // "About" was retired from the primary nav in favour of the public
+  // security audit (labelled "Audit" here — shorter, and it's the
+  // trust signal we want in the top bar). The /about route still
+  // exists and stays linked from the footer's Product column; only
+  // the nav slot was reassigned.
+  { to: "/security", label: "Audit" },
   { to: "/download", label: "Download" },
 ];
 
@@ -76,6 +86,18 @@ export function Nav() {
             <GithubMark size={16} />
             <span>GitHub</span>
           </a>
+          {/* Community Discord. Same icon-link treatment as the GitHub */}
+          {/* link above so the row stays visually balanced. */}
+          <a
+            className="nav__link nav__link--icon"
+            href={DISCORD_INVITE}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Join the Libre Discord"
+          >
+            <DiscordMark size={16} />
+            <span>Discord</span>
+          </a>
           {/* Tip jar — port of the desktop app's TipDropdown. Sits */}
           {/* between GitHub + the main CTA so the affordance is */}
           {/* visible from every page without competing with course nav. */}
@@ -117,6 +139,14 @@ export function Nav() {
             rel="noopener noreferrer"
           >
             GitHub
+          </a>
+          <a
+            className="nav__drawer-link"
+            href={DISCORD_INVITE}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Discord
           </a>
           <Link to="/courses" className="nav__drawer-cta">
             Start learning free
