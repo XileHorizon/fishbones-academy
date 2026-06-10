@@ -156,6 +156,17 @@ jobs:
       - name: Build site
         run: npm run build
 
+      # Refuse to publish a starter-courses manifest that would make
+      # live courses disappear (or regress the manifest version).
+      # rsync --delete below replaces the catalog wholesale — twice on
+      # 2026-06-10 a deploy built from a checkout that lagged behind
+      # surgical VPS fixes silently dropped live courses. The guard
+      # diffs dist/ against the live manifest and fails the job before
+      # anything is synced. Mirrors the same step in scripts/deploy.mjs
+      # — keep both in lockstep.
+      - name: Guard — no live courses may disappear
+        run: node scripts/check-manifest-safety.mjs
+
       # ─── Production sync to the VPS (Caddy host) ────────
       #
       # The site lives at /var/www/libre-academy on the same VPS

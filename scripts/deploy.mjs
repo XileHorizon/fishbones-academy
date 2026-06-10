@@ -17,7 +17,13 @@
 ///                         so the bundled marketing catalog matches the
 ///                         runtime files.
 ///   3. npm run build    — Vite-build the academy → dist/.
-///   4. rsync to VPS     — Mirrors `.github/workflows/deploy.yml`'s
+///   4. manifest guard   — scripts/check-manifest-safety.mjs diffs
+///                         dist/'s starter-courses manifest against
+///                         the live one and ABORTS if any live course
+///                         would disappear (or the version would
+///                         regress). rsync --delete makes a bad
+///                         manifest an irreversible clobber.
+///   5. rsync to VPS     — Mirrors `.github/workflows/deploy.yml`'s
 ///                         "Sync to VPS" step. Uses sshpass + the same
 ///                         password the CI workflow does.
 ///
@@ -26,6 +32,9 @@
 ///
 /// Skip the rsync and just stage everything locally:
 ///   npm run deploy -- --no-rsync
+///
+/// Deploy an intentional course removal past the manifest guard:
+///   npm run deploy -- --allow-course-removal
 ///
 /// Auth — VPS password resolution order:
 ///   1. $VPS_SSH_PASSWORD env var (matches the GH secret name)
@@ -45,6 +54,9 @@ const SITE_ROOT = join(__dirname, "..");
 const args = new Set(process.argv.slice(2));
 const RSYNC_ONLY = args.has("--rsync-only");
 const NO_RSYNC = args.has("--no-rsync");
+// Forwarded to scripts/check-manifest-safety.mjs — lets an
+// intentional course removal through the pre-rsync guard.
+const ALLOW_COURSE_REMOVAL = args.has("--allow-course-removal");
 
 const VPS_HOST = process.env.VPS_HOST ?? "149.28.120.197";
 const VPS_USER = process.env.VPS_USER ?? "root";
@@ -169,6 +181,18 @@ if (!RSYNC_ONLY) {
     run("npm run sync:courses"),
   );
   step("build (Vite build the academy)", () => run("npm run build"));
+}
+
+if (!NO_RSYNC) {
+  // Refuse to publish a manifest that drops live courses or
+  // regresses the manifest version — rsync --delete makes that an
+  // irreversible clobber (it deletes the per-course JSONs + covers
+  // too). See scripts/check-manifest-safety.mjs for the contract.
+  step("manifest safety check (diff against live)", () =>
+    run(
+      `node scripts/check-manifest-safety.mjs${ALLOW_COURSE_REMOVAL ? " --allow-course-removal" : ""}`,
+    ),
+  );
 }
 
 step("rsync to VPS", rsyncToVps);
