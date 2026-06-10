@@ -115,12 +115,19 @@ jobs:
           # Vite-bundled vendor assets + the fetched node sidecar
           # don't change unless kata's lockfile or vendor script
           # does. Caching them shaves another ~30s off cold builds.
+          #
+          # kata/public/starter-courses is deliberately NOT cached:
+          # it derives from bundled-packs CONTENT, which the cache key
+          # (lockfile + script hashes) doesn't capture. A cached copy
+          # silently resurrects an old catalog — that's exactly how
+          # the live site served a mid-May 37-course manifest nightly
+          # for three weeks (restored snapshot + rsync --delete).
+          # starter:web regenerates it from bundled-packs every build.
           path: |
             kata/src-tauri/resources/vendor
             kata/src-tauri/.cache
             kata/public/vendor
             kata/public/pyodide
-            kata/public/starter-courses
           key: kata-build-${{ hashFiles('kata/package-lock.json', 'kata/scripts/vendor-cdn-deps.mjs', 'kata/scripts/extract-starter-courses.mjs') }}
           restore-keys: |
             kata-build-
