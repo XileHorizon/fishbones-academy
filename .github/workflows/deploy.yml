@@ -33,6 +33,19 @@ on:
         default: "true"
         type: choice
         options: ["true", "false"]
+      allow_course_removal:
+        description: |
+          Override the manifest-safety guard so a deploy may
+          intentionally REMOVE a live course from the catalog.
+          Default false — the guard refuses to deploy when any
+          course present in the live manifest is missing from the
+          new dist/, which is the right default (accidental
+          removals are catastrophic). Flip to true ONLY when the
+          missing course is intentionally being retired.
+        required: false
+        default: "false"
+        type: choice
+        options: ["true", "false"]
 
 permissions:
   contents: read
@@ -165,6 +178,14 @@ jobs:
       # anything is synced. Mirrors the same step in scripts/deploy.mjs
       # — keep both in lockstep.
       - name: Guard — no live courses may disappear
+        env:
+          # Forwarded from the workflow_dispatch `allow_course_removal`
+          # input. The guard reads this env var and, when set to "1",
+          # permits a live course to be missing from the new dist/
+          # manifest (still refuses regressing manifest version).
+          # Empty on push/schedule/repository_dispatch so the guard
+          # behaves at its strictest default for those triggers.
+          LIBRE_ALLOW_COURSE_REMOVAL: ${{ github.event.inputs.allow_course_removal == 'true' && '1' || '' }}
         run: node scripts/check-manifest-safety.mjs
 
       # ─── Production sync to the VPS (Caddy host) ────────
