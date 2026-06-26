@@ -25,6 +25,9 @@ const Privacy = lazy(() =>
   import("./pages/Privacy").then((m) => ({ default: m.Privacy })),
 );
 const Terms = lazy(() => import("./pages/Terms").then((m) => ({ default: m.Terms })));
+const SecurityAudit = lazy(() =>
+  import("./pages/SecurityAudit").then((m) => ({ default: m.SecurityAudit })),
+);
 const Support = lazy(() =>
   import("./pages/Support").then((m) => ({ default: m.Support })),
 );
@@ -43,6 +46,9 @@ const ResetPassword = lazy(() =>
 const Blog = lazy(() => import("./pages/Blog").then((m) => ({ default: m.Blog })));
 const BlogPost = lazy(() =>
   import("./pages/BlogPost").then((m) => ({ default: m.BlogPost })),
+);
+const VerifyEmail = lazy(() =>
+  import("./pages/VerifyEmail").then((m) => ({ default: m.VerifyEmail })),
 );
 
 export function App() {
@@ -90,12 +96,15 @@ export function App() {
             <Route path="/docs/:section" element={<Docs />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/terms" element={<Terms />} />
+            <Route path="/security" element={<SecurityAudit />} />
+            <Route path="/audit" element={<SecurityAudit />} />
             <Route path="/support" element={<Support />} />
             <Route path="/donate" element={<Support />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
             <Route path="/oauth/done" element={<OAuthDone />} />
             <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/verify-email" element={<VerifyEmail />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>

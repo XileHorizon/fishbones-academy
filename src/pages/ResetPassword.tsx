@@ -21,7 +21,11 @@ import { useEffect, useId, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import "./ResetPassword.css";
 
-const RELAY_URL = "https://api.mattssoftware.com";
+// The live relay. Was `https://api.mattssoftware.com` with a
+// `/fishbones/` path prefix — both are pre-rebrand and now dead (the
+// host fails TLS), which silently broke web password reset. The current
+// relay is `https://api.libre.academy/auth/*`, same as the desktop app.
+const RELAY_URL = "https://api.libre.academy";
 const PASSWORD_MIN_LENGTH = 8;
 
 type Strength = 0 | 1 | 2 | 3 | 4;
@@ -243,7 +247,7 @@ export function ResetPassword() {
     setPhase("submitting");
     setErrorMsg(null);
     try {
-      const res = await fetch(`${RELAY_URL}/fishbones/auth/password-reset/confirm`, {
+      const res = await fetch(`${RELAY_URL}/auth/password-reset/confirm`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ token, new_password: password }),

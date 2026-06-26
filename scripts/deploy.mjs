@@ -158,6 +158,14 @@ function rsyncToVps() {
   // without the exclude `--delete` would wipe the entire audio dir
   // on every site deploy — meaning every push of marketing-copy or
   // /learn/ embed would silently nuke the narration tracks.
+  // `--exclude=courses/` is the same protection for the desktop
+  // course-download archives: remote-tier `.academy` files are
+  // uploaded by hand to /var/www/libre-academy/courses/<id>.academy
+  // (NOT shipped in dist/) and the desktop installer fetches them from
+  // libre.academy/courses/ (REMOTE_ARCHIVE_BASE in
+  // Apps/Libre.academy/scripts/course-tiers.mjs). Without the exclude
+  // `--delete` would wipe them every deploy — the same failure that
+  // made the old mattssoftware.com/fishbones/courses/ host unusable.
   // `-T` disables pseudo-tty allocation — required when sshpass is
   // driving the connection from a non-interactive shell (e.g. when
   // this script is invoked from another tool, an agent harness, or
@@ -167,7 +175,7 @@ function rsyncToVps() {
   const sshOpts = `ssh -T -o StrictHostKeyChecking=no -o ConnectTimeout=15 -p ${VPS_PORT}`;
   const target = `${VPS_USER}@${VPS_HOST}:${VPS_TARGET_DIR}/`;
   run(
-    `sshpass -e rsync -a --delete --exclude=audio/ --stats -e "${sshOpts}" dist/ "${target}"`,
+    `sshpass -e rsync -a --delete --exclude=audio/ --exclude=courses/ --stats -e "${sshOpts}" dist/ "${target}"`,
     { env: { SSHPASS: pwd } },
   );
   console.log(`[deploy] synced dist/ → ${target} (audio/ preserved)`);
