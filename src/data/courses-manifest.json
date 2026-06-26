@@ -1,6 +1,6 @@
 {
-  "version": 23,
-  "generatedAt": "2026-06-26T16:10:01.713Z",
+  "version": 24,
+  "generatedAt": "2026-06-26T20:26:21.886Z",
   "archiveBaseUrl": "https://mattssoftware.com/fishbones/courses",
   "courses": [
     {
@@ -1169,6 +1169,38 @@
       "releaseStatus": "UNREVIEWED",
       "tier": "remote",
       "lessonCount": 12
+    },
+    {
+      "id": "learning-python",
+      "packId": "learning-python",
+      "title": "Learning Python",
+      "author": "Fishbones",
+      "language": "python",
+      "file": "learning-python.json",
+      "cover": "learning-python.jpg",
+      "sizeBytes": 669093,
+      "archiveSizeBytes": 210548,
+      "archiveUrl": "https://mattssoftware.com/fishbones/courses/learning-python.academy",
+      "packType": "course",
+      "releaseStatus": "BETA",
+      "tier": "remote",
+      "lessonCount": 148
+    },
+    {
+      "id": "python-for-beginners",
+      "packId": "python-for-beginners",
+      "title": "Python for Beginners",
+      "author": "Fishbones",
+      "language": "python",
+      "file": "python-for-beginners.json",
+      "cover": "python-for-beginners.jpg",
+      "sizeBytes": 183254,
+      "archiveSizeBytes": 57804,
+      "archiveUrl": "https://mattssoftware.com/fishbones/courses/python-for-beginners.academy",
+      "packType": "course",
+      "releaseStatus": "BETA",
+      "tier": "remote",
+      "lessonCount": 47
     },
     {
       "id": "python-koans",
