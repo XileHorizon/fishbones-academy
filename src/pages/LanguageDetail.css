@@ -60,3 +60,60 @@
   font-size: 32px;
   margin-bottom: 16px;
 }
+
+/* ── "How it runs" + "Why learn with Libre" explainer cards
+       Two side-by-side cards under the hero. Templated content
+       per language so the page answers the searcher's "where
+       does this run?" question without scrolling past the
+       catalog. Grid collapses to stacked cards on phone. */
+.lang-detail__how {
+  padding-block: 16px 24px;
+}
+
+.lang-detail__how-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+.lang-detail__how-card {
+  padding: 22px 22px 20px;
+  background: var(--color-bg-secondary, #18181b);
+  border: 1px solid var(--color-border-default, rgba(255, 255, 255, 0.08));
+  border-radius: 12px;
+}
+
+.lang-detail__how-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--amber-6, #f59e0b) 16%, transparent);
+  color: var(--amber-7, #fbbf24);
+  margin-bottom: 12px;
+}
+
+.lang-detail__how-title {
+  margin: 0 0 8px;
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--color-text-primary, #fafafa);
+  letter-spacing: -0.005em;
+}
+
+.lang-detail__how-body {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--color-text-secondary, #a4a4ad);
+}
+
+@media (max-width: 720px) {
+  .lang-detail__how-grid {
+    grid-template-columns: 1fr;
+  }
+}

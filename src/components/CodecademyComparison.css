@@ -1,0 +1,364 @@
+/* "Why Libre vs Codecademy" comparison section.
+   3-column comparison table + "No paywall, ever" closer.
+
+   Layout strategy:
+   - Wide viewports: 4-column grid (feature label + Libre + Free +
+     Pro). The Libre column is visually emphasised (amber accent
+     border, slightly brighter row backgrounds) so a skimmer
+     instantly sees which column is "ours."
+   - Narrow viewports (< 720px): the table collapses to stacked
+     cards via a container-style restructure, one card per row,
+     each card showing the feature name + three labeled column
+     values. Native <table> semantics preserved (screen readers
+     still get the row/column structure).
+
+   Tokens this file leans on:
+     --amber-6 / --amber-7    primary amber accents (brand)
+     --color-bg-secondary     row background (default)
+     --color-bg-tertiary      row background (Libre column tint)
+     --color-text-primary     headings + values
+     --color-text-secondary   subtitles + detail lines
+     --color-border-default   row separators
+*/
+
+.cmp {
+  padding-block: 80px;
+}
+
+/* ── Header zone ─────────────────────────────────────────────── */
+
+.cmp__head {
+  max-width: 760px;
+  margin: 0 auto 32px;
+  text-align: center;
+}
+
+.cmp__subtitle {
+  margin-top: 12px;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--color-text-secondary, #a4a4ad);
+}
+
+/* ── Table ───────────────────────────────────────────────────── */
+
+.cmp__table-wrap {
+  /* Outer card frame — gives the comparison a clear "module" feel
+     and lets the table corners round cleanly. `overflow: hidden`
+     is what makes border-radius work on a table (collapsed
+     borders + clipping). */
+  max-width: 980px;
+  margin: 0 auto;
+  background: var(--color-bg-secondary, #18181b);
+  border: 1px solid var(--color-border-default, rgba(255, 255, 255, 0.08));
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.cmp__table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 14px;
+  color: var(--color-text-primary, #fafafa);
+}
+
+/* ── Column headers ──────────────────────────────────────────── */
+
+.cmp__th {
+  padding: 18px 16px 14px;
+  text-align: center;
+  vertical-align: bottom;
+  font-weight: 600;
+  border-bottom: 1px solid var(--color-border-default, rgba(255, 255, 255, 0.10));
+  background: var(--color-bg-secondary, #18181b);
+}
+
+.cmp__th--feature {
+  text-align: left;
+  padding-left: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-tertiary, #71717a);
+}
+
+/* The Libre column header: amber gradient bar above + slightly
+   brighter background so the eye lands here first. */
+.cmp__th--libre {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--amber-6, #f59e0b) 12%, transparent),
+    transparent 80%
+  ),
+  var(--color-bg-secondary, #18181b);
+  border-bottom-color: var(--amber-6, #f59e0b);
+}
+
+.cmp__th-eyebrow {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-tertiary, #71717a);
+  margin-bottom: 4px;
+}
+
+.cmp__th--libre .cmp__th-eyebrow {
+  color: var(--amber-7, #fbbf24);
+}
+
+.cmp__th-tier {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-primary, #fafafa);
+}
+
+/* ── Rows ─────────────────────────────────────────────────────── */
+
+.cmp__row + .cmp__row .cmp__feature,
+.cmp__row + .cmp__row .cmp__td {
+  border-top: 1px solid var(--color-border-default, rgba(255, 255, 255, 0.06));
+}
+
+.cmp__feature {
+  padding: 16px 20px;
+  text-align: left;
+  vertical-align: middle;
+  font-weight: 500;
+  color: var(--color-text-primary, #fafafa);
+  background: var(--color-bg-secondary, #18181b);
+}
+
+.cmp__feature-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.cmp__feature-detail {
+  display: block;
+  margin-top: 3px;
+  font-size: 12.5px;
+  font-weight: 400;
+  color: var(--color-text-tertiary, #71717a);
+  line-height: 1.4;
+}
+
+.cmp__td {
+  padding: 16px 12px;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 14px;
+}
+
+/* Subtle amber tint behind every Libre cell so the column reads
+   as the visually emphasised one without overpowering. */
+.cmp__td--libre {
+  background: color-mix(
+    in srgb,
+    var(--amber-6, #f59e0b) 4%,
+    var(--color-bg-secondary, #18181b)
+  );
+}
+
+/* ── Cell value variants ──────────────────────────────────────── */
+
+.cmp__cell {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  vertical-align: middle;
+}
+
+.cmp__cell--yes {
+  color: var(--amber-7, #fbbf24);
+  background: color-mix(in srgb, var(--amber-6, #f59e0b) 16%, transparent);
+}
+
+.cmp__cell--no {
+  color: var(--color-text-tertiary, #71717a);
+  background: color-mix(in srgb, var(--color-text-tertiary, #71717a) 10%, transparent);
+}
+
+.cmp__cell--na {
+  color: var(--color-text-tertiary, #71717a);
+  background: transparent;
+}
+
+.cmp__cell--text {
+  display: inline-block;
+  width: auto;
+  height: auto;
+  padding: 4px 8px;
+  border-radius: 0;
+  background: transparent;
+  color: var(--color-text-primary, #fafafa);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.cmp__td--libre .cmp__cell--text {
+  color: var(--amber-7, #fbbf24);
+  font-weight: 600;
+}
+
+/* ── Fine print ──────────────────────────────────────────────── */
+
+.cmp__fineprint {
+  max-width: 760px;
+  margin: 16px auto 0;
+  text-align: center;
+  font-size: 12.5px;
+  color: var(--color-text-tertiary, #71717a);
+  line-height: 1.55;
+}
+
+.cmp__fineprint-link {
+  color: var(--color-text-secondary, #a4a4ad);
+  text-decoration: underline;
+  text-decoration-color: var(--color-text-tertiary, #71717a);
+  text-underline-offset: 2px;
+}
+
+.cmp__fineprint-link:hover {
+  color: var(--amber-7, #fbbf24);
+  text-decoration-color: var(--amber-7, #fbbf24);
+}
+
+/* ── "No paywall, ever" closing pillar ─────────────────────── */
+
+.cmp__pillar {
+  max-width: 980px;
+  margin: 48px auto 0;
+  padding: 28px 32px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--amber-6, #f59e0b) 12%, var(--color-bg-secondary, #18181b)),
+    var(--color-bg-secondary, #18181b)
+  );
+  border: 1px solid color-mix(
+    in srgb,
+    var(--amber-6, #f59e0b) 24%,
+    var(--color-border-default, rgba(255, 255, 255, 0.10))
+  );
+  border-radius: 14px;
+}
+
+.cmp__pillar-mark {
+  flex-shrink: 0;
+  width: 64px;
+  height: 64px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--amber-6, #f59e0b), var(--amber-7, #fbbf24));
+  color: var(--color-bg-primary, #09090b);
+  border-radius: 14px;
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.cmp__pillar-copy {
+  flex: 1;
+  min-width: 0;
+}
+
+.cmp__pillar-title {
+  margin: 0 0 6px;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--color-text-primary, #fafafa);
+  letter-spacing: -0.01em;
+}
+
+.cmp__pillar-lede {
+  margin: 0;
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--color-text-secondary, #a4a4ad);
+}
+
+/* ── Narrow viewports — collapse to stacked-card pattern ──── */
+
+@media (max-width: 720px) {
+  /* Pillar wraps vertically so the mark sits above the copy on
+     phone widths instead of squeezing the text into a sliver. */
+  .cmp__pillar {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    padding: 24px;
+  }
+  .cmp__pillar-mark {
+    width: 52px;
+    height: 52px;
+    font-size: 30px;
+    border-radius: 12px;
+  }
+
+  /* The table re-flows: header row hidden, each <tr> becomes a
+     stacked card, each <td> shows its column label inline via a
+     data-attribute. Keeps the semantic <table> intact while
+     fitting a phone screen. */
+  .cmp__table thead {
+    display: none;
+  }
+  .cmp__table,
+  .cmp__table tbody,
+  .cmp__row,
+  .cmp__feature,
+  .cmp__td {
+    display: block;
+    width: 100%;
+  }
+  .cmp__row {
+    padding: 14px 0;
+    border-top: 1px solid var(--color-border-default, rgba(255, 255, 255, 0.06));
+  }
+  .cmp__row + .cmp__row .cmp__feature,
+  .cmp__row + .cmp__row .cmp__td {
+    border-top: 0;
+  }
+  .cmp__feature {
+    padding: 4px 16px 8px;
+    background: transparent;
+  }
+  .cmp__td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 16px;
+    text-align: right;
+    background: transparent;
+  }
+  .cmp__td::before {
+    content: attr(data-label);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-text-tertiary, #71717a);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .cmp__td--libre {
+    background: color-mix(
+      in srgb,
+      var(--amber-6, #f59e0b) 8%,
+      transparent
+    );
+    border-left: 3px solid var(--amber-6, #f59e0b);
+  }
+  .cmp__td--libre::before {
+    color: var(--amber-7, #fbbf24);
+  }
+}

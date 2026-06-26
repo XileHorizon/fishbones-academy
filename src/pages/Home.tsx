@@ -10,12 +10,25 @@ import {
   Flame,
   Cpu,
   PlayCircle,
+  Download,
 } from "lucide-react";
 import { LANGUAGES } from "../data/languages";
+import { CATALOG } from "../data/courses";
+
+/// Live course count, derived from the bundled manifest. Used in
+/// the hero H1 + stats so the page never claims a stale number;
+/// the manifest is regenerated on every `sync:courses` run.
+const COURSE_COUNT = CATALOG.length;
+/// Round-down headline number for the stats strip so the value
+/// stays stable across small catalog churn (e.g. 92 → 91 → 92
+/// shouldn't ripple through the page; "90+" reads the same).
+const COURSE_COUNT_ROUNDED = `${Math.floor(COURSE_COUNT / 10) * 10}+`;
 import { ParticleField } from "../components/spotlights/ParticleField";
 import { WorkbenchSpotlight } from "../components/spotlights/WorkbenchSpotlight";
 import { EvmChainSpotlight } from "../components/spotlights/EvmChainSpotlight";
 import { BookCarousel } from "../components/spotlights/BookCarousel";
+import { CodecademyComparison } from "../components/CodecademyComparison";
+import { LandingEditor } from "../components/LandingEditor";
 import "./Home.css";
 
 /// Homepage architecture:
@@ -85,7 +98,7 @@ const FEATURES = [
 /// stale between releases.
 const STATS = [
   { value: "26+", label: "Languages covered" },
-  { value: "47", label: "Free courses" },
+  { value: COURSE_COUNT_ROUNDED, label: "Free courses" },
   { value: "1,500+", label: "Interactive lessons" },
   { value: "$0", label: "No paywall, ever" },
 ];
@@ -151,15 +164,13 @@ export function Home() {
         <ParticleField className="home-hero__particles" count={80} />
 
         <div className="home-hero__inner home-hero__inner--stacked">
-          <motion.img
-            src="/libre_header.png"
-            alt="Libre Academy — free interactive coding courses"
-            className="home-hero__artwork"
-            initial={{ opacity: 0, y: 24, scale: 0.98 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 0.9, ease: "easeOut" }}
-            draggable={false}
-          />
+          {/* Header artwork removed pending an SEO + copy rework.
+              The hero now leads with the eyebrow / H1 / lede so the
+              first-paint LCP element is text (faster, better Core
+              Web Vitals) and the headline carries the brand instead
+              of an oversized image competing with it. The particle
+              field above + the typography below carry the visual
+              identity in the meantime. */}
           <motion.div
             className="home-hero__copy"
             initial={{ opacity: 0, y: 20 }}
@@ -167,34 +178,38 @@ export function Home() {
             transition={{ duration: 0.8, delay: 0.15, ease: "easeOut" }}
           >
             <span className="home-hero__eyebrow">
-              <span className="home-hero__pulse" /> Free · Interactive · Open
-              source · MIT licensed
+              <span className="home-hero__pulse" /> Open source · Free forever ·
+              MIT licensed
             </span>
-            {/* H1: leads with the SEO head term ("Free interactive
-                coding courses") so the rendered text matches the page
-                <title> and the og:title — Googlebot heavily weights
-                consistency across those three. Second clause
-                ("26 languages, in your browser") packs the
-                differentiator into the same line for snippet
-                previews. */}
+            {/* H1: declarative claim leading with the primary
+                keyword "learn to code free" (verbatim match to
+                <title> + og:title — Google weights cross-element
+                consistency). Second sentence packs the two
+                differentiator numbers (courses + languages) into
+                the headline so even a clipped SERP preview carries
+                the proof. Period after "free" is intentional — the
+                no-nonsense voice doesn't sell, it asserts. */}
             <h1 className="home-hero__title">
-              Free interactive coding courses in 26 languages — right in your
-              browser.
+              Learn to code, free. {COURSE_COUNT_ROUNDED} courses, 26 languages,
+              zero paywall.
             </h1>
             <p className="home-hero__lede">
-              Libre Academy is the open source way to learn to code online. Read
-              short lessons, write code in a real editor, and watch hidden tests
-              grade your work in real time. No setup, no signup wall, no paywall
-              — just twenty-six languages and forty-seven free courses ready to
-              run.
+              Real editor. Hidden tests grade your code. Twenty-six languages
+              in your browser, hand-crafted courses, MIT-licensed end to end.
+              The open-source alternative to Codecademy — no signup, no email,
+              no upsell.
             </p>
             <div className="home-hero__actions">
               <a href="/learn" className="btn btn--primary btn--lg">
                 <PlayCircle size={16} /> Start learning free
                 <ArrowRight size={14} />
               </a>
-              <Link to="/courses" className="btn btn--ghost btn--lg">
-                Browse all courses
+              {/* Secondary CTA is the desktop-app download path —
+                  the hybrid story is a real moat vs Codecademy's
+                  web-only product. /download owns OS detection +
+                  the per-platform release lookup. */}
+              <Link to="/download" className="btn btn--ghost btn--lg">
+                <Download size={16} /> Download the desktop app
               </Link>
             </div>
             <p className="home-hero__hint">
@@ -220,6 +235,14 @@ export function Home() {
         </div>
       </section>
 
+      {/* ─── Landing editor demo (lazy Monaco) ──────────────
+          Sits right under the hero so the first scroll already
+          puts the visitor face-to-face with real code in a real
+          editor. The component renders a skeleton until it
+          scrolls into view; Monaco's 3 MB chunk only fetches
+          when the user nears the section. */}
+      <LandingEditor />
+
       {/* ─── Spotlight 1: Workbench ──────────────────────── */}
       <WorkbenchSpotlight />
 
@@ -233,6 +256,14 @@ export function Home() {
 
       {/* ─── Spotlight 3: EVM chain (replica of in-app ChainDock) ── */}
       <EvmChainSpotlight />
+
+      {/* ─── "Why Libre vs Codecademy" comparison ───────────
+          3-column table (Libre / Codecademy Free / Codecademy
+          Pro) + a "No paywall, ever" pull-quote closer. Sits
+          here after the editor + catalog spotlights so the
+          reader has the proof in mind before they hit the
+          honest, row-by-row comparison. */}
+      <CodecademyComparison />
 
       {/* ─── Feature cards ──────────────────────────────── */}
       <section className="section section--tight" id="features">

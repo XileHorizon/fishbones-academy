@@ -1,18 +1,34 @@
 {
-  "version": 6,
-  "generatedAt": "2026-06-11T22:10:33.489Z",
+  "version": 23,
+  "generatedAt": "2026-06-26T16:10:01.713Z",
   "archiveBaseUrl": "https://mattssoftware.com/fishbones/courses",
   "courses": [
     {
+      "id": "javascript-for-beginners",
+      "packId": "javascript-for-beginners",
+      "title": "JavaScript for Beginners",
+      "author": "Fishbones",
+      "language": "javascript",
+      "file": "javascript-for-beginners.json",
+      "cover": "javascript-for-beginners.jpg",
+      "sizeBytes": 3996176,
+      "archiveSizeBytes": 3148585,
+      "archiveUrl": "https://mattssoftware.com/fishbones/courses/javascript-for-beginners.academy",
+      "packType": "course",
+      "releaseStatus": "BETA",
+      "tier": "core",
+      "lessonCount": 38
+    },
+    {
       "id": "javascript-typescript",
       "packId": "javascript-typescript",
-      "title": "JavaScript & TypeScript",
+      "title": "Learning JavaScript & TypeScript",
       "author": "Fishbones",
       "language": "typescript",
       "file": "javascript-typescript.json",
       "cover": "javascript-typescript.jpg",
-      "sizeBytes": 1552930,
-      "archiveSizeBytes": 601988,
+      "sizeBytes": 6980997,
+      "archiveSizeBytes": 4911731,
       "archiveUrl": "https://mattssoftware.com/fishbones/courses/javascript-typescript.academy",
       "packType": "course",
       "releaseStatus": "BETA",
@@ -27,29 +43,13 @@
       "language": "zig",
       "file": "a-to-zig.json",
       "cover": "a-to-zig.jpg",
-      "sizeBytes": 439994,
-      "archiveSizeBytes": 262989,
+      "sizeBytes": 10719582,
+      "archiveSizeBytes": 8182650,
       "archiveUrl": "https://mattssoftware.com/fishbones/courses/a-to-zig.academy",
       "packType": "course",
       "releaseStatus": "ALPHA",
       "tier": "core",
       "lessonCount": 105
-    },
-    {
-      "id": "a-to-ts",
-      "packId": "a-to-ts",
-      "title": "A to TS",
-      "author": "Fishbones",
-      "language": "typescript",
-      "file": "a-to-ts.json",
-      "cover": "a-to-ts.jpg",
-      "sizeBytes": 451332,
-      "archiveSizeBytes": 229003,
-      "archiveUrl": "https://mattssoftware.com/fishbones/courses/a-to-ts.academy",
-      "packType": "course",
-      "releaseStatus": "ALPHA",
-      "tier": "core",
-      "lessonCount": 110
     },
     {
       "id": "learning-ledger",
@@ -75,8 +75,8 @@
       "language": "rust",
       "file": "the-rust-programming-language.json",
       "cover": "the-rust-programming-language.jpg",
-      "sizeBytes": 4714545,
-      "archiveSizeBytes": 3294593,
+      "sizeBytes": 4553885,
+      "archiveSizeBytes": 3245085,
       "archiveUrl": "https://mattssoftware.com/fishbones/courses/the-rust-programming-language.academy",
       "packType": "course",
       "releaseStatus": "VERIFIED",
@@ -91,12 +91,12 @@
       "language": "rust",
       "file": "the-rustonomicon.json",
       "cover": "the-rustonomicon.jpg",
-      "sizeBytes": 113569,
-      "archiveSizeBytes": 170255,
+      "sizeBytes": 787639,
+      "archiveSizeBytes": 700674,
       "archiveUrl": "https://mattssoftware.com/fishbones/courses/the-rustonomicon.academy",
       "packType": "course",
       "releaseStatus": "UNREVIEWED",
-      "tier": "remote",
+      "tier": "core",
       "lessonCount": 20
     },
     {
@@ -107,11 +107,11 @@
       "language": "go",
       "file": "learning-go.json",
       "cover": "learning-go.jpg",
-      "sizeBytes": 1826949,
-      "archiveSizeBytes": 502645,
+      "sizeBytes": 7453933,
+      "archiveSizeBytes": 5232113,
       "archiveUrl": "https://mattssoftware.com/fishbones/courses/learning-go.academy",
       "packType": "course",
-      "releaseStatus": "BETA",
+      "releaseStatus": "VERIFIED",
       "tier": "core",
       "lessonCount": 258
     },
@@ -192,7 +192,7 @@
       "archiveUrl": "https://mattssoftware.com/fishbones/courses/python-challenges.academy",
       "packType": "challenges",
       "releaseStatus": "BETA",
-      "tier": "core",
+      "tier": "remote",
       "lessonCount": 120
     },
     {
@@ -208,7 +208,7 @@
       "archiveUrl": "https://mattssoftware.com/fishbones/courses/react-native-challenges.academy",
       "packType": "challenges",
       "releaseStatus": "BETA",
-      "tier": "core",
+      "tier": "remote",
       "lessonCount": 12
     },
     {
@@ -224,7 +224,7 @@
       "archiveUrl": "https://mattssoftware.com/fishbones/courses/c-challenges.academy",
       "packType": "challenges",
       "releaseStatus": "BETA",
-      "tier": "core",
+      "tier": "remote",
       "lessonCount": 120
     },
     {
@@ -240,7 +240,7 @@
       "archiveUrl": "https://mattssoftware.com/fishbones/courses/cpp-challenges.academy",
       "packType": "challenges",
       "releaseStatus": "BETA",
-      "tier": "core",
+      "tier": "remote",
       "lessonCount": 120
     },
     {
@@ -256,7 +256,7 @@
       "archiveUrl": "https://mattssoftware.com/fishbones/courses/java-challenges.academy",
       "packType": "challenges",
       "releaseStatus": "BETA",
-      "tier": "core",
+      "tier": "remote",
       "lessonCount": 120
     },
     {
@@ -272,7 +272,7 @@
       "archiveUrl": "https://mattssoftware.com/fishbones/courses/kotlin-challenges.academy",
       "packType": "challenges",
       "releaseStatus": "BETA",
-      "tier": "core",
+      "tier": "remote",
       "lessonCount": 120
     },
     {
@@ -288,7 +288,7 @@
       "archiveUrl": "https://mattssoftware.com/fishbones/courses/csharp-challenges.academy",
       "packType": "challenges",
       "releaseStatus": "BETA",
-      "tier": "core",
+      "tier": "remote",
       "lessonCount": 120
     },
     {
@@ -304,7 +304,7 @@
       "archiveUrl": "https://mattssoftware.com/fishbones/courses/swift-challenges.academy",
       "packType": "challenges",
       "releaseStatus": "BETA",
-      "tier": "core",
+      "tier": "remote",
       "lessonCount": 120
     },
     {
@@ -320,7 +320,7 @@
       "archiveUrl": "https://mattssoftware.com/fishbones/courses/assembly-challenges-arm64-macos.academy",
       "packType": "challenges",
       "releaseStatus": "BETA",
-      "tier": "core",
+      "tier": "remote",
       "lessonCount": 120
     },
     {
@@ -336,7 +336,7 @@
       "archiveUrl": "https://mattssoftware.com/fishbones/courses/challenges-ruby-handwritten.academy",
       "packType": "challenges",
       "releaseStatus": "BETA",
-      "tier": "core",
+      "tier": "remote",
       "lessonCount": 120
     },
     {
@@ -352,7 +352,7 @@
       "archiveUrl": "https://mattssoftware.com/fishbones/courses/challenges-lua-handwritten.academy",
       "packType": "challenges",
       "releaseStatus": "BETA",
-      "tier": "core",
+      "tier": "remote",
       "lessonCount": 120
     },
     {
@@ -368,7 +368,7 @@
       "archiveUrl": "https://mattssoftware.com/fishbones/courses/challenges-dart-handwritten.academy",
       "packType": "challenges",
       "releaseStatus": "BETA",
-      "tier": "core",
+      "tier": "remote",
       "lessonCount": 120
     },
     {
@@ -384,7 +384,7 @@
       "archiveUrl": "https://mattssoftware.com/fishbones/courses/challenges-haskell-handwritten.academy",
       "packType": "challenges",
       "releaseStatus": "BETA",
-      "tier": "core",
+      "tier": "remote",
       "lessonCount": 120
     },
     {
@@ -400,7 +400,7 @@
       "archiveUrl": "https://mattssoftware.com/fishbones/courses/challenges-scala-handwritten.academy",
       "packType": "challenges",
       "releaseStatus": "BETA",
-      "tier": "core",
+      "tier": "remote",
       "lessonCount": 120
     },
     {
@@ -432,7 +432,7 @@
       "archiveUrl": "https://mattssoftware.com/fishbones/courses/challenges-elixir-handwritten.academy",
       "packType": "challenges",
       "releaseStatus": "BETA",
-      "tier": "core",
+      "tier": "remote",
       "lessonCount": 120
     },
     {
@@ -464,7 +464,7 @@
       "archiveUrl": "https://mattssoftware.com/fishbones/courses/challenges-move-handwritten.academy",
       "packType": "challenges",
       "releaseStatus": "BETA",
-      "tier": "core",
+      "tier": "remote",
       "lessonCount": 120
     },
     {
@@ -480,7 +480,7 @@
       "archiveUrl": "https://mattssoftware.com/fishbones/courses/challenges-cairo-handwritten.academy",
       "packType": "challenges",
       "releaseStatus": "BETA",
-      "tier": "core",
+      "tier": "remote",
       "lessonCount": 120
     },
     {
@@ -496,7 +496,7 @@
       "archiveUrl": "https://mattssoftware.com/fishbones/courses/challenges-sway-handwritten.academy",
       "packType": "challenges",
       "releaseStatus": "BETA",
-      "tier": "core",
+      "tier": "remote",
       "lessonCount": 120
     },
     {
@@ -559,8 +559,8 @@
       "archiveSizeBytes": 296892,
       "archiveUrl": "https://mattssoftware.com/fishbones/courses/challenges-go-handwritten.academy",
       "packType": "challenges",
-      "releaseStatus": "BETA",
-      "tier": "remote",
+      "releaseStatus": "VERIFIED",
+      "tier": "core",
       "lessonCount": 120
     },
     {
@@ -576,7 +576,7 @@
       "archiveUrl": "https://mattssoftware.com/fishbones/courses/challenges-rust-handwritten.academy",
       "packType": "challenges",
       "releaseStatus": "BETA",
-      "tier": "remote",
+      "tier": "core",
       "lessonCount": 120
     },
     {
@@ -767,8 +767,8 @@
       "archiveSizeBytes": 407662,
       "archiveUrl": "https://mattssoftware.com/fishbones/courses/exercism-go.academy",
       "packType": "track",
-      "releaseStatus": "ALPHA",
-      "tier": "remote",
+      "releaseStatus": "VERIFIED",
+      "tier": "core",
       "lessonCount": 165
     },
     {
@@ -816,7 +816,7 @@
       "archiveUrl": "https://mattssoftware.com/fishbones/courses/exercism-javascript.academy",
       "packType": "track",
       "releaseStatus": "ALPHA",
-      "tier": "remote",
+      "tier": "core",
       "lessonCount": 158
     },
     {
@@ -896,7 +896,7 @@
       "archiveUrl": "https://mattssoftware.com/fishbones/courses/exercism-rust.academy",
       "packType": "track",
       "releaseStatus": "ALPHA",
-      "tier": "remote",
+      "tier": "core",
       "lessonCount": 109
     },
     {
@@ -944,7 +944,7 @@
       "archiveUrl": "https://mattssoftware.com/fishbones/courses/exercism-typescript.academy",
       "packType": "track",
       "releaseStatus": "ALPHA",
-      "tier": "remote",
+      "tier": "core",
       "lessonCount": 106
     },
     {
@@ -960,7 +960,7 @@
       "archiveUrl": "https://mattssoftware.com/fishbones/courses/exercism-zig.academy",
       "packType": "track",
       "releaseStatus": "ALPHA",
-      "tier": "remote",
+      "tier": "core",
       "lessonCount": 98
     },
     {
@@ -1018,12 +1018,12 @@
       "language": "go",
       "file": "golings.json",
       "cover": "golings.jpg",
-      "sizeBytes": 85382,
-      "archiveSizeBytes": 184945,
+      "sizeBytes": 1246082,
+      "archiveSizeBytes": 1078626,
       "archiveUrl": "https://mattssoftware.com/fishbones/courses/golings.academy",
       "packType": "lings",
-      "releaseStatus": "UNREVIEWED",
-      "tier": "remote",
+      "releaseStatus": "VERIFIED",
+      "tier": "core",
       "lessonCount": 43
     },
     {
@@ -1115,11 +1115,11 @@
       "file": "javascript-koans.json",
       "cover": "javascript-koans.jpg",
       "sizeBytes": 50421,
-      "archiveSizeBytes": 50420,
+      "archiveSizeBytes": 149619,
       "archiveUrl": "https://mattssoftware.com/fishbones/courses/javascript-koans.academy",
       "packType": "koans",
       "releaseStatus": "UNREVIEWED",
-      "tier": "remote",
+      "tier": "core",
       "lessonCount": 8
     },
     {
@@ -1131,7 +1131,7 @@
       "file": "kotlin-koans.json",
       "cover": "kotlin-koans.jpg",
       "sizeBytes": 149098,
-      "archiveSizeBytes": 72315,
+      "archiveSizeBytes": 159166,
       "archiveUrl": "https://mattssoftware.com/fishbones/courses/kotlin-koans.academy",
       "packType": "koans",
       "releaseStatus": "UNREVIEWED",
@@ -1162,8 +1162,8 @@
       "language": "javascript",
       "file": "pro-git.json",
       "cover": "pro-git.jpg",
-      "sizeBytes": 69777,
-      "archiveSizeBytes": 3847401,
+      "sizeBytes": 1039276,
+      "archiveSizeBytes": 953999,
       "archiveUrl": "https://mattssoftware.com/fishbones/courses/pro-git.academy",
       "packType": "course",
       "releaseStatus": "UNREVIEWED",
@@ -1179,7 +1179,7 @@
       "file": "python-koans.json",
       "cover": "python-koans.jpg",
       "sizeBytes": 244289,
-      "archiveSizeBytes": 107030,
+      "archiveSizeBytes": 192966,
       "archiveUrl": "https://mattssoftware.com/fishbones/courses/python-koans.academy",
       "packType": "koans",
       "releaseStatus": "UNREVIEWED",
@@ -1210,12 +1210,12 @@
       "language": "rust",
       "file": "rust-async-book.json",
       "cover": "rust-async-book.jpg",
-      "sizeBytes": 83147,
-      "archiveSizeBytes": 197607,
+      "sizeBytes": 772850,
+      "archiveSizeBytes": 736742,
       "archiveUrl": "https://mattssoftware.com/fishbones/courses/rust-async-book.academy",
       "packType": "course",
       "releaseStatus": "UNREVIEWED",
-      "tier": "remote",
+      "tier": "core",
       "lessonCount": 22
     },
     {
@@ -1226,13 +1226,29 @@
       "language": "rust",
       "file": "testing-rust.json",
       "cover": "testing-rust.jpg",
-      "sizeBytes": 5725394,
-      "archiveSizeBytes": 4201741,
+      "sizeBytes": 1847314,
+      "archiveSizeBytes": 1428297,
       "archiveUrl": "https://mattssoftware.com/fishbones/courses/testing-rust.academy",
       "packType": "course",
       "releaseStatus": "BETA",
-      "tier": "remote",
+      "tier": "core",
       "lessonCount": 55
+    },
+    {
+      "id": "testing-javascript",
+      "packId": "testing-javascript",
+      "title": "Testing JavaScript",
+      "author": "Fishbones",
+      "language": "javascript",
+      "file": "testing-javascript.json",
+      "cover": "testing-javascript.jpg",
+      "sizeBytes": 2055882,
+      "archiveSizeBytes": 1629999,
+      "archiveUrl": "https://mattssoftware.com/fishbones/courses/testing-javascript.academy",
+      "packType": "course",
+      "releaseStatus": "BETA",
+      "tier": "core",
+      "lessonCount": 51
     },
     {
       "id": "rustlings",
@@ -1241,12 +1257,12 @@
       "language": "rust",
       "file": "rustlings.json",
       "cover": "rustlings.jpg",
-      "sizeBytes": 371839,
-      "archiveSizeBytes": 217258,
+      "sizeBytes": 2682872,
+      "archiveSizeBytes": 2017895,
       "archiveUrl": "https://mattssoftware.com/fishbones/courses/rustlings.academy",
       "packType": "lings",
       "releaseStatus": "VERIFIED",
-      "tier": "remote",
+      "tier": "core",
       "lessonCount": 94
     },
     {
@@ -1369,12 +1385,12 @@
       "language": "javascript",
       "file": "you-dont-know-js-yet.json",
       "cover": "you-dont-know-js-yet.jpg",
-      "sizeBytes": 98170,
-      "archiveSizeBytes": 3917558,
+      "sizeBytes": 1919769,
+      "archiveSizeBytes": 1557408,
       "archiveUrl": "https://mattssoftware.com/fishbones/courses/you-dont-know-js-yet.academy",
       "packType": "course",
       "releaseStatus": "UNREVIEWED",
-      "tier": "remote",
+      "tier": "core",
       "lessonCount": 25
     },
     {
@@ -1384,12 +1400,12 @@
       "language": "zig",
       "file": "ziglings.json",
       "cover": "ziglings.jpg",
-      "sizeBytes": 807141,
-      "archiveSizeBytes": 269252,
+      "sizeBytes": 14135763,
+      "archiveSizeBytes": 10442176,
       "archiveUrl": "https://mattssoftware.com/fishbones/courses/ziglings.academy",
       "packType": "lings",
       "releaseStatus": "UNREVIEWED",
-      "tier": "remote",
+      "tier": "core",
       "lessonCount": 116
     },
     {

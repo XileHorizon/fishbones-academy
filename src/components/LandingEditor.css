@@ -1,0 +1,259 @@
+/* Landing-page editor demo — Monaco in a faux-VS-Code window.
+   Goal: read as a polished, premium editor without being so big
+   that it dominates the page. Sits high above the fold so the
+   visitor sees real code on first scroll. */
+
+.landing-editor {
+  padding-block: 64px 80px;
+}
+
+.landing-editor__head {
+  max-width: 760px;
+  margin: 0 auto 28px;
+  text-align: center;
+}
+
+.landing-editor__subtitle {
+  margin-top: 12px;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--color-text-secondary, #a4a4ad);
+}
+
+/* ── Editor card ──────────────────────────────────────────── */
+
+.landing-editor__card {
+  max-width: 880px;
+  margin: 0 auto;
+  background: #1e1e1e; /* matches Monaco's vs-dark theme bg */
+  border: 1px solid var(--color-border-default, rgba(255, 255, 255, 0.10));
+  border-radius: 12px;
+  overflow: hidden;
+  /* Subtle elevation so the card reads as a window floating in
+     front of the page rather than a recessed widget. */
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.03) inset,
+    0 18px 48px rgba(0, 0, 0, 0.35);
+}
+
+/* ── Window chrome ────────────────────────────────────────── */
+
+.landing-editor__chrome {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: #252526;
+  border-bottom: 1px solid #1a1a1a;
+}
+
+.landing-editor__dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.landing-editor__dot--red {
+  background: #ff5f57;
+}
+.landing-editor__dot--yellow {
+  background: #ffbd2e;
+}
+.landing-editor__dot--green {
+  background: #28c840;
+}
+
+.landing-editor__filename {
+  flex: 1;
+  text-align: center;
+  font-size: 12.5px;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+    monospace;
+  color: var(--color-text-secondary, #a4a4ad);
+}
+
+/* Amber Run button — the only colored affordance in the chrome
+   so the eye lands on it. */
+.landing-editor__run {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  background: var(--amber-6, #f59e0b);
+  color: #18120a;
+  border: 0;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 140ms ease, transform 80ms ease;
+}
+
+.landing-editor__run:hover {
+  background: var(--amber-7, #fbbf24);
+}
+
+.landing-editor__run:active {
+  transform: scale(0.97);
+}
+
+.landing-editor__run[aria-pressed="true"] {
+  background: color-mix(in srgb, var(--amber-6, #f59e0b) 60%, #2a2a2a);
+  color: var(--amber-9, #fde68a);
+}
+
+/* ── Editor pane ──────────────────────────────────────────── */
+
+.landing-editor__pane {
+  /* Fixed height so the skeleton + Monaco share the same vertical
+     footprint — CLS protection. Matches the `height` prop passed
+     to Monaco in the TSX. */
+  height: 320px;
+  background: #1e1e1e;
+}
+
+/* Reset Monaco's own border-radius / margins inside our card. */
+.landing-editor__pane .monaco-editor,
+.landing-editor__pane .monaco-editor-background,
+.landing-editor__pane .monaco-editor .margin {
+  background: #1e1e1e !important;
+}
+
+/* ── Skeleton (pre-Monaco placeholder) ─────────────────────── */
+
+.landing-editor__skeleton {
+  height: 100%;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: #1e1e1e;
+}
+
+.landing-editor__skeleton-line {
+  height: 12px;
+  border-radius: 4px;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.04) 0%,
+    rgba(255, 255, 255, 0.09) 50%,
+    rgba(255, 255, 255, 0.04) 100%
+  );
+  background-size: 200% 100%;
+  animation: landing-editor-shimmer 1.6s ease-in-out infinite;
+}
+
+@keyframes landing-editor-shimmer {
+  0%,
+  100% {
+    background-position: 200% 0;
+  }
+  50% {
+    background-position: -200% 0;
+  }
+}
+
+/* ── Output panel (revealed on Run click) ──────────────────── */
+
+.landing-editor__output {
+  background: #161616;
+  border-top: 1px solid #2a2a2a;
+  animation: landing-editor-reveal 200ms ease-out;
+}
+
+@keyframes landing-editor-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.landing-editor__output-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  border-bottom: 1px solid #2a2a2a;
+}
+
+.landing-editor__output-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-tertiary, #71717a);
+}
+
+.landing-editor__try-real {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--amber-7, #fbbf24);
+  text-decoration: none;
+}
+
+.landing-editor__try-real:hover {
+  color: var(--amber-8, #fcd34d);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.landing-editor__output-body {
+  margin: 0;
+  padding: 14px 18px;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+    monospace;
+  font-size: 13px;
+  line-height: 1.55;
+  color: #d4d4d4;
+  white-space: pre;
+  overflow-x: auto;
+}
+
+/* ── Caption under the card ─────────────────────────────────── */
+
+.landing-editor__caption {
+  max-width: 760px;
+  margin: 16px auto 0;
+  text-align: center;
+  font-size: 12.5px;
+  color: var(--color-text-tertiary, #71717a);
+  line-height: 1.55;
+}
+
+.landing-editor__caption-link {
+  color: var(--color-text-secondary, #a4a4ad);
+  text-decoration: underline;
+  text-decoration-color: var(--color-text-tertiary, #71717a);
+  text-underline-offset: 2px;
+}
+
+.landing-editor__caption-link:hover {
+  color: var(--amber-7, #fbbf24);
+  text-decoration-color: var(--amber-7, #fbbf24);
+}
+
+/* ── Narrow viewports ──────────────────────────────────────── */
+
+@media (max-width: 720px) {
+  .landing-editor {
+    padding-block: 48px 56px;
+  }
+  .landing-editor__card {
+    border-radius: 10px;
+  }
+  .landing-editor__pane {
+    height: 260px;
+  }
+  .landing-editor__output-body {
+    font-size: 12px;
+    padding: 12px 14px;
+  }
+}
