@@ -1,0 +1,217 @@
+/* "Also compared to" — two side-by-side mini-comparison cards
+   for Team Treehouse + DataCamp. Sits below the marquee
+   Codecademy table so a visitor who's still comparing options
+   has a single page that covers all three named competitors.
+
+   Layout strategy:
+   - Wide viewports: 2-column grid, equal-width cards
+   - Narrow viewports: stacks vertically
+   Each card has a small header (chip + name + framing), a
+   stack of delta rows (axis label + 2-side comparison), and a
+   fine-print footer with the pricing-as-of date + an outbound
+   link to the competitor's current pricing page.
+*/
+
+.more-cmp {
+  padding-block: 64px 80px;
+}
+
+/* ── Header zone ─────────────────────────────────────────────── */
+
+.more-cmp__head {
+  max-width: 760px;
+  margin: 0 auto 32px;
+  text-align: center;
+}
+
+.more-cmp__subtitle {
+  margin-top: 12px;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--color-text-secondary, #a4a4ad);
+}
+
+/* ── Grid ─────────────────────────────────────────────────── */
+
+.more-cmp__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+/* ── Card ─────────────────────────────────────────────────── */
+
+.more-cmp__card {
+  display: flex;
+  flex-direction: column;
+  padding: 28px 28px 22px;
+  background: var(--color-bg-secondary, #18181b);
+  border: 1px solid var(--color-border-default, rgba(255, 255, 255, 0.08));
+  border-radius: 14px;
+}
+
+.more-cmp__card-head {
+  margin-bottom: 18px;
+}
+
+/* "vs" chip — small amber affordance that anchors the
+   comparison framing visually. Aligned with the H3 baseline. */
+.more-cmp__chip {
+  display: inline-block;
+  padding: 2px 8px;
+  margin-right: 8px;
+  background: color-mix(in srgb, var(--amber-6, #f59e0b) 16%, transparent);
+  color: var(--amber-7, #fbbf24);
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+
+.more-cmp__card-title {
+  display: inline;
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--color-text-primary, #fafafa);
+  letter-spacing: -0.005em;
+  vertical-align: middle;
+}
+
+.more-cmp__card-framing {
+  margin: 10px 0 0;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--color-text-secondary, #a4a4ad);
+}
+
+/* ── Delta rows ──────────────────────────────────────────── */
+
+.more-cmp__deltas {
+  flex: 1;
+  list-style: none;
+  margin: 0 0 18px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.more-cmp__delta {
+  padding-top: 12px;
+  border-top: 1px solid var(--color-border-default, rgba(255, 255, 255, 0.06));
+}
+
+.more-cmp__delta:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.more-cmp__delta-axis {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-tertiary, #71717a);
+  margin-bottom: 8px;
+}
+
+.more-cmp__delta-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.more-cmp__delta-side {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid var(--color-border-default, rgba(255, 255, 255, 0.06));
+  border-radius: 8px;
+}
+
+.more-cmp__delta-side--libre {
+  background: color-mix(
+    in srgb,
+    var(--amber-6, #f59e0b) 6%,
+    rgba(255, 255, 255, 0.025)
+  );
+  border-color: color-mix(
+    in srgb,
+    var(--amber-6, #f59e0b) 24%,
+    var(--color-border-default, rgba(255, 255, 255, 0.10))
+  );
+}
+
+.more-cmp__delta-label {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-tertiary, #71717a);
+}
+
+.more-cmp__delta-side--libre .more-cmp__delta-label {
+  color: var(--amber-7, #fbbf24);
+}
+
+.more-cmp__delta-value {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-primary, #fafafa);
+  line-height: 1.4;
+}
+
+/* ── Card footer ──────────────────────────────────────────── */
+
+.more-cmp__card-foot {
+  margin: 0;
+  padding-top: 14px;
+  border-top: 1px solid var(--color-border-default, rgba(255, 255, 255, 0.06));
+  font-size: 12px;
+  color: var(--color-text-tertiary, #71717a);
+  line-height: 1.5;
+}
+
+.more-cmp__card-link {
+  color: var(--color-text-secondary, #a4a4ad);
+  text-decoration: underline;
+  text-decoration-color: var(--color-text-tertiary, #71717a);
+  text-underline-offset: 2px;
+}
+
+.more-cmp__card-link:hover {
+  color: var(--amber-7, #fbbf24);
+  text-decoration-color: var(--amber-7, #fbbf24);
+}
+
+/* ── Narrow viewports ──────────────────────────────────────── */
+
+@media (max-width: 820px) {
+  .more-cmp__grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+@media (max-width: 500px) {
+  .more-cmp {
+    padding-block: 48px 64px;
+  }
+  .more-cmp__card {
+    padding: 22px 20px 18px;
+  }
+  /* On very narrow viewports the side-by-side delta pair gets
+     squeezed; stack so each side gets a full line. */
+  .more-cmp__delta-pair {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+}

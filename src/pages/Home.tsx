@@ -28,6 +28,7 @@ import { WorkbenchSpotlight } from "../components/spotlights/WorkbenchSpotlight"
 import { EvmChainSpotlight } from "../components/spotlights/EvmChainSpotlight";
 import { BookCarousel } from "../components/spotlights/BookCarousel";
 import { CodecademyComparison } from "../components/CodecademyComparison";
+import { MoreComparisons } from "../components/MoreComparisons";
 import { LandingEditor } from "../components/LandingEditor";
 import "./Home.css";
 
@@ -264,6 +265,13 @@ export function Home() {
           reader has the proof in mind before they hit the
           honest, row-by-row comparison. */}
       <CodecademyComparison />
+
+      {/* ─── "Also compared to" — Treehouse + DataCamp ─────
+          Two follow-up mini-comparisons. Captures the
+          "Treehouse alternative" and "DataCamp alternative"
+          search intents without burying the marquee Codecademy
+          table above. */}
+      <MoreComparisons />
 
       {/* ─── Feature cards ──────────────────────────────── */}
       <section className="section section--tight" id="features">
