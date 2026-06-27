@@ -1,0 +1,178 @@
+/* ─── Blog post page ──────────────────────────────────────────── */
+
+.blog-post {
+  padding-top: 48px;
+  padding-bottom: 96px;
+}
+
+.blog-post__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--text-sm-size);
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  margin-bottom: 32px;
+  transition: color 0.15s ease;
+}
+
+.blog-post__back:hover {
+  color: var(--color-text-primary);
+}
+
+/* ─── Post frame — colour-customisable container ──────────────── */
+/*
+   The three CSS custom properties below are injected per-post from
+   React via inline `style` based on the `color:` frontmatter field.
+   They define the entire visual personality of the frame:
+
+     --post-frame-accent   ← left border stripe + heading accent + link hover
+     --post-frame-bg       ← subtle tinted background fill
+     --post-frame-border   ← perimeter border colour
+
+   If none are set (no frontmatter colour), they fall back to the
+   site's default accent palette so the frame still looks intentional.
+
+   Available values (set in post frontmatter as `color: <name>`):
+     blue | purple | teal | amber | green | red | pink | accent | warm
+*/
+
+.post-frame {
+  background: var(--post-frame-bg, var(--color-bg-secondary));
+  border: 1px solid var(--post-frame-border, var(--color-border-default));
+  border-left: 4px solid var(--post-frame-accent, var(--color-accent));
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.post-frame__header {
+  padding: 40px 48px 32px;
+  border-bottom: 1px solid var(--post-frame-border, var(--color-border-default));
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.post-frame__meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.post-frame__date,
+.post-frame__author {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: var(--text-xs-size);
+  color: var(--color-text-tertiary);
+  font-weight: 500;
+}
+
+.post-frame__title {
+  font-size: var(--text-3xl-size);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+  margin: 0;
+  line-height: 1.15;
+}
+
+/* Accent tint on the post title so it picks up the frame colour */
+.post-frame__title {
+  background: linear-gradient(
+    135deg,
+    var(--color-text-primary) 60%,
+    var(--post-frame-accent, var(--color-text-primary))
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.post-frame__excerpt {
+  font-size: var(--text-base-size);
+  color: var(--color-text-secondary);
+  margin: 0;
+  line-height: 1.6;
+  font-style: italic;
+}
+
+.post-frame__tags {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  color: var(--color-text-tertiary);
+}
+
+/* ─── Markdown body inside the frame ─────────────────────────── */
+
+.post-frame__body {
+  padding: 40px 48px 48px;
+}
+
+/* Tint links inside the post to the frame accent colour */
+.post-frame__body a {
+  color: var(--post-frame-accent, var(--color-text-primary));
+  text-decoration-color: var(--post-frame-accent, var(--color-text-tertiary));
+}
+
+.post-frame__body a:hover {
+  text-decoration-color: var(--post-frame-accent, var(--color-text-primary));
+}
+
+/* Tint h2/h3 headings slightly toward the accent colour */
+.post-frame__body h2,
+.post-frame__body h3 {
+  color: var(--color-text-primary);
+  border-left: 3px solid var(--post-frame-accent, transparent);
+  padding-left: 12px;
+  margin-left: -15px;
+}
+
+/* ─── Not-found state ─────────────────────────────────────────── */
+
+.blog-post--not-found {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.blog-post--not-found h1 {
+  font-size: var(--text-2xl-size);
+  font-weight: 700;
+}
+
+.blog-post--not-found p {
+  color: var(--color-text-secondary);
+}
+
+/* ─── Skeleton loading state ──────────────────────────────────── */
+
+.blog-post__skeleton {
+  height: 400px;
+  background: var(--color-skeleton);
+  border-radius: 12px;
+  animation: skeleton-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* ─── Responsive ──────────────────────────────────────────────── */
+
+@media (max-width: 720px) {
+  .post-frame__header,
+  .post-frame__body {
+    padding: 28px 24px;
+  }
+
+  .post-frame__title {
+    font-size: var(--text-2xl-size);
+  }
+}

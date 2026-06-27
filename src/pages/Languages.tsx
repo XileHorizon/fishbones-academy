@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
+import { useSeo } from "../lib/useSeo";
 import { LANGUAGES, type Language } from "../data/languages";
 import { CATALOG } from "../data/courses";
 import "./Languages.css";
@@ -11,6 +12,11 @@ const RUN_LABEL: Record<Language["run"], string> = {
 };
 
 export function Languages() {
+  useSeo({
+    title: "26 Programming Languages — Free Interactive Courses Online",
+    description: "Libre Academy supports 26 programming languages — JavaScript, Python, Rust, Go, Solidity, TypeScript, and more. Free courses, real browser runtimes, zero install.",
+    canonicalUrl: "https://libre.academy/languages",
+  });
   // Bucket by execution mode so the page reads as three groups: things
   // you can sample in the browser today, things that run via a hosted
   // playground, things that need the desktop app.

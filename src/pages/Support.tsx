@@ -9,9 +9,15 @@ import { GithubMark } from "../components/icons/GithubMark";
 import { CryptoSupport } from "../components/CryptoSupport";
 import { TipActivity } from "../components/TipActivity";
 import { RecentSupporters } from "../components/RecentSupporters";
+import { useSeo } from "../lib/useSeo";
 import "./Support.css";
 
 export function Support() {
+  useSeo({
+    title: "Support Libre Academy — Donate to a Free, Open-Source Project",
+    description: "Libre Academy is free forever. If it's been useful, consider a crypto tip to help keep the servers and development running.",
+    canonicalUrl: "https://libre.academy/support",
+  });
   return (
     <div className="support-page">
       <header className="support-hero">

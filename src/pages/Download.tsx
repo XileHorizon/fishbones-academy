@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useSeo } from "../lib/useSeo";
 import {
   Apple,
   ArrowRight,
@@ -58,6 +59,11 @@ const PLATFORMS: PlatformBuild[] = [
 const FALLBACK_URL = "https://github.com/InfamousVague/Libre.academy/releases/latest";
 
 export function Download() {
+  useSeo({
+    title: "Download Libre Academy — Free Desktop App for Mac, Windows & Linux",
+    description: "Download Libre Academy for free. MIT-licensed desktop app with 26 language runtimes, AI tutor, and PDF/EPUB course ingest. No signup, no paywall.",
+    canonicalUrl: "https://libre.academy/download",
+  });
   const [release, setRelease] = useState<Release | null>(null);
 
   useEffect(() => {

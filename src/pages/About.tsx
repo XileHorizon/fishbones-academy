@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { GithubMark } from "../components/icons/GithubMark";
+import { useSeo } from "../lib/useSeo";
 import "./About.css";
 
 const POINTS = [
@@ -50,6 +51,11 @@ const PRINCIPLES = [
 ];
 
 export function About() {
+  useSeo({
+    title: "About Libre Academy — Free Open-Source Interactive Coding Platform",
+    description: "Libre Academy is a free, open-source platform for learning to code. No signup, no paywall, no tracking. 26 languages, real editor, hidden tests.",
+    canonicalUrl: "https://libre.academy/about",
+  });
   return (
     <div className="about-page">
       <header className="about-hero">

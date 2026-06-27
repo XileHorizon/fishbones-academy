@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import { useSeo } from "../lib/useSeo";
 import { Search, X, ArrowRight } from "lucide-react";
 import {
   CATALOG,
@@ -22,6 +23,11 @@ type AnyId = string | "all";
 /// query-string sync for v1, intentionally; the catalog is a discovery
 /// surface, not a deeply linkable filter view.
 export function Courses() {
+  useSeo({
+    title: "Free Coding Courses — Browse 47 Courses in 26 Programming Languages",
+    description: "Browse 47 free interactive coding courses across 26 languages. JavaScript, Python, Rust, Solidity, Go, and more. Real editor, hidden tests, zero paywall.",
+    canonicalUrl: "https://libre.academy/courses",
+  });
   const [query, setQuery] = useState("");
   const [language, setLanguage] = useState<AnyId>("all");
   const [topic, setTopic] = useState<AnyId>("all");

@@ -3,6 +3,7 @@ import { Link, NavLink, useNavigate, useParams } from "react-router-dom";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { DOCS, findDocPage, type DocPage } from "../data/docs";
 import { renderMarkdown } from "../lib/markdown";
+import { useSeo } from "../lib/useSeo";
 import "./Docs.css";
 
 /// Docs route — sidebar nav on the left, rendered markdown on the right.
@@ -17,6 +18,11 @@ export function Docs() {
   // bar reflects the resolved page.
   const fallback = DOCS[0]?.pages[0];
   const active: DocPage | undefined = pageParam ? findDocPage(pageParam) : fallback;
+
+  useSeo({
+    title: active ? `${active.title} — Libre Academy Docs` : "Documentation — Libre Academy",
+    canonicalUrl: active ? `https://libre.academy/docs/${active.id}` : "https://libre.academy/docs",
+  });
 
   useEffect(() => {
     if (!pageParam && fallback) {
