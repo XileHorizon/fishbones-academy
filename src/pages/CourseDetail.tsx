@@ -17,6 +17,7 @@ import {
 import { fetchFullCourse, findCatalogCourse } from "../data/courses";
 import type { CourseChapter, CourseLesson, FullCourse } from "../data/types";
 import { renderMarkdown, truncateMarkdown } from "../lib/markdown";
+import { useSeo } from "../lib/useSeo";
 import {
   libreOpenUrl,
   hasLibreInstalled,
@@ -66,6 +67,21 @@ type CourseFetchState =
 export function CourseDetail() {
   const { id } = useParams<{ id: string }>();
   const catalogEntry = id ? findCatalogCourse(id) : undefined;
+
+  // Per-course SEO — must be called unconditionally (before early returns)
+  // so hook order stays stable across renders.
+  useSeo({
+    title: catalogEntry
+      ? `${catalogEntry.title} — Free ${catalogEntry.languageLabel} Course`
+      : "Course Not Found",
+    description: catalogEntry
+      ? `Learn ${catalogEntry.languageLabel} free with this interactive course. Real editor, hidden tests, ${catalogEntry.approxLessons}+ lessons. No signup, no paywall.`
+      : undefined,
+    canonicalUrl: catalogEntry
+      ? `https://libre.academy/courses/${catalogEntry.id}`
+      : undefined,
+    ogType: "article",
+  });
 
   // Pair the loaded course with the id it was fetched for so a
   // mid-flight route change can't race in stale data. The render

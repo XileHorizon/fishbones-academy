@@ -1,7 +1,13 @@
 import { Link } from "react-router-dom";
+import { useSeo } from "../lib/useSeo";
 import "./Legal.css";
 
 export function Terms() {
+  useSeo({
+    title: "Terms of Service — Libre Academy",
+    description: "Libre Academy terms of service. MIT-licensed, no accounts required, no upsell. Use the platform for free, forever.",
+    canonicalUrl: "https://libre.academy/terms",
+  });
   return (
     <div className="legal-page section section--narrow">
       <span className="section__eyebrow">Legal</span>

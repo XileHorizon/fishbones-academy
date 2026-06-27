@@ -1,7 +1,13 @@
 import { Link } from "react-router-dom";
+import { useSeo } from "../lib/useSeo";
 import "./Legal.css";
 
 export function Privacy() {
+  useSeo({
+    title: "Privacy Policy — Libre Academy",
+    description: "Libre Academy privacy policy. No tracking, no cookies, no PII. Progress stays on your device. Optional cloud sync stores only XP + completion timestamps.",
+    canonicalUrl: "https://libre.academy/privacy",
+  });
   return (
     <div className="legal-page section section--narrow">
       <span className="section__eyebrow">Legal</span>
