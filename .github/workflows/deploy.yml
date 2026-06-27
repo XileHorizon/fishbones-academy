@@ -215,16 +215,25 @@ jobs:
           fi
           sudo apt-get update -qq
           sudo apt-get install -y -qq sshpass rsync
-          # `--exclude=audio/` is load-bearing. The Fishbones lesson-
-          # audio pipeline (Apps/Fishbones/scripts/upload-lesson-
-          # audio.mjs) pushes pre-generated MP3s to
-          # /var/www/libre-academy/audio/. Without this exclude,
-          # `--delete` wipes the entire audio dir on every CI deploy
-          # — lessons across the app stop playing TTS until someone
-          # manually re-uploads. The local `scripts/deploy.mjs` has
-          # the matching exclude; keep both in lockstep.
-          sshpass -e rsync -a --delete --exclude=audio/ \
+          # `--exclude=audio/` AND `--exclude=courses/` are both load-
+          # bearing. The Fishbones lesson-audio pipeline pushes MP3s to
+          # /var/www/libre-academy/audio/, and the desktop .academy
+          # course-archive downloads live in
+          # /var/www/libre-academy/courses/<id>.academy — neither ships
+          # in dist/, so without these excludes `--delete` wipes them on
+          # every CI deploy. The local `scripts/deploy.mjs` has the
+          # matching excludes; keep both in lockstep.
+          sshpass -e rsync -a --delete --exclude=audio/ --exclude=courses/ \
             -e "ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 -p ${VPS_PORT}" \
             dist/ \
             "${VPS_USER}@${VPS_HOST}:${VPS_TARGET_DIR}/"
-          echo "Synced dist/ to ${VPS_USER}@${VPS_HOST}:${VPS_TARGET_DIR}/ (audio/ preserved)"
+          # scripts/prerender.mjs writes per-course landing pages to
+          # dist/courses/<id>.html. The main rsync above excludes
+          # courses/, so push just the .html pages with a SECOND rsync
+          # that has NO --delete (adds/updates pages, leaves .academy
+          # archives intact). Lockstep with scripts/deploy.mjs.
+          sshpass -e rsync -a --include="*.html" --exclude="*" \
+            -e "ssh -o StrictHostKeyChecking=no -o ConnectTimeout=15 -p ${VPS_PORT}" \
+            dist/courses/ \
+            "${VPS_USER}@${VPS_HOST}:${VPS_TARGET_DIR}/courses/"
+          echo "Synced dist/ to ${VPS_USER}@${VPS_HOST}:${VPS_TARGET_DIR}/ (audio/ + courses/ archives preserved)"

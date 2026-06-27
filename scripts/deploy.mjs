@@ -178,7 +178,20 @@ function rsyncToVps() {
     `sshpass -e rsync -a --delete --exclude=audio/ --exclude=courses/ --stats -e "${sshOpts}" dist/ "${target}"`,
     { env: { SSHPASS: pwd } },
   );
-  console.log(`[deploy] synced dist/ → ${target} (audio/ preserved)`);
+  console.log(`[deploy] synced dist/ → ${target} (audio/ + courses/ preserved)`);
+
+  // The main rsync excludes courses/ to protect the remote .academy
+  // archive downloads (uploaded separately, NOT in dist/). But
+  // scripts/prerender.mjs ALSO writes the per-course landing pages to
+  // dist/courses/<id>.html — so push just those with a SECOND rsync
+  // that has NO --delete: it adds/updates the .html pages and leaves
+  // the .academy archives untouched. Keep this in lockstep with the
+  // matching step in .github/workflows/deploy.yml.
+  run(
+    `sshpass -e rsync -a --include="*.html" --exclude="*" --stats -e "${sshOpts}" dist/courses/ "${target}courses/"`,
+    { env: { SSHPASS: pwd } },
+  );
+  console.log(`[deploy] synced prerendered course pages → courses/ (archives preserved)`);
 }
 
 if (!RSYNC_ONLY) {
