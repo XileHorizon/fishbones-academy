@@ -1,37 +1,44 @@
 /* Big rotating logo at the top of the homepage hero.
    Visual goal: brand-first first impression — the logo is the
    biggest thing on the page above the fold, then the H1 below it
-   carries the SEO keyword. */
+   carries the SEO keyword.
+
+   Sizing strategy after the trim pass: the source logos used to
+   be 2048×2048 squares with a lot of transparent whitespace; the
+   trim crops to the actual bounding box of the artwork, so each
+   logo now lands at its own (mostly wider-than-tall) aspect
+   ratio. CSS therefore caps BOTH width and height — width holds
+   the typical wordmark inside the hero column, height keeps the
+   slightly-taller variants from pushing the H1 below the desktop
+   fold. `object-fit: contain` ensures whichever bound binds
+   first determines the rendered size; the other dimension
+   floats to honor the natural aspect ratio. */
 
 .logo-hero {
   display: flex;
   justify-content: center;
   align-items: center;
-  /* Sits above the H1 with breathing room. Used to be where the
-     retired libre_header.png lived; this slot is now the rotating
-     logo's. Margin is tight so the keyword-bearing H1 stays
-     above the desktop fold (typical 720 px viewport). */
+  /* Tight margin so the H1 sits within the desktop fold (typical
+     720 px viewport). Each variant has a different height so the
+     hero's vertical rhythm settles into whatever the picked
+     logo's height + this margin is. */
   margin: 0 auto 16px;
   width: 100%;
-  /* Centered max width keeps the logo balanced inside the hero
-     even on ultra-wide displays. */
-  max-width: 380px;
   user-select: none;
   -webkit-user-drag: none;
 }
 
 .logo-hero__img {
-  /* Square logos rendered at up to 320 px on desktop. Larger
-     would push the H1 below the 720 px fold and cost the SEO
-     win of having the keyword-bearing headline above it. The
-     width attribute on the <img> (1024) gives the browser a
-     layout hint while the file downloads; CSS overrides it for
-     the final paint. */
+  /* Cap BOTH dimensions and let the natural aspect ratio decide
+     which one binds. width: auto + height: auto + max-width /
+     max-height + object-fit: contain is the canonical "fit
+     inside a box without distortion" recipe. */
   display: block;
-  width: 100%;
-  max-width: 320px;
+  width: auto;
   height: auto;
-  aspect-ratio: 1 / 1;
+  max-width: 480px;
+  max-height: 220px;
+  object-fit: contain;
   /* Soft warm glow behind the logo so it reads as a centerpiece
      and not as a floating sticker on the dark canvas. Uses the
      brand amber at low alpha so it doesn't fight the colors in
@@ -39,19 +46,21 @@
   filter: drop-shadow(0 12px 32px rgba(245, 158, 11, 0.12));
 }
 
-/* Phones: shrink the logo so it doesn't dominate the screen and
-   leave room for the H1 + CTAs above the fold. */
+/* Phones: shrink so the logo doesn't push the H1 off-screen,
+   and leave room for the CTAs above the visible area. */
 @media (max-width: 720px) {
   .logo-hero {
     margin-bottom: 12px;
   }
   .logo-hero__img {
-    max-width: 240px;
+    max-width: 360px;
+    max-height: 170px;
   }
 }
 
 @media (max-width: 460px) {
   .logo-hero__img {
-    max-width: 200px;
+    max-width: 280px;
+    max-height: 140px;
   }
 }

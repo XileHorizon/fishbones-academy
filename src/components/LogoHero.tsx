@@ -13,31 +13,26 @@
 ///     LCP element on most paint paths, which is the trade-off
 ///     for the visual brand impact the design is going for.
 ///   - `decoding="async"` so layout doesn't block on decode.
-///   - Width / height attributes hard-coded to the source size so
-///     the browser reserves the right amount of vertical space
-///     before the image arrives (zero CLS).
+///   - Each entry carries the trimmed source's exact width +
+///     height so the browser reserves the right slot before the
+///     pixels arrive (zero CLS). Trimmed dimensions vary per
+///     logo since `magick -trim` strips whitespace differently
+///     for each wordmark.
 
 import { useState } from "react";
 import "./LogoHero.css";
 
-/// Names of the logo files under `/public/logos/`. Adding a new
-/// logo is "drop the file in that folder + append its filename
-/// here." The rotation grows automatically without code changes
-/// elsewhere.
-const LOGOS = [
-  "logo-01.png",
-  "logo-02.png",
-  "logo-03.png",
-  "logo-04.png",
-  "logo-05.png",
+/// Rotation pool. Each entry pairs the file under `/public/logos/`
+/// with the exact pixel dimensions of the (post-`magick -trim`)
+/// source so the <img> tag can supply width/height attrs that
+/// match the natural aspect ratio. Adding a new logo: drop the
+/// file in the folder + append an entry here.
+const LOGOS: Array<{ src: string; w: number; h: number }> = [
+  { src: "logo-01.png", w: 640, h: 525 },
+  { src: "logo-02.png", w: 1024, h: 518 },
+  { src: "logo-03.png", w: 1024, h: 531 },
+  { src: "logo-04.png", w: 1024, h: 365 },
 ];
-
-/// Native logo dimensions in the source files (square). The
-/// rendered size on screen is controlled by CSS — these attrs
-/// are only here to give the browser an aspect-ratio hint so it
-/// can pre-allocate the slot at the right height while the
-/// image is still downloading. CLS = 0.
-const LOGO_NATIVE_SIZE = 1024;
 
 export function LogoHero() {
   /// Pick once at mount. The `useState` initializer fires
@@ -49,10 +44,10 @@ export function LogoHero() {
   return (
     <div className="logo-hero" aria-hidden>
       <img
-        src={`/logos/${chosen}`}
+        src={`/logos/${chosen.src}`}
         alt="Libre Academy"
-        width={LOGO_NATIVE_SIZE}
-        height={LOGO_NATIVE_SIZE}
+        width={chosen.w}
+        height={chosen.h}
         loading="eager"
         fetchPriority="high"
         decoding="async"
