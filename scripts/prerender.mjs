@@ -1,0 +1,811 @@
+#!/usr/bin/env node
+/// Build-time prerender for libre.academy.
+///
+/// WHY THIS EXISTS
+/// ----------------
+/// The site is a Vite + React SPA: the built `dist/index.html` ships an
+/// empty `<div id="root"></div>` and renders everything client-side.
+/// That's invisible to the crawlers that matter most for "free ways to
+/// learn to code" discovery — ChatGPT (OAI-SearchBot / GPTBot), Claude
+/// (ClaudeBot / Claude-SearchBot) and Perplexity all fetch raw HTML and
+/// do NOT execute JavaScript. To them the entire site was a blank shell.
+///
+/// This script runs AFTER `vite build`. For every public route it:
+///   1. renders real, semantic, internally-linked HTML from the same
+///      data modules the app uses (loaded via Vite's ssrLoadModule, so
+///      there's zero drift with the live catalog), and
+///   2. patches the built template's <head> with per-route title /
+///      description / canonical / Open Graph / Twitter / JSON-LD, then
+///   3. injects the rendered body into <div id="root"> and writes a flat
+///      `dist/<route>.html` file.
+///
+/// React still boots normally on top of this (createRoot replaces #root
+/// on mount), so users get the full SPA while crawlers and no-JS clients
+/// get substantive content. It also emits a correct root robots.txt and
+/// a full sitemap.xml (the old ones lived under /learn/ where crawlers
+/// never look).
+///
+/// Caddy must serve the flat files: `try_files {path} {path}.html
+/// {path}/index.html /index.html` — see deploy/Caddyfile.
+
+import { createServer } from "vite";
+import MarkdownIt from "markdown-it";
+import {
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  readdirSync,
+  writeFileSync,
+} from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const SITE_ROOT = join(__dirname, "..");
+const DIST = join(SITE_ROOT, "dist");
+const SITE = "https://libre.academy";
+const BUILD_DATE = new Date().toISOString().slice(0, 10);
+
+const md = new MarkdownIt({ html: false, linkify: true, typographer: true });
+
+// ─── tiny escapers ───────────────────────────────────────────────────
+const esc = (s) =>
+  String(s ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+const escAttr = (s) =>
+  String(s ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/"/g, "&quot;");
+const escRe = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+if (!existsSync(join(DIST, "index.html"))) {
+  console.error(
+    "[prerender] dist/index.html not found — run `vite build` first.",
+  );
+  process.exit(1);
+}
+const TEMPLATE = readFileSync(join(DIST, "index.html"), "utf8");
+if (!TEMPLATE.includes('<div id="root"></div>')) {
+  console.error('[prerender] template is missing `<div id="root"></div>`.');
+  process.exit(1);
+}
+
+// ─── load the app's real data (no drift with the live catalog) ───────
+console.log("[prerender] booting Vite to load data modules…");
+const vite = await createServer({
+  server: { middlewareMode: true },
+  appType: "custom",
+  logLevel: "error",
+});
+let LANGUAGES, CATALOG, RELEASE_SECTION_ORDER, DOCS;
+try {
+  ({ LANGUAGES } = await vite.ssrLoadModule("/src/data/languages.ts"));
+  ({ CATALOG, RELEASE_SECTION_ORDER } = await vite.ssrLoadModule(
+    "/src/data/courses.ts",
+  ));
+  ({ DOCS } = await vite.ssrLoadModule("/src/data/docs.ts"));
+} finally {
+  await vite.close();
+}
+console.log(
+  `[prerender] loaded ${CATALOG.length} courses, ${LANGUAGES.length} languages, ${DOCS.length} doc sections.`,
+);
+
+// ─── blog posts (markdown on disk) ───────────────────────────────────
+function loadPosts() {
+  const manifestPath = join(SITE_ROOT, "public/blog/manifest.json");
+  if (!existsSync(manifestPath)) return [];
+  const metas = JSON.parse(readFileSync(manifestPath, "utf8"));
+  return metas
+    .map((m) => {
+      const file = join(SITE_ROOT, "public/blog/posts", `${m.slug}.md`);
+      if (!existsSync(file)) return null;
+      let src = readFileSync(file, "utf8");
+      // strip leading --- frontmatter --- block
+      if (src.startsWith("---")) {
+        const lines = src.split("\n");
+        const close = lines.findIndex((l, i) => i > 0 && l.trim() === "---");
+        if (close !== -1) src = lines.slice(close + 1).join("\n").trimStart();
+      }
+      return { ...m, bodyHtml: md.render(src) };
+    })
+    .filter(Boolean);
+}
+const POSTS = loadPosts();
+
+// ─── shared chrome + snapshot styling ────────────────────────────────
+// Namespaced under .lib-pre so it only styles the static snapshot; React
+// removes the whole #root subtree on mount, taking this with it.
+const PRE_STYLE = `<style>
+.lib-pre{max-width:880px;margin:0 auto;padding:2rem 1.25rem 4rem;font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:#e4e4e7;background:#09090b}
+.lib-pre a{color:#fb923c;text-decoration:none}
+.lib-pre a:hover{text-decoration:underline}
+.lib-pre h1{font-size:2rem;line-height:1.2;margin:.4rem 0 1rem;color:#fafafa}
+.lib-pre h2{font-size:1.35rem;margin:2.2rem 0 .8rem;color:#fafafa}
+.lib-pre h3{font-size:1.1rem;margin:1.4rem 0 .5rem;color:#fafafa}
+.lib-pre .lede{font-size:1.15rem;color:#d4d4d8}
+.lib-pre nav,.lib-pre footer{font-size:.9rem;color:#a1a1aa}
+.lib-pre nav a,.lib-pre footer a{margin-right:1rem;display:inline-block}
+.lib-pre ul{padding-left:1.2rem}.lib-pre li{margin:.3rem 0}
+.lib-pre .stats{list-style:none;padding:0;display:flex;flex-wrap:wrap;gap:.5rem 1.5rem}
+.lib-pre .stats li{font-weight:600;color:#fafafa}
+.lib-pre table{border-collapse:collapse;width:100%;margin:1rem 0;font-size:.95rem}
+.lib-pre th,.lib-pre td{border:1px solid #27272a;padding:.5rem .7rem;text-align:left}
+.lib-pre th{color:#fafafa}
+.lib-pre dt{font-weight:600;color:#fafafa;margin-top:1rem}
+.lib-pre dd{margin:.25rem 0 0}
+.lib-pre pre{background:#131316;border:1px solid #27272a;border-radius:8px;padding:.8rem;overflow:auto}
+.lib-pre code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.9em}
+.lib-pre hr{border:0;border-top:1px solid #27272a;margin:2.5rem 0 1.5rem}
+</style>`;
+
+const NAV_LINKS = [
+  ["/courses", "Courses"],
+  ["/languages", "Languages"],
+  ["/download", "Download"],
+  ["/docs", "Docs"],
+  ["/blog", "Blog"],
+  ["/about", "About"],
+];
+function header() {
+  const links = NAV_LINKS.map(([h, t]) => `<a href="${h}">${t}</a>`).join("");
+  return `<nav><a href="/"><strong>Libre Academy</strong></a> ${links}<a href="/learn/">Open the app →</a></nav>`;
+}
+function footer() {
+  return `<hr><footer><p>Libre Academy — free, open-source interactive coding courses. 90+ courses across 26 languages, no paywall.</p>
+<p><a href="/">Home</a><a href="/courses">Courses</a><a href="/languages">Languages</a><a href="/download">Download</a><a href="/docs">Docs</a><a href="/blog">Blog</a><a href="/about">About</a><a href="https://github.com/InfamousVague/Libre.academy">GitHub</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a></p>
+<p>© Libre Academy · MIT licensed · <a href="${SITE}/">libre.academy</a></p></footer>`;
+}
+const shell = (mainHtml) =>
+  `${PRE_STYLE}<div class="lib-pre">${header()}${mainHtml}${footer()}</div>`;
+
+// ─── head patching ───────────────────────────────────────────────────
+function setMeta(html, attr, key, content) {
+  const tag = `<meta ${attr}="${key}" content="${escAttr(content)}" />`;
+  const re = new RegExp(
+    `<meta\\s+${attr}="${escRe(key)}"\\s+content="[\\s\\S]*?"\\s*/?>`,
+  );
+  return re.test(html)
+    ? html.replace(re, tag)
+    : html.replace("</head>", `    ${tag}\n  </head>`);
+}
+function setLink(html, rel, href) {
+  const tag = `<link rel="${rel}" href="${escAttr(href)}" />`;
+  const re = new RegExp(`<link\\s+rel="${escRe(rel)}"\\s+href="[\\s\\S]*?"\\s*/?>`);
+  return re.test(html)
+    ? html.replace(re, tag)
+    : html.replace("</head>", `    ${tag}\n  </head>`);
+}
+function setJsonLd(html, graphNodes) {
+  const obj = { "@context": "https://schema.org", "@graph": graphNodes };
+  const json = JSON.stringify(obj, null, 2).replace(/</g, "\\u003c");
+  const block = `<script type="application/ld+json">\n${json}\n</script>`;
+  const re = /<script type="application\/ld\+json">[\s\S]*?<\/script>/;
+  return re.test(html)
+    ? html.replace(re, block)
+    : html.replace("</head>", `  ${block}\n  </head>`);
+}
+
+const ORG_NODE = {
+  "@type": "EducationalOrganization",
+  "@id": `${SITE}/#org`,
+  name: "Libre Academy",
+  url: `${SITE}/`,
+  logo: `${SITE}/libre_app_icon.png`,
+  description:
+    "Free, open-source interactive coding courses. 90+ courses across 26 languages — real editor, hidden tests, zero paywall. A free alternative to Codecademy and freeCodeCamp.",
+  sameAs: ["https://github.com/InfamousVague/Libre.academy"],
+};
+const WEBSITE_NODE = {
+  "@type": "WebSite",
+  "@id": `${SITE}/#website`,
+  name: "Libre Academy",
+  url: `${SITE}/`,
+  publisher: { "@id": `${SITE}/#org` },
+  potentialAction: {
+    "@type": "SearchAction",
+    target: `${SITE}/courses?q={search_term_string}`,
+    "query-input": "required name=search_term_string",
+  },
+};
+function breadcrumb(items) {
+  return {
+    "@type": "BreadcrumbList",
+    itemListElement: items.map((it, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: it.name,
+      item: SITE + it.path,
+    })),
+  };
+}
+
+// ─── route writer ────────────────────────────────────────────────────
+const routes = []; // { path, file, lastmod, priority, changefreq }
+function emit(opts) {
+  const {
+    path,
+    title,
+    description,
+    main,
+    graph = [],
+    ogType = "website",
+    priority = 0.5,
+    changefreq = "monthly",
+    lastmod = BUILD_DATE,
+    sitemap = true,
+  } = opts;
+  const canonical = SITE + path;
+  let html = TEMPLATE;
+  html = html.replace(/<title>[\s\S]*?<\/title>/, `<title>${esc(title)}</title>`);
+  html = setMeta(html, "name", "description", description);
+  html = setMeta(html, "property", "og:title", title);
+  html = setMeta(html, "property", "og:description", description);
+  html = setMeta(html, "property", "og:type", ogType);
+  html = setMeta(html, "property", "og:url", canonical);
+  html = setMeta(html, "property", "og:image", `${SITE}/og.png`);
+  html = setMeta(html, "property", "og:image:width", "1200");
+  html = setMeta(html, "property", "og:image:height", "630");
+  html = setMeta(html, "name", "twitter:title", title);
+  html = setMeta(html, "name", "twitter:description", description);
+  html = setMeta(html, "name", "twitter:image", `${SITE}/og.png`);
+  html = setLink(html, "canonical", canonical);
+  html = setJsonLd(html, [ORG_NODE, WEBSITE_NODE, ...graph]);
+  html = html.replace(
+    '<div id="root"></div>',
+    `<div id="root">${shell(main)}</div>`,
+  );
+
+  const file =
+    path === "/" ? join(DIST, "index.html") : join(DIST, `${path.slice(1)}.html`);
+  mkdirSync(dirname(file), { recursive: true });
+  writeFileSync(file, html);
+  if (sitemap) routes.push({ path, lastmod, priority, changefreq });
+}
+
+// ─── content helpers ─────────────────────────────────────────────────
+const courseLI = (c) =>
+  `<li><a href="/courses/${c.id}">${esc(c.title)}</a> — ${esc(
+    c.languageLabel,
+  )} · ~${c.approxLessons} lessons</li>`;
+const runLabel = (l) =>
+  l.run === "browser"
+    ? "runs in your browser"
+    : l.run === "sandbox"
+      ? "runs via a hosted playground"
+      : "desktop app (native toolchain)";
+
+const FAQ = [
+  [
+    "Is Libre Academy really free?",
+    "Yes. Every course is free, there is no paid tier, and you don't need an account to start. The whole project — the website, the desktop app, and the cloud-sync server — is open source under the MIT license.",
+  ],
+  [
+    "Do I need to sign up or install anything?",
+    "No. You can start any course in your browser at libre.academy/learn with no account and no install. An optional free desktop app for macOS, Windows, and Linux adds offline use, native compilers, and the ability to turn your own books into courses.",
+  ],
+  [
+    "What programming languages can I learn?",
+    "26, including JavaScript, TypeScript, Python, Rust, Go, C, C++, Java, Kotlin, C#, Swift, Solidity and more. JavaScript, TypeScript, Python, Rust, Go and the web frameworks run in your browser; compiled languages like C, C++, Java and Swift run in the desktop app.",
+  ],
+  [
+    "How is it different from freeCodeCamp or Codecademy?",
+    "You write real code in a Monaco editor and hidden tests grade you on every lesson — active recall instead of passive video. It is fully open source, asks for no sign-up, and the desktop app can turn any technical book (PDF or EPUB) into an interactive course.",
+  ],
+  [
+    "Is it good for complete beginners?",
+    "Yes. There are beginner tracks such as JavaScript for Beginners alongside deeper books and challenge packs, so you can start from zero or level up a language you already know.",
+  ],
+  [
+    "Is it open source?",
+    "Yes, it's MIT-licensed. The source lives at github.com/InfamousVague/Libre.academy.",
+  ],
+];
+
+// ─── HOME ────────────────────────────────────────────────────────────
+{
+  const featuredIds = [
+    "javascript-for-beginners",
+    "eloquent-javascript",
+    "the-rust-programming-language",
+    "learning-go",
+    "exercism-python",
+    "composing-programs",
+    "crafting-interpreters-js",
+    "mastering-bitcoin",
+    "algorithms-erickson",
+    "javascript-typescript",
+    "exercism-rust",
+    "mastering-ethereum",
+  ];
+  const featured = featuredIds
+    .map((id) => CATALOG.find((c) => c.id === id))
+    .filter(Boolean);
+  const langLinks = LANGUAGES.map(
+    (l) => `<a href="/languages/${l.slug}">${esc(l.name)}</a>`,
+  ).join(" · ");
+  const main = `<main>
+<h1>Learn to code for free — 90+ interactive courses across 26 languages</h1>
+<p class="lede">Libre Academy is a free, open-source platform where you learn programming by writing real code in a built-in editor and getting instant feedback from hidden tests — 90+ courses across 26 languages, with no paywall and no sign-up. It runs in your browser and as a desktop app, and it's a free, open-source alternative to Codecademy, freeCodeCamp, and Scrimba.</p>
+<p><a href="/learn/">Start learning free →</a> &nbsp; <a href="/courses">Browse all 94 courses</a> &nbsp; <a href="/download">Download the app</a></p>
+<ul class="stats"><li>90+ courses</li><li>26 languages</li><li>$0 — free forever</li><li>Open source (MIT)</li></ul>
+<h2>Why Libre Academy</h2>
+<ul>
+<li><strong>Write code, don't watch video.</strong> Every lesson has a real Monaco editor and hidden tests that grade your work — active recall, not passive lectures.</li>
+<li><strong>Free and open source.</strong> No paywall, no Pro tier, no sign-up to start. The site, the desktop app and the sync server are all MIT-licensed.</li>
+<li><strong>Bring your own book.</strong> The desktop app turns any technical PDF or EPUB into an interactive course with generated exercises.</li>
+<li><strong>Local-first, no telemetry.</strong> Courses and progress live on your device; optional free cloud sync mirrors progress across machines.</li>
+<li><strong>Browser or desktop.</strong> Learn in-tab with nothing to install, or install the app for native compilers and offline use.</li>
+</ul>
+<h2>How Libre Academy compares</h2>
+<table>
+<tr><th>&nbsp;</th><th>Libre Academy</th><th>Codecademy</th><th>freeCodeCamp</th></tr>
+<tr><td>Price</td><td>Free</td><td>Free tier + paid Pro</td><td>Free</td></tr>
+<tr><td>Open source</td><td>Yes (MIT)</td><td>No</td><td>Yes</td></tr>
+<tr><td>Languages</td><td>26</td><td>~14</td><td>~10</td></tr>
+<tr><td>Run code in the browser</td><td>Yes</td><td>Yes</td><td>Yes (some)</td></tr>
+<tr><td>Turn your own book into a course</td><td>Yes</td><td>No</td><td>No</td></tr>
+<tr><td>Sign-up required to start</td><td>No</td><td>Yes</td><td>Yes</td></tr>
+<tr><td>Desktop app</td><td>Yes</td><td>No</td><td>No</td></tr>
+</table>
+<h2>Popular courses</h2>
+<ul>${featured.map(courseLI).join("")}</ul>
+<p><a href="/courses">Browse all 94 free courses →</a></p>
+<h2>Languages you can learn</h2>
+<p>${langLinks}</p>
+<h2>Frequently asked questions</h2>
+<dl>${FAQ.map(([q, a]) => `<dt>${esc(q)}</dt><dd>${esc(a)}</dd>`).join("")}</dl>
+<h2>Start learning</h2>
+<p><a href="/learn/">Open the free in-browser app →</a> &nbsp; <a href="/download">Download for macOS, Windows &amp; Linux</a> &nbsp; <a href="https://github.com/InfamousVague/Libre.academy">Star on GitHub</a></p>
+</main>`;
+  emit({
+    path: "/",
+    title: "Learn to code free — 90+ courses, 26 languages | Libre Academy",
+    description:
+      "Free, open-source interactive coding courses. 90+ courses across 26 languages — write real code, graded by hidden tests, zero paywall and no sign-up. A free alternative to Codecademy.",
+    main,
+    priority: 1.0,
+    changefreq: "weekly",
+    graph: [
+      {
+        "@type": "WebPage",
+        "@id": `${SITE}/#webpage`,
+        url: `${SITE}/`,
+        name: "Learn to code free — Libre Academy",
+        isPartOf: { "@id": `${SITE}/#website` },
+        about: { "@id": `${SITE}/#org` },
+      },
+      {
+        "@type": "FAQPage",
+        mainEntity: FAQ.map(([q, a]) => ({
+          "@type": "Question",
+          name: q,
+          acceptedAnswer: { "@type": "Answer", text: a },
+        })),
+      },
+    ],
+  });
+}
+
+// ─── COURSES INDEX ───────────────────────────────────────────────────
+{
+  const sections = RELEASE_SECTION_ORDER.map((sec) => {
+    const list = CATALOG.filter((c) => c.releaseStatus === sec.status);
+    if (!list.length) return "";
+    return `<h2>${esc(sec.label)} <span style="font-weight:400;color:#a1a1aa">— ${esc(
+      sec.blurb,
+    )}</span></h2><ul>${list.map(courseLI).join("")}</ul>`;
+  }).join("");
+  const main = `<main>
+<h1>Free coding courses — browse all ${CATALOG.length}</h1>
+<p class="lede">Every Libre Academy course is free and interactive: read, write code in a real editor, and let hidden tests grade you. ${CATALOG.length} courses across ${LANGUAGES.length} languages, from beginner tracks to full books and challenge packs — no paywall, no sign-up.</p>
+<p><a href="/learn/">Start any course free →</a> &nbsp; <a href="/languages">Browse by language</a></p>
+${sections}
+</main>`;
+  const itemList = {
+    "@type": "ItemList",
+    itemListElement: CATALOG.slice(0, 200).map((c, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      url: `${SITE}/courses/${c.id}`,
+      name: c.title,
+    })),
+  };
+  emit({
+    path: "/courses",
+    title: `Free coding courses — all ${CATALOG.length} | Libre Academy`,
+    description: `Browse all ${CATALOG.length} free, interactive coding courses across ${LANGUAGES.length} languages on Libre Academy. Write real code, graded by hidden tests. No paywall, no sign-up.`,
+    main,
+    priority: 0.9,
+    changefreq: "weekly",
+    graph: [
+      breadcrumb([
+        { name: "Home", path: "/" },
+        { name: "Courses", path: "/courses" },
+      ]),
+      { "@type": "CollectionPage", url: `${SITE}/courses`, name: "Courses", mainEntity: itemList },
+    ],
+  });
+}
+
+// ─── COURSE DETAIL (×N) ──────────────────────────────────────────────
+for (const c of CATALOG) {
+  const lang = LANGUAGES.find((l) => l.id === c.language);
+  const langName = c.languageLabel || c.language;
+  const kind =
+    c.topic === "challenges"
+      ? "challenge pack"
+      : c.topic === "tracks"
+        ? "learning track"
+        : "course";
+  const desc = `Learn ${langName} for free with the Libre Academy ${esc(
+    c.title,
+  )} ${kind}: about ${c.approxLessons} interactive lessons you complete by writing real code, graded by hidden tests. No paywall, no sign-up — runs in your browser and the free desktop app.`;
+  const main = `<main>
+<p><a href="/courses">← All courses</a></p>
+<h1>${esc(c.title)}</h1>
+<p class="lede">${desc}</p>
+<ul class="stats"><li>${esc(langName)}</li><li>~${c.approxLessons} lessons</li><li>~${Math.round(
+    c.approxMinutes / 60,
+  )} hours</li><li>Free</li></ul>
+<h2>What you get</h2>
+<ul>
+<li>Hands-on lessons with a real editor and instant, test-graded feedback.</li>
+<li>Free and open source — no account required to start.</li>
+<li>Runs in your browser, and offline in the free desktop app.</li>
+${lang ? `<li>${esc(lang.name)} ${runLabel(lang)}.</li>` : ""}
+</ul>
+<p><a href="/learn/">Start ${esc(c.title)} free →</a> &nbsp; ${
+    lang ? `<a href="/languages/${lang.slug}">More ${esc(lang.name)} courses</a>` : ""
+  }</p>
+</main>`;
+  emit({
+    path: `/courses/${c.id}`,
+    title: `${c.title} — free interactive course | Libre Academy`,
+    description: desc.replace(/<[^>]+>/g, ""),
+    main,
+    ogType: "article",
+    priority: 0.6,
+    graph: [
+      breadcrumb([
+        { name: "Home", path: "/" },
+        { name: "Courses", path: "/courses" },
+        { name: c.title, path: `/courses/${c.id}` },
+      ]),
+      {
+        "@type": "Course",
+        name: c.title,
+        description: desc.replace(/<[^>]+>/g, ""),
+        url: `${SITE}/courses/${c.id}`,
+        provider: { "@id": `${SITE}/#org` },
+        inLanguage: "en",
+        about: langName,
+        isAccessibleForFree: true,
+        offers: { "@type": "Offer", price: "0", priceCurrency: "USD", category: "Free" },
+        hasCourseInstance: {
+          "@type": "CourseInstance",
+          courseMode: "online",
+          courseWorkload: `PT${c.approxMinutes}M`,
+          instructor: { "@id": `${SITE}/#org` },
+        },
+      },
+    ],
+  });
+}
+
+// ─── LANGUAGES INDEX ─────────────────────────────────────────────────
+{
+  const li = LANGUAGES.map(
+    (l) =>
+      `<li><a href="/languages/${l.slug}">${esc(l.name)}</a> — ${esc(
+        l.blurb,
+      )} <em style="color:#71717a">(${runLabel(l)})</em></li>`,
+  ).join("");
+  const main = `<main>
+<h1>Programming languages you can learn for free</h1>
+<p class="lede">Libre Academy has free, interactive courses in ${LANGUAGES.length} languages. JavaScript, TypeScript, Python, Rust, Go and the web frameworks run right in your browser; compiled languages run in the free desktop app.</p>
+<ul>${li}</ul>
+<p><a href="/courses">Browse all ${CATALOG.length} courses →</a></p>
+</main>`;
+  emit({
+    path: "/languages",
+    title: "Learn 26 programming languages free | Libre Academy",
+    description:
+      "Free, interactive courses in 26 programming languages — JavaScript, Python, Rust, Go, C, C++, Java, Swift, Solidity and more. Write real code in your browser. No paywall.",
+    main,
+    priority: 0.9,
+    changefreq: "weekly",
+    graph: [
+      breadcrumb([
+        { name: "Home", path: "/" },
+        { name: "Languages", path: "/languages" },
+      ]),
+    ],
+  });
+}
+
+// ─── LANGUAGE DETAIL (×N) ────────────────────────────────────────────
+for (const l of LANGUAGES) {
+  const courses = CATALOG.filter((c) => c.language === l.id);
+  const coursesHtml = courses.length
+    ? `<h2>${esc(l.name)} courses</h2><ul>${courses.map(courseLI).join("")}</ul>`
+    : "";
+  const main = `<main>
+<p><a href="/languages">← All languages</a></p>
+<h1>Learn ${esc(l.name)} for free</h1>
+<p class="lede">${esc(l.blurb)} On Libre Academy you learn ${esc(
+    l.name,
+  )} for free by writing real code in an in-editor workbench, graded by hidden tests — ${runLabel(
+    l,
+  )}. No paywall, no sign-up.</p>
+<p><a href="/learn/">Start learning ${esc(l.name)} free →</a></p>
+${coursesHtml}
+</main>`;
+  emit({
+    path: `/languages/${l.slug}`,
+    title: `Learn ${l.name} free — interactive courses | Libre Academy`,
+    description: `Learn ${l.name} for free with interactive, test-graded coding lessons on Libre Academy${
+      courses.length ? ` (${courses.length} ${l.name} course${courses.length > 1 ? "s" : ""})` : ""
+    }. Write real code, no paywall, no sign-up.`,
+    main,
+    ogType: "article",
+    priority: 0.6,
+    graph: [
+      breadcrumb([
+        { name: "Home", path: "/" },
+        { name: "Languages", path: "/languages" },
+        { name: l.name, path: `/languages/${l.slug}` },
+      ]),
+    ],
+  });
+}
+
+// ─── DOWNLOAD ────────────────────────────────────────────────────────
+emit({
+  path: "/download",
+  title: "Download Libre Academy — free coding app for Mac, Windows, Linux",
+  description:
+    "Download the free Libre Academy desktop app for macOS, Windows and Linux: 90+ interactive coding courses, native compilers, offline use, and turn your own books into courses. Free and open source.",
+  main: `<main>
+<h1>Download Libre Academy</h1>
+<p class="lede">Libre Academy is free on every platform. Learn in your browser with nothing to install, or download the desktop app for native compilers, offline use, and turning your own PDFs and EPUBs into interactive courses.</p>
+<h2>Three ways to use it — all free</h2>
+<ul>
+<li><strong>In your browser</strong> — open <a href="/learn/">libre.academy/learn</a>, no install and no account.</li>
+<li><strong>Desktop app</strong> — macOS, Windows and Linux. Adds native toolchain runners (C, C++, Java, Swift…), book ingestion, and a local AI tutor. <a href="https://github.com/InfamousVague/Libre.academy/releases/latest">Get the latest release</a>.</li>
+<li><strong>Optional cloud sync</strong> — free, opt-in, mirrors your progress across machines.</li>
+</ul>
+<p><a href="/courses">Browse the 94 courses →</a></p>
+</main>`,
+  priority: 0.8,
+  changefreq: "weekly",
+  graph: [breadcrumb([{ name: "Home", path: "/" }, { name: "Download", path: "/download" }])],
+});
+
+// ─── ABOUT ───────────────────────────────────────────────────────────
+emit({
+  path: "/about",
+  title: "About Libre Academy — free, open-source way to learn to code",
+  description:
+    "Libre Academy is a free, open-source coding platform built on active recall: write real code graded by hidden tests, bring your own books, learn local-first with no telemetry and no paywall.",
+  main: `<main>
+<h1>About Libre Academy</h1>
+<p class="lede">Libre Academy exists to make learning to code genuinely free and genuinely effective. Passive video doesn't make you a programmer; writing code does. So every lesson puts you in a real editor with hidden tests that grade your work.</p>
+<h2>What we believe</h2>
+<ul>
+<li><strong>Free should mean free.</strong> No paywall, no Pro tier, no sign-up wall. Everything — site, desktop app, sync server — is open source under the MIT license.</li>
+<li><strong>Active recall beats passive video.</strong> You learn by doing, with instant test feedback, XP and streaks.</li>
+<li><strong>Your books, your courses.</strong> The desktop app turns any technical PDF or EPUB into an interactive course.</li>
+<li><strong>Local-first and private.</strong> Courses and progress live on your device, with no telemetry and only opt-in cloud sync.</li>
+</ul>
+<p><a href="/courses">Browse 94 free courses →</a> &nbsp; <a href="https://github.com/InfamousVague/Libre.academy">View the source on GitHub</a></p>
+</main>`,
+  priority: 0.7,
+  graph: [breadcrumb([{ name: "Home", path: "/" }, { name: "About", path: "/about" }])],
+});
+
+// ─── DOCS ────────────────────────────────────────────────────────────
+{
+  const allPages = [];
+  for (const sec of DOCS) for (const p of sec.pages) allPages.push({ sec, p });
+  const intro = DOCS[0].pages[0];
+  const toc = DOCS.map(
+    (sec) =>
+      `<h3>${esc(sec.title)}</h3><ul>${sec.pages
+        .map(
+          (p) =>
+            `<li><a href="/docs/${sec.id}/${p.id}">${esc(p.title)}</a>${
+              p.tagline ? ` — ${esc(p.tagline)}` : ""
+            }</li>`,
+        )
+        .join("")}</ul>`,
+  ).join("");
+  emit({
+    path: "/docs",
+    title: "Docs — Libre Academy",
+    description:
+      "Documentation for Libre Academy, the free interactive coding platform: getting started in the browser or desktop app, lesson kinds, the editor, themes, and the local-first design.",
+    main: `<main><h1>Libre Academy documentation</h1><p class="lede">${esc(
+      intro.tagline || "How Libre Academy works and how to get started.",
+    )}</p>${md.render(intro.body)}<h2>All pages</h2>${toc}</main>`,
+    priority: 0.5,
+    graph: [breadcrumb([{ name: "Home", path: "/" }, { name: "Docs", path: "/docs" }])],
+  });
+  for (const { sec, p } of allPages) {
+    emit({
+      path: `/docs/${sec.id}/${p.id}`,
+      title: `${p.title} — Libre Academy docs`,
+      description: p.tagline
+        ? `${p.tagline} — Libre Academy documentation.`
+        : `Libre Academy documentation: ${p.title}.`,
+      main: `<main><p><a href="/docs">← Docs</a></p><h1>${esc(p.title)}</h1>${md.render(
+        p.body,
+      )}</main>`,
+      ogType: "article",
+      priority: 0.4,
+      graph: [
+        breadcrumb([
+          { name: "Home", path: "/" },
+          { name: "Docs", path: "/docs" },
+          { name: p.title, path: `/docs/${sec.id}/${p.id}` },
+        ]),
+      ],
+    });
+  }
+}
+
+// ─── BLOG ────────────────────────────────────────────────────────────
+{
+  const list = POSTS.map(
+    (p) =>
+      `<li><a href="/blog/${p.slug}">${esc(p.title)}</a><br><span style="color:#a1a1aa">${esc(
+        p.date,
+      )} — ${esc(p.excerpt || "")}</span></li>`,
+  ).join("");
+  emit({
+    path: "/blog",
+    title: "Blog — Libre Academy",
+    description:
+      "Writing from the Libre Academy team on learning to code effectively, active recall, and turning books into interactive courses.",
+    main: `<main><h1>Libre Academy blog</h1><p class="lede">Notes on learning to code effectively and how Libre Academy is built.</p><ul>${list}</ul></main>`,
+    priority: 0.6,
+    changefreq: "weekly",
+    graph: [breadcrumb([{ name: "Home", path: "/" }, { name: "Blog", path: "/blog" }])],
+  });
+  for (const p of POSTS) {
+    emit({
+      path: `/blog/${p.slug}`,
+      title: `${p.title} — Libre Academy`,
+      description: p.excerpt || `${p.title} — from the Libre Academy blog.`,
+      main: `<main><p><a href="/blog">← Blog</a></p><h1>${esc(
+        p.title,
+      )}</h1><p style="color:#a1a1aa">${esc(p.date)}${
+        p.author ? ` · ${esc(p.author)}` : ""
+      }</p>${p.bodyHtml}</main>`,
+      ogType: "article",
+      priority: 0.6,
+      lastmod: p.date || BUILD_DATE,
+      graph: [
+        breadcrumb([
+          { name: "Home", path: "/" },
+          { name: "Blog", path: "/blog" },
+          { name: p.title, path: `/blog/${p.slug}` },
+        ]),
+        {
+          "@type": "BlogPosting",
+          headline: p.title,
+          datePublished: p.date,
+          description: p.excerpt || "",
+          author: { "@type": "Organization", name: p.author || "The Libre Team" },
+          publisher: { "@id": `${SITE}/#org` },
+          url: `${SITE}/blog/${p.slug}`,
+          mainEntityOfPage: `${SITE}/blog/${p.slug}`,
+        },
+      ],
+    });
+  }
+}
+
+// ─── LEGAL / SUPPORT / SECURITY ──────────────────────────────────────
+emit({
+  path: "/privacy",
+  title: "Privacy — Libre Academy",
+  description:
+    "Libre Academy is local-first with no telemetry. Your courses and progress live on your device; cloud sync is optional and stores only a small progress record.",
+  main: `<main><h1>Privacy</h1><p class="lede">Libre Academy is local-first and private by design. There is no telemetry, no analytics on the learning app, and no tracking. Courses and progress live on your device. Optional cloud sync stores only a small JSON progress record, and only if you opt in.</p><p><a href="/docs/principles/offline">Read about local-first &amp; what talks to a server →</a></p></main>`,
+  priority: 0.2,
+  graph: [breadcrumb([{ name: "Home", path: "/" }, { name: "Privacy", path: "/privacy" }])],
+});
+emit({
+  path: "/terms",
+  title: "Terms — Libre Academy",
+  description:
+    "Libre Academy is free and open source under the MIT license. Use it freely; it's provided as-is.",
+  main: `<main><h1>Terms</h1><p class="lede">Libre Academy is free and open source under the MIT license. You're free to use, study, and build on it. The software is provided as-is, without warranty.</p><p><a href="https://github.com/InfamousVague/Libre.academy">See the license and source on GitHub →</a></p></main>`,
+  priority: 0.2,
+  graph: [breadcrumb([{ name: "Home", path: "/" }, { name: "Terms", path: "/terms" }])],
+});
+emit({
+  path: "/support",
+  title: "Support Libre Academy",
+  description:
+    "Libre Academy is free and open source. If it helped you learn to code, you can support development — but every course stays free for everyone.",
+  main: `<main><h1>Support Libre Academy</h1><p class="lede">Libre Academy is free and open source, and every course stays free for everyone. If it helped you learn to code, support is welcome and keeps development going — but it's never required and never gates content.</p><p><a href="/courses">Browse the free courses →</a> &nbsp; <a href="https://github.com/InfamousVague/Libre.academy">Star the project on GitHub</a></p></main>`,
+  priority: 0.4,
+  graph: [breadcrumb([{ name: "Home", path: "/" }, { name: "Support", path: "/support" }])],
+});
+emit({
+  path: "/security",
+  title: "Security — Libre Academy",
+  description:
+    "How Libre Academy handles security: open-source, local-first, no telemetry, sandboxed code execution, and an opt-in sync server that stores only progress records.",
+  main: `<main><h1>Security</h1><p class="lede">Libre Academy is open source, local-first, and runs lesson code in sandboxed environments. There's no telemetry, and the optional sync server stores only a small progress record. Because the whole stack is MIT-licensed, anyone can audit exactly how it works.</p><p><a href="https://github.com/InfamousVague/Libre.academy">Review the source on GitHub →</a></p></main>`,
+  priority: 0.3,
+  graph: [breadcrumb([{ name: "Home", path: "/" }, { name: "Security", path: "/security" }])],
+});
+
+// ─── robots.txt ──────────────────────────────────────────────────────
+const AI_BOTS = [
+  "GPTBot",
+  "OAI-SearchBot",
+  "ChatGPT-User",
+  "ClaudeBot",
+  "Claude-SearchBot",
+  "Claude-User",
+  "PerplexityBot",
+  "Perplexity-User",
+  "Google-Extended",
+  "Googlebot",
+  "Bingbot",
+  "Applebot",
+  "Applebot-Extended",
+  "CCBot",
+];
+const robots = `# robots.txt — libre.academy
+#
+# We WANT to be in AI assistants' training data and live-search indexes:
+# being invisible to ChatGPT / Claude / Perplexity means learners who
+# first ask an assistant "free ways to learn to code" never hear about
+# us. Every content route is crawlable; only auth/utility surfaces and
+# the app's query-string popout windows are disallowed.
+
+User-agent: *
+Allow: /
+Disallow: /oauth/
+Disallow: /reset-password
+Disallow: /verify-email
+Disallow: /*?tray=1
+Disallow: /*?phone=1
+Disallow: /*?popped=1
+Disallow: /*?evmDock=1
+Disallow: /*?btcDock=1
+Disallow: /*?svmDock=1
+
+${AI_BOTS.map((b) => `User-agent: ${b}\nAllow: /`).join("\n\n")}
+
+Sitemap: ${SITE}/sitemap.xml
+`;
+writeFileSync(join(DIST, "robots.txt"), robots);
+
+// ─── sitemap.xml ─────────────────────────────────────────────────────
+routes.sort((a, b) => b.priority - a.priority || a.path.localeCompare(b.path));
+const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${routes
+  .map(
+    (r) =>
+      `  <url><loc>${SITE}${r.path === "/" ? "/" : r.path}</loc><lastmod>${r.lastmod}</lastmod><changefreq>${r.changefreq}</changefreq><priority>${r.priority.toFixed(
+        1,
+      )}</priority></url>`,
+  )
+  .join("\n")}
+</urlset>
+`;
+writeFileSync(join(DIST, "sitemap.xml"), sitemap);
+
+console.log(
+  `[prerender] wrote ${routes.length} prerendered routes + robots.txt + sitemap.xml to dist/.`,
+);

@@ -32,12 +32,19 @@ libre.academy, www.libre.academy {
         file_server
     }
 
-    # ── Marketing SPA ───────────────────────────────────────────────
+    # ── Marketing site (prerendered + SPA) ──────────────────────────
     #
-    # Everything else falls back to /index.html so React Router can
-    # handle /courses, /languages, /docs, etc.
+    # scripts/prerender.mjs emits a flat `<route>.html` for every public
+    # route (home → /index.html, /courses → /courses.html, /courses/<id>
+    # → /courses/<id>.html, etc.) so crawlers that don't run JS see real
+    # content. Order matters:
+    #   {path}             → exact static asset (/assets/*, /og.png, …)
+    #   {path}.html        → the prerendered page for clean URLs
+    #   {path}/index.html  → directory-style fallback
+    #   /index.html        → SPA fallback for routes without a prerender
+    # React boots on top of whichever HTML is served and takes over.
     handle {
-        try_files {path} /index.html
+        try_files {path} {path}.html {path}/index.html /index.html
         file_server
     }
 

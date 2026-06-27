@@ -6,7 +6,8 @@
   "description": "Marketing + onboarding site for Libre — libre.academy",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && node scripts/prerender.mjs",
+    "prerender": "node scripts/prerender.mjs",
     "build:embed": "npm run sync:learn && npm run sync:courses && npm run build",
     "deploy": "node scripts/deploy.mjs",
     "deploy:rsync-only": "node scripts/deploy.mjs --rsync-only",
