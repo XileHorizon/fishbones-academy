@@ -237,3 +237,11 @@ jobs:
             dist/courses/ \
             "${VPS_USER}@${VPS_HOST}:${VPS_TARGET_DIR}/courses/"
           echo "Synced dist/ to ${VPS_USER}@${VPS_HOST}:${VPS_TARGET_DIR}/ (audio/ + courses/ archives preserved)"
+
+      # Ping IndexNow after the sync so Bing — and therefore ChatGPT
+      # search — plus Perplexity/Yandex recrawl the changed URLs within
+      # days. Reads dist/sitemap.xml; the public key file is already live
+      # from the rsync above. Non-fatal.
+      - name: Ping IndexNow (Bing / ChatGPT / Perplexity)
+        continue-on-error: true
+        run: node scripts/indexnow.mjs

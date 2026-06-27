@@ -218,4 +218,13 @@ if (!NO_RSYNC) {
 
 step("rsync to VPS", rsyncToVps);
 
+// Ping IndexNow AFTER the sync so every URL (and the key file) is live.
+// One ping reaches Bing — and therefore ChatGPT search — plus Perplexity,
+// Yandex, etc. Non-fatal: scripts/indexnow.mjs always exits 0.
+if (!NO_RSYNC) {
+  step("IndexNow ping (Bing / ChatGPT / Perplexity)", () =>
+    run("node scripts/indexnow.mjs"),
+  );
+}
+
 console.log("\n[deploy] Done. Visit https://libre.academy/ to verify.");
