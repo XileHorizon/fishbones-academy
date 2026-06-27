@@ -30,6 +30,7 @@ import { BookCarousel } from "../components/spotlights/BookCarousel";
 import { CodecademyComparison } from "../components/CodecademyComparison";
 import { MoreComparisons } from "../components/MoreComparisons";
 import { LandingEditor } from "../components/LandingEditor";
+import { LogoHero } from "../components/LogoHero";
 import "./Home.css";
 
 /// Homepage architecture:
@@ -165,13 +166,12 @@ export function Home() {
         <ParticleField className="home-hero__particles" count={80} />
 
         <div className="home-hero__inner home-hero__inner--stacked">
-          {/* Header artwork removed pending an SEO + copy rework.
-              The hero now leads with the eyebrow / H1 / lede so the
-              first-paint LCP element is text (faster, better Core
-              Web Vitals) and the headline carries the brand instead
-              of an oversized image competing with it. The particle
-              field above + the typography below carry the visual
-              identity in the meantime. */}
+          {/* Big rotating logo — picks one of the variants under
+              /public/logos/ at random on every page load. Brand
+              first impression sits above the eyebrow / H1 / lede.
+              See LogoHero.tsx for the rotation list and the
+              CLS / fetchpriority notes. */}
+          <LogoHero />
           <motion.div
             className="home-hero__copy"
             initial={{ opacity: 0, y: 20 }}

@@ -89,7 +89,6 @@ interface Frontmatter {
 /// Only handles simple `key: value` and `key: [a, b]` forms —
 /// enough for post metadata without a full YAML parser dep.
 function parseFrontmatter(source: string): { meta: Frontmatter; body: string } {
-  const DELIM = /^---\s*$/m;
   const lines = source.split("\n");
 
   // Must start with a delimiter on the very first line.
