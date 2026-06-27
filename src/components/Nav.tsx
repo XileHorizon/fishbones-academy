@@ -13,6 +13,7 @@ const DISCORD_INVITE = "https://discord.gg/2yPVVfuFdW";
 const LINKS = [
   { to: "/courses", label: "Courses" },
   { to: "/languages", label: "Languages" },
+  { to: "/blog", label: "Blog" },
   { to: "/docs", label: "Docs" },
   // "About" was retired from the primary nav in favour of the public
   // security audit (labelled "Audit" here — shorter, and it's the

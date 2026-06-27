@@ -1,0 +1,20 @@
+[
+  {
+    "slug": "why-passive-video-doesnt-work",
+    "title": "Why Passive Video Doesn't Make You a Programmer",
+    "date": "2026-06-26",
+    "author": "The Libre Team",
+    "excerpt": "You can watch ten hours of someone else writing TypeScript and still freeze when the cursor lands in your own editor. Here's what actually sticks.",
+    "color": "blue",
+    "tags": ["learning", "pedagogy"]
+  },
+  {
+    "slug": "bring-your-own-book",
+    "title": "Bring Your Own Book: Turning Any PDF Into a Course",
+    "date": "2026-06-20",
+    "author": "The Libre Team",
+    "excerpt": "The desktop app's ingest pipeline turns PDFs, EPUBs, and docs sites into interactive courses with hidden tests. Here's how it works under the hood.",
+    "color": "teal",
+    "tags": ["features", "ingest", "AI"]
+  }
+]
