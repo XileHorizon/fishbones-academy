@@ -24,8 +24,8 @@ type AnyId = string | "all";
 /// surface, not a deeply linkable filter view.
 export function Courses() {
   useSeo({
-    title: "Free Coding Courses — Browse 47 Courses in 26 Programming Languages",
-    description: "Browse 47 free interactive coding courses across 26 languages. JavaScript, Python, Rust, Solidity, Go, and more. Real editor, hidden tests, zero paywall.",
+    title: `Free Coding Courses — Browse ${CATALOG.length} Courses in ${LANGUAGES.length} Programming Languages | Libre Academy`,
+    description: `Browse ${CATALOG.length} free interactive coding courses across ${LANGUAGES.length} languages — JavaScript, Python, Rust, Go, Solidity and more. Real editor, hidden tests, zero paywall.`,
     canonicalUrl: "https://libre.academy/courses",
   });
   const [query, setQuery] = useState("");
@@ -115,10 +115,10 @@ export function Courses() {
                 "free python courses online" so the head term
                 doing real work matters more here than tone. */}
             <h1 className="section__title">
-              Free coding courses in 26 programming languages.
+              Free coding courses in {LANGUAGES.length} programming languages.
             </h1>
             <p className="section__subtitle">
-              Forty-seven interactive courses to choose from — linear
+              {CATALOG.length} interactive courses to choose from — linear
               textbooks, framework deep-dives, and kata-style challenge
               packs. Every course runs in your browser. Pick one and
               start writing code now. No signup, no install.

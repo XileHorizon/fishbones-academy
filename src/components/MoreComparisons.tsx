@@ -15,6 +15,7 @@
 ///     of the AS_OF date below; the date surfaces in fine print
 ///   - We do not mock; the cards are for the visitor, not for us
 
+import { LANGUAGE_COUNT } from "../lib/siteStats";
 import "./MoreComparisons.css";
 
 /// The date the competitor claims were last verified. Bumps with
@@ -82,7 +83,7 @@ const COMPARISONS: Comparison[] = [
       },
       {
         axis: "Subject scope",
-        libre: "Full-stack development + 26 languages",
+        libre: `Full-stack development + ${LANGUAGE_COUNT} languages`,
         them: "Data science + analytics (Python / R / SQL)",
       },
       {

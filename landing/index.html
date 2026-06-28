@@ -1,0 +1,509 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- ── Primary SEO ─────────────────────────────────────────────── -->
+    <title>Libre Academy — Free Interactive Coding Courses</title>
+    <meta name="description" content="Learn JavaScript, TypeScript, Rust, Python, and Solidity through free interactive books and guided exercises. Run real code in your browser, earn certificates, and get help from a private AI tutor that stays on your machine." />
+    <meta name="keywords" content="learn to code, free coding courses, interactive programming, javascript tutorial, typescript tutorial, rust programming, python beginner, solidity web3, local-first learning, coding platform, libre academy" />
+    <meta name="author" content="Libre.academy" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="theme-color" content="#0a0a0a" />
+    <link rel="canonical" href="https://libre.academy/" />
+
+    <!-- ── Open Graph ──────────────────────────────────────────────── -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Libre.academy" />
+    <meta property="og:title" content="Libre Academy — Free Interactive Coding Courses" />
+    <meta property="og:description" content="Learn to code through interactive books and real-code exercises. JavaScript, TypeScript, Rust, Python, Solidity — all free, local-first, with a private AI tutor." />
+    <meta property="og:url" content="https://libre.academy/" />
+    <meta property="og:image" content="https://libre.academy/libre_header.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Libre Academy — interactive coding courses" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- ── Twitter / X Card ───────────────────────────────────────── -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Libre Academy — Free Interactive Coding Courses" />
+    <meta name="twitter:description" content="Learn to code through interactive books and real-code exercises. All free, local-first, with a private AI tutor." />
+    <meta name="twitter:image" content="https://libre.academy/libre_header.png" />
+    <meta name="twitter:image:alt" content="Libre Academy coding platform" />
+
+    <!-- ── Sitemap pointer ─────────────────────────────────────────── -->
+    <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+
+    <!-- ── Favicon / Touch icon ───────────────────────────────────── -->
+    <link rel="icon" type="image/png" href="/libre_app_icon.png" />
+    <link rel="apple-touch-icon" href="/libre_app_icon.png" />
+
+    <!-- ── JSON-LD Structured Data ────────────────────────────────── -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": ["Organization", "EducationalOrganization"],
+          "@id": "https://libre.academy/#organization",
+          "name": "Libre.academy",
+          "url": "https://libre.academy/",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://libre.academy/libreacademy.png",
+            "width": 512,
+            "height": 512
+          },
+          "description": "Free, open, local-first coding education platform with interactive books, real-code workbenches, and a private AI tutor.",
+          "sameAs": [
+            "https://github.com/InfamousVague/Libre.academy"
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://libre.academy/#website",
+          "url": "https://libre.academy/",
+          "name": "Libre.academy",
+          "description": "Free interactive coding courses for JavaScript, TypeScript, Rust, Python, and Solidity.",
+          "publisher": { "@id": "https://libre.academy/#organization" },
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": {
+              "@type": "EntryPoint",
+              "urlTemplate": "https://libre.academy/?q={search_term_string}"
+            },
+            "query-input": "required name=search_term_string"
+          }
+        },
+        {
+          "@type": "SoftwareApplication",
+          "name": "Libre.academy",
+          "operatingSystem": "macOS, Windows, Linux, iOS, Web",
+          "applicationCategory": "EducationalApplication",
+          "description": "Local-first learning platform for programmers — installable courses, real-code execution, private AI tutor.",
+          "url": "https://libre.academy/",
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+          },
+          "featureList": [
+            "Interactive coding exercises",
+            "Real in-browser code execution",
+            "Private local AI tutor",
+            "JavaScript, TypeScript, Rust, Python, Solidity courses",
+            "Progress tracking and certificates",
+            "Works offline"
+          ]
+        },
+        {
+          "@type": "ItemList",
+          "name": "Available Coding Courses",
+          "url": "https://libre.academy/",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "item": {
+                "@type": "Course",
+                "name": "JavaScript",
+                "description": "Learn JavaScript from the ground up with interactive exercises and real code execution.",
+                "provider": { "@id": "https://libre.academy/#organization" },
+                "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+              }
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "item": {
+                "@type": "Course",
+                "name": "TypeScript",
+                "description": "Master TypeScript with guided exercises, type system deep-dives, and real-code workbenches.",
+                "provider": { "@id": "https://libre.academy/#organization" },
+                "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+              }
+            },
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "item": {
+                "@type": "Course",
+                "name": "Rust",
+                "description": "Learn systems programming in Rust with hands-on exercises and memory-safety concepts.",
+                "provider": { "@id": "https://libre.academy/#organization" },
+                "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+              }
+            },
+            {
+              "@type": "ListItem",
+              "position": 4,
+              "item": {
+                "@type": "Course",
+                "name": "Python",
+                "description": "Start coding with Python — beginner-friendly interactive exercises with real output.",
+                "provider": { "@id": "https://libre.academy/#organization" },
+                "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+              }
+            },
+            {
+              "@type": "ListItem",
+              "position": 5,
+              "item": {
+                "@type": "Course",
+                "name": "Solidity",
+                "description": "Learn smart contract development in Solidity for Ethereum and EVM-compatible chains.",
+                "provider": { "@id": "https://libre.academy/#organization" },
+                "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+              }
+            }
+          ]
+        }
+      ]
+    }
+    </script>
+
+    <style>
+      /* ── Reset + Base ─────────────────────────────────────────────── */
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+      :root {
+        --bg:        #080a0d;
+        --surface:   #111318;
+        --border:    rgba(255,255,255,0.08);
+        --accent:    #f37239;
+        --accent2:   #e8c97a;
+        --text:      #eaeaea;
+        --muted:     rgba(234,234,234,0.55);
+        --radius:    14px;
+        --max:       1100px;
+      }
+      html { scroll-behavior: smooth; }
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      /* ── Nav ──────────────────────────────────────────────────────── */
+      nav {
+        position: sticky; top: 0; z-index: 50;
+        background: rgba(8,10,13,0.85);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--border);
+        padding: 0 24px;
+      }
+      .nav-inner {
+        max-width: var(--max); margin: 0 auto;
+        display: flex; align-items: center; justify-content: space-between;
+        height: 60px;
+      }
+      .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+      .nav-logo img { width: 28px; height: 28px; border-radius: 6px; }
+      .nav-logo span { font-weight: 700; font-size: 1rem; color: var(--text); letter-spacing: -0.3px; }
+      .nav-cta {
+        background: var(--accent); color: #fff;
+        border: none; border-radius: 8px; cursor: pointer;
+        padding: 8px 18px; font-size: 0.875rem; font-weight: 600;
+        text-decoration: none;
+        transition: opacity 0.15s;
+      }
+      .nav-cta:hover { opacity: 0.88; }
+
+      /* ── Hero ─────────────────────────────────────────────────────── */
+      .hero {
+        text-align: center;
+        padding: 100px 24px 80px;
+        max-width: var(--max); margin: 0 auto;
+      }
+      .hero-badge {
+        display: inline-flex; align-items: center; gap: 6px;
+        background: rgba(243,114,57,0.12); border: 1px solid rgba(243,114,57,0.3);
+        border-radius: 100px; padding: 5px 14px;
+        font-size: 0.78rem; font-weight: 600; color: var(--accent);
+        letter-spacing: 0.5px; text-transform: uppercase;
+        margin-bottom: 28px;
+      }
+      h1 {
+        font-size: clamp(2.2rem, 5vw, 3.6rem);
+        font-weight: 800; letter-spacing: -1.5px; line-height: 1.1;
+        margin-bottom: 20px;
+      }
+      h1 em { font-style: normal; color: var(--accent); }
+      .hero-sub {
+        font-size: clamp(1rem, 2vw, 1.2rem);
+        color: var(--muted); max-width: 620px; margin: 0 auto 40px;
+      }
+      .hero-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+      .btn-primary {
+        background: var(--accent); color: #fff;
+        border: none; border-radius: 10px; cursor: pointer;
+        padding: 14px 28px; font-size: 1rem; font-weight: 700;
+        text-decoration: none;
+        transition: opacity 0.15s, transform 0.15s;
+        display: inline-block;
+      }
+      .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+      .btn-secondary {
+        background: transparent; color: var(--text);
+        border: 1px solid var(--border); border-radius: 10px; cursor: pointer;
+        padding: 14px 28px; font-size: 1rem; font-weight: 600;
+        text-decoration: none;
+        transition: border-color 0.15s, transform 0.15s;
+        display: inline-block;
+      }
+      .btn-secondary:hover { border-color: rgba(255,255,255,0.25); transform: translateY(-1px); }
+
+      /* ── Stats bar ────────────────────────────────────────────────── */
+      .stats {
+        display: flex; justify-content: center; gap: 48px; flex-wrap: wrap;
+        border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+        padding: 28px 24px; margin: 0;
+        background: var(--surface);
+      }
+      .stat { text-align: center; }
+      .stat-val { font-size: 1.6rem; font-weight: 800; color: var(--accent); }
+      .stat-label { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
+
+      /* ── Section shared ───────────────────────────────────────────── */
+      section { padding: 80px 24px; }
+      .section-inner { max-width: var(--max); margin: 0 auto; }
+      .section-eyebrow {
+        font-size: 0.78rem; font-weight: 700; letter-spacing: 1px;
+        text-transform: uppercase; color: var(--accent); margin-bottom: 12px;
+      }
+      h2 {
+        font-size: clamp(1.6rem, 3vw, 2.4rem);
+        font-weight: 800; letter-spacing: -0.8px;
+        margin-bottom: 16px;
+      }
+      .section-sub { color: var(--muted); max-width: 540px; margin-bottom: 48px; }
+
+      /* ── Course grid ──────────────────────────────────────────────── */
+      #courses { background: var(--surface); }
+      .course-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 16px;
+      }
+      .course-card {
+        background: var(--bg); border: 1px solid var(--border);
+        border-radius: var(--radius); padding: 24px;
+        transition: border-color 0.2s, transform 0.2s;
+        text-decoration: none; color: inherit;
+        display: block;
+      }
+      .course-card:hover { border-color: rgba(243,114,57,0.4); transform: translateY(-2px); }
+      .course-tag {
+        display: inline-block;
+        font-size: 0.72rem; font-weight: 700; letter-spacing: 0.5px;
+        text-transform: uppercase; padding: 3px 10px;
+        border-radius: 100px; margin-bottom: 14px;
+      }
+      .tag-js    { background: rgba(247,223,30,0.12);  color: #f7df1e; }
+      .tag-ts    { background: rgba(49,120,198,0.15);  color: #3178c6; }
+      .tag-rust  { background: rgba(243,114,57,0.15);  color: #f37239; }
+      .tag-py    { background: rgba(53,126,221,0.15);  color: #4b8bbe; }
+      .tag-sol   { background: rgba(100,100,255,0.15); color: #9b9bff; }
+      .course-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; }
+      .course-desc  { font-size: 0.875rem; color: var(--muted); line-height: 1.55; }
+      .course-footer {
+        display: flex; align-items: center; gap: 6px;
+        margin-top: 18px; font-size: 0.8rem; color: var(--muted);
+      }
+      .pill-free {
+        background: rgba(52,199,89,0.12); color: #34c759;
+        border-radius: 100px; padding: 2px 10px;
+        font-size: 0.72rem; font-weight: 700;
+      }
+
+      /* ── Features ─────────────────────────────────────────────────── */
+      .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 16px;
+      }
+      .feature-card {
+        background: var(--surface); border: 1px solid var(--border);
+        border-radius: var(--radius); padding: 24px;
+      }
+      .feature-icon { font-size: 1.6rem; margin-bottom: 14px; }
+      .feature-title { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
+      .feature-desc  { font-size: 0.875rem; color: var(--muted); line-height: 1.55; }
+
+      /* ── CTA band ─────────────────────────────────────────────────── */
+      .cta-band {
+        text-align: center; padding: 80px 24px;
+        background: linear-gradient(135deg, rgba(243,114,57,0.08) 0%, rgba(232,201,122,0.06) 100%);
+        border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+      }
+      .cta-band h2 { margin-bottom: 14px; }
+      .cta-band p  { color: var(--muted); max-width: 480px; margin: 0 auto 32px; }
+
+      /* ── Footer ───────────────────────────────────────────────────── */
+      footer {
+        padding: 40px 24px; text-align: center;
+        border-top: 1px solid var(--border);
+        font-size: 0.85rem; color: var(--muted);
+      }
+      footer a { color: var(--muted); text-decoration: none; }
+      footer a:hover { color: var(--text); }
+      .footer-links { display: flex; gap: 24px; justify-content: center; margin-bottom: 16px; flex-wrap: wrap; }
+
+      /* ── Responsive ───────────────────────────────────────────────── */
+      @media (max-width: 600px) {
+        .hero { padding: 64px 20px 56px; }
+        .stats { gap: 28px; }
+        section { padding: 56px 20px; }
+      }
+    </style>
+  </head>
+
+  <body>
+
+    <!-- ── Nav ──────────────────────────────────────────────────────── -->
+    <nav>
+      <div class="nav-inner">
+        <a class="nav-logo" href="https://libre.academy/">
+          <img src="/libre_app_icon.png" alt="Libre Academy logo" width="28" height="28" />
+          <span>Libre Academy</span>
+        </a>
+        <a class="nav-cta" href="https://libre.academy/app">Launch App →</a>
+      </div>
+    </nav>
+
+    <!-- ── Hero ─────────────────────────────────────────────────────── -->
+    <header>
+      <div class="hero">
+        <div class="hero-badge">🎓 Free &amp; Open Source</div>
+        <h1>Learn to code.<br /><em>Really</em> learn it.</h1>
+        <p class="hero-sub">
+          Interactive books. Real code execution. A private AI tutor that runs on your machine.
+          JavaScript, TypeScript, Rust, Python, Solidity — all free.
+        </p>
+        <div class="hero-actions">
+          <a class="btn-primary" href="https://libre.academy/app">Start Learning Free →</a>
+          <a class="btn-secondary" href="https://github.com/InfamousVague/Libre.academy" rel="noopener">View on GitHub</a>
+        </div>
+      </div>
+    </header>
+
+    <!-- ── Stats ─────────────────────────────────────────────────────── -->
+    <div class="stats" aria-label="Platform highlights">
+      <div class="stat"><div class="stat-val">5+</div><div class="stat-label">Languages</div></div>
+      <div class="stat"><div class="stat-val">100%</div><div class="stat-label">Free Forever</div></div>
+      <div class="stat"><div class="stat-val">Local</div><div class="stat-label">Private AI Tutor</div></div>
+      <div class="stat"><div class="stat-val">0</div><div class="stat-label">Ads or Paywalls</div></div>
+    </div>
+
+    <!-- ── Courses ────────────────────────────────────────────────────── -->
+    <section id="courses">
+      <div class="section-inner">
+        <p class="section-eyebrow">Courses</p>
+        <h2>Pick a language. Start today.</h2>
+        <p class="section-sub">Every course is fully interactive — read, write code, see results. No sign-up required.</p>
+
+        <div class="course-grid">
+
+          <a class="course-card" href="https://libre.academy/app?view=library&course=javascript" aria-label="Learn JavaScript">
+            <span class="course-tag tag-js">JavaScript</span>
+            <div class="course-title">JavaScript — From Zero to Fluent</div>
+            <div class="course-desc">The language of the web, taught through real interactive exercises. Variables, functions, async, DOM, and beyond.</div>
+            <div class="course-footer"><span class="pill-free">Free</span> · Interactive · Beginner friendly</div>
+          </a>
+
+          <a class="course-card" href="https://libre.academy/app?view=library&course=typescript" aria-label="Learn TypeScript">
+            <span class="course-tag tag-ts">TypeScript</span>
+            <div class="course-title">TypeScript — Types That Actually Help</div>
+            <div class="course-desc">Graduate from JavaScript with TypeScript's type system. Interfaces, generics, narrowing — all hands-on.</div>
+            <div class="course-footer"><span class="pill-free">Free</span> · Interactive · Intermediate</div>
+          </a>
+
+          <a class="course-card" href="https://libre.academy/app?view=library&course=rust" aria-label="Learn Rust">
+            <span class="course-tag tag-rust">Rust</span>
+            <div class="course-title">Rust — Systems Programming, Demystified</div>
+            <div class="course-desc">Learn ownership, borrowing, and lifetimes through guided exercises. Write fast, safe, memory-correct code.</div>
+            <div class="course-footer"><span class="pill-free">Free</span> · Interactive · Intermediate</div>
+          </a>
+
+          <a class="course-card" href="https://libre.academy/app?view=library&course=python" aria-label="Learn Python">
+            <span class="course-tag tag-py">Python</span>
+            <div class="course-title">Python — Practical Programming</div>
+            <div class="course-desc">The friendliest language to start with. Scripts, data, automation — learn by doing with real code output.</div>
+            <div class="course-footer"><span class="pill-free">Free</span> · Interactive · Beginner friendly</div>
+          </a>
+
+          <a class="course-card" href="https://libre.academy/app?view=library&course=solidity" aria-label="Learn Solidity">
+            <span class="course-tag tag-sol">Solidity</span>
+            <div class="course-title">Solidity — Smart Contract Development</div>
+            <div class="course-desc">Write Ethereum smart contracts with hands-on exercises. EVM, tokens, DeFi patterns — from scratch.</div>
+            <div class="course-footer"><span class="pill-free">Free</span> · Interactive · Intermediate</div>
+          </a>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Features ───────────────────────────────────────────────────── -->
+    <section id="features">
+      <div class="section-inner">
+        <p class="section-eyebrow">Why Libre</p>
+        <h2>Built different, on purpose.</h2>
+        <p class="section-sub">No paywalls. No ads. No tracking. Just you, the code, and a platform that's on your side.</p>
+
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">⚡</div>
+            <div class="feature-title">Run Code Instantly</div>
+            <div class="feature-desc">Every exercise has a real code editor. Write it, run it, see the output — right in your browser or the desktop app.</div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🤖</div>
+            <div class="feature-title">Private AI Tutor</div>
+            <div class="feature-desc">Get hints and explanations from an AI that runs entirely on your machine. No data leaves your device. No API bills.</div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">📚</div>
+            <div class="feature-title">Books, Not Videos</div>
+            <div class="feature-desc">Learn at your pace with structured, interactive books. Skip around, revisit chapters, export your progress.</div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🏆</div>
+            <div class="feature-title">Earn Certificates</div>
+            <div class="feature-desc">Complete a course and earn a verifiable certificate — a real record of what you built and learned.</div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">📡</div>
+            <div class="feature-title">Works Offline</div>
+            <div class="feature-desc">The desktop app is local-first. Install a course once and learn anywhere — on a plane, in a coffee shop, wherever.</div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🔓</div>
+            <div class="feature-title">Fully Open Source</div>
+            <div class="feature-desc">Everything is on GitHub. Fork it, audit it, build on it. No black box — you own your learning experience.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── CTA ────────────────────────────────────────────────────────── -->
+    <div class="cta-band">
+      <h2>Ready to actually learn to code?</h2>
+      <p>No credit card. No sign-up. No ads. Just open it and start.</p>
+      <a class="btn-primary" href="https://libre.academy/app">Start for Free →</a>
+    </div>
+
+    <!-- ── Footer ─────────────────────────────────────────────────────── -->
+    <footer>
+      <div class="footer-links">
+        <a href="https://github.com/InfamousVague/Libre.academy" rel="noopener">GitHub</a>
+        <a href="https://libre.academy/app">Launch App</a>
+        <a href="https://libre.academy/sitemap.xml">Sitemap</a>
+      </div>
+      <p>© 2025 Libre.academy — Free interactive coding courses. Open source and always free.</p>
+    </footer>
+
+  </body>
+</html>

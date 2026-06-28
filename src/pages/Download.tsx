@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useSeo } from "../lib/useSeo";
+import { LANGUAGES } from "../data/languages";
 import {
   Apple,
   ArrowRight,
@@ -61,7 +62,7 @@ const FALLBACK_URL = "https://github.com/InfamousVague/Libre.academy/releases/la
 export function Download() {
   useSeo({
     title: "Download Libre Academy — Free Desktop App for Mac, Windows & Linux",
-    description: "Download Libre Academy for free. MIT-licensed desktop app with 26 language runtimes, AI tutor, and PDF/EPUB course ingest. No signup, no paywall.",
+    description: `Download Libre Academy for free. MIT-licensed desktop app with ${LANGUAGES.length} language runtimes, AI tutor, and PDF/EPUB course ingest. No signup, no paywall.`,
     canonicalUrl: "https://libre.academy/download",
   });
   const [release, setRelease] = useState<Release | null>(null);
@@ -102,7 +103,7 @@ export function Download() {
             Two ways to run Libre Academy — both free, both MIT licensed,
             both interactive. The browser version is the fastest way to
             sample any course. The desktop app adds ingest, native runtimes
-            for 26 languages, and a local AI tutor.
+            for {LANGUAGES.length} languages, and a local AI tutor.
           </p>
         </div>
       </header>

@@ -13,8 +13,8 @@ const RUN_LABEL: Record<Language["run"], string> = {
 
 export function Languages() {
   useSeo({
-    title: "26 Programming Languages — Free Interactive Courses Online",
-    description: "Libre Academy supports 26 programming languages — JavaScript, Python, Rust, Go, Solidity, TypeScript, and more. Free courses, real browser runtimes, zero install.",
+    title: `${LANGUAGES.length} Programming Languages — Free Interactive Courses Online | Libre Academy`,
+    description: `Libre Academy supports ${LANGUAGES.length} programming languages — JavaScript, Python, Rust, Go, Solidity, TypeScript, and more. Free courses, real browser runtimes, zero install.`,
     canonicalUrl: "https://libre.academy/languages",
   });
   // Bucket by execution mode so the page reads as three groups: things
@@ -33,7 +33,7 @@ export function Languages() {
       <header className="languages-page__head section section--narrow">
         <span className="section__eyebrow">Programming languages</span>
         <h1 className="section__title">
-          Learn 26 programming languages — free, in your browser.
+          Learn {LANGUAGES.length} programming languages — free, in your browser.
         </h1>
         <p className="section__subtitle">
           Every language Libre Academy supports, with its real runtime and

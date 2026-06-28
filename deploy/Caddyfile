@@ -5,7 +5,11 @@
 # Mirrors the layout of the mattssoftware.com block — same VPS, same
 # Caddy install, just a separate site block per domain.
 
-libre.academy, www.libre.academy {
+www.libre.academy {
+    redir https://libre.academy{uri} permanent
+}
+
+libre.academy {
     root * /var/www/libre-academy
     encode zstd gzip
 
@@ -32,13 +36,33 @@ libre.academy, www.libre.academy {
         file_server
     }
 
-    # ── Marketing SPA ───────────────────────────────────────────────
+    # ── SPA-only utility routes ──────────────────────────────────────
     #
-    # Everything else falls back to /index.html so React Router can
-    # handle /courses, /languages, /docs, etc.
-    handle {
-        try_files {path} /index.html
+    # These aren't prerendered public landing pages; they need the React
+    # app shell so the client router can hydrate the right screen.
+    @spa path /oauth/done /reset-password /verify-email /pricing /audit /donate
+    handle @spa {
+        rewrite * /index.html
         file_server
+    }
+
+    # ── Marketing site (prerendered HTML) ────────────────────────────
+    #
+    # Public pages are emitted as flat HTML files by scripts/prerender.mjs.
+    # We intentionally DO NOT fall back to /index.html here; unknown paths
+    # should be real HTTP 404s for crawlers and browsers alike.
+    handle {
+        try_files {path} {path}.html {path}/index.html
+        file_server
+    }
+
+    handle_errors {
+        @notfound expression `{http.error.status_code} == 404`
+        handle @notfound {
+            rewrite * /404.html
+            header Cache-Control "no-store"
+            file_server
+        }
     }
 
     # Optional: emit standard access logs to journalctl. Useful for

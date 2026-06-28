@@ -28,6 +28,12 @@ import { ArrowLeft, ArrowRight, PlayCircle, Code2, Sparkles } from "lucide-react
 import { languageBySlug } from "../data/languages";
 import { CATALOG } from "../data/courses";
 import { useSeo } from "../lib/useSeo";
+import {
+  languageSeoTitle,
+  languageSeoDescription,
+  languageCanonical,
+  SITE,
+} from "../lib/seoMeta";
 import "./LanguageDetail.css";
 
 export function LanguageDetail() {
@@ -38,13 +44,10 @@ export function LanguageDetail() {
   // hook order stays stable across renders. When `lang` is null,
   // we pass an empty tags object so the head goes untouched and
   // the homepage tags remain in place.
-  const canonical = lang ? `https://libre.academy/languages/${lang.slug}` : "";
-  const seoTitle = lang
-    ? `Learn ${lang.name} online, free — open-source course | Libre Academy`
-    : "";
-  const seoDescription = lang
-    ? `Learn ${lang.name} for free with Libre Academy — a real code editor, hidden tests that grade your work, and no signup. Open source and MIT licensed.`
-    : "";
+  const langCourses = lang ? CATALOG.filter((c) => c.language === lang.id) : [];
+  const canonical = lang ? languageCanonical(lang.slug) : "";
+  const seoTitle = lang ? languageSeoTitle(lang) : "";
+  const seoDescription = lang ? languageSeoDescription(lang, langCourses.length) : "";
 
   useSeo({
     title: seoTitle || undefined,
@@ -55,12 +58,12 @@ export function LanguageDetail() {
       ? {
           "@context": "https://schema.org",
           "@type": "Course",
-          name: `Learn ${lang.name} online, free`,
+          name: `Learn ${lang.name} for free`,
           description: seoDescription,
           provider: {
             "@type": "Organization",
             name: "Libre Academy",
-            sameAs: "https://libre.academy/",
+            sameAs: `${SITE}/`,
           },
           url: canonical,
           inLanguage: "en",
@@ -72,10 +75,10 @@ export function LanguageDetail() {
           // Listing each in-catalog title as `hasPart` boosts the
           // page's coverage of "{lang} course" queries even when
           // the user lands here instead of /courses.
-          hasPart: CATALOG.filter((c) => c.language === lang.id).map((c) => ({
+          hasPart: langCourses.map((c) => ({
             "@type": "Course",
             name: c.title,
-            url: `https://libre.academy/courses/${c.id}`,
+            url: `${SITE}/courses/${c.id}`,
           })),
         }
       : undefined,
@@ -92,7 +95,7 @@ export function LanguageDetail() {
     );
   }
 
-  const courses = CATALOG.filter((c) => c.language === lang.id);
+  const courses = langCourses;
   const runLabel =
     lang.run === "browser"
       ? "Runs in your browser"
@@ -232,6 +235,24 @@ export function LanguageDetail() {
             ))}
           </div>
         )}
+      </section>
+
+      <section className="section section--narrow">
+        <h2 className="section__title">Helpful reading</h2>
+        <p className="section__subtitle">
+          New to {lang.name}? These two posts explain the learning model behind
+          Libre and how the desktop app can turn books into interactive
+          exercises.
+        </p>
+        <p>
+          <Link to="/blog/why-passive-video-doesnt-work">
+            Why passive video doesn't make you a programmer
+          </Link>{" "}
+          ·{" "}
+          <Link to="/blog/bring-your-own-book">
+            Bring Your Own Book: turning any PDF into a course
+          </Link>
+        </p>
       </section>
     </div>
   );

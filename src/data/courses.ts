@@ -129,9 +129,16 @@ function normaliseReleaseStatus(s: string | undefined): ReleaseStatus {
 }
 
 function approximateLessons(entry: CourseManifestEntry): number {
+  // Use the real lesson count from the manifest when available —
+  // it is regenerated on every `sync:courses` run from the actual
+  // course JSON, so it's exact. Fall back to a sizeBytes heuristic
+  // for manifests that predate the lessonCount field.
+  if (entry.lessonCount != null && entry.lessonCount > 0) {
+    return entry.lessonCount;
+  }
   // Roughly 5KB of JSON per lesson on average across the bundled
   // packs. Calibrated against the few we sampled; close enough for a
-  // marketing card.
+  // marketing card when the real count isn't present.
   const kb = (entry.sizeBytes ?? 80_000) / 1024;
   return Math.max(8, Math.round(kb / 5));
 }
