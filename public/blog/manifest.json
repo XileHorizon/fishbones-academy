@@ -1,5 +1,14 @@
 [
   {
+    "slug": "vibe-coding-vs-ai-accelerated-development",
+    "title": "Vibe Coding vs. AI-Accelerated Development: Why Coding Fundamentals Still Matter",
+    "date": "2026-06-28",
+    "author": "The Libre Team",
+    "excerpt": "People have been talking a lot about “vibe coding.” This is when you describe an idea to an AI assistant and let it build most or all of the app. Sometimes the results are impressive, but other times they are unstable, insecure, or just plain “AI slop.”",
+    "color": "red",
+    "tags": ["opinion", "vibe coding", "AI", "llm", "claude code"]
+  },
+  {
     "slug": "why-passive-video-doesnt-work",
     "title": "Why Passive Video Doesn't Make You a Programmer",
     "date": "2026-06-26",
