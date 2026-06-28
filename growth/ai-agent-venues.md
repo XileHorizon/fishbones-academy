@@ -154,3 +154,37 @@ Annotate every tool with `readOnlyHint`/`destructiveHint` (Claude Connectors dir
 - **Don't submit the server before it's real.** Every MCP registry validates the package/repo; a "proposed" server gets rejected and burns goodwill.
 - **Don't submit to contributor lists you don't qualify for** (Good First Issue needs ≥10 contributors) — rejection wastes everyone's time.
 - **mcp-get is dead** (archived 2026-06-17) — don't waste a PR on it.
+
+---
+
+## Recommendation (bottom line)
+
+Build and ship a small MCP server — this is the only move that materially changes the situation, and it should be #1 in priority order. Right now the entire "AI-agent registry/marketplace" category (the most valuable venues) is blocked because they all index real installable MCP servers, not a learn-to-code website or a "proposed" server. The server is small: a stdio MCP server in TypeScript wrapping libre's existing catalog + JS/TS sandbox + validators, exposing list_courses / get_lesson / run_exercise(check_solution) (+ optional get_hint/next_lesson), ~1–2 days plus publishing. The check_solution tool is the load-bearing piece — it's what makes Claude/Cursor/Cline actually teach and grade through libre.academy rather than just read content.
+
+Order of operations:
+1. WHILE the server is being built (no-MCP, free, real value): Launch on Hacker News Show HN (link the working app, human-posted, warm the account) and Product Hunt; submit free tiers of Future Tools and Toolify; add `good first issue`/`up for grabs` labels + CONTRIBUTING.md to the public repo, then PR into Up For Grabs and First Contributions and add the repo to CodeTriage. These cost nothing and don't depend on the server.
+2. BUILD the server (stdio + npm package; add a Streamable-HTTP remote later only if you want Smithery hosting or the Claude remote-connector directory).
+3. PUBLISH to the Official MCP Registry first (mcp-publisher CLI; package must already be on npm with a matching mcpName). This one listing auto-propagates to PulseMCP, VS Code's @mcp gallery, and GitHub's MCP registry.
+4. THEN fan out: agent-PR into punkpeye/awesome-mcp-servers (Education category) and Docker MCP Catalog; agent-via-GitHub-issue to mcp.so and Cline Marketplace; web/CLI submit to Smithery, Glama, mcpservers.org, Cursor; post to r/mcp.
+5. LONG-TERM: harden the server (annotations, privacy policy, test account) and submit to the Claude Connectors Directory — highest trust, highest bar, needs a Team/Enterprise org for the remote path or the .mcpb desktop-extension form for the solo path.
+
+On the explicit "should we ship an MCP server?" question: yes, unambiguously — it's the difference between libre.academy being a passive website and being an active tool agents invoke. The agent-PR-able registries (awesome-mcp-servers, Docker, Up For Grabs) mean an agent can do most of the listing legwork for you once the server exists.
+
+What to skip: Don't pay any AI directory (Futurepedia $497 nofollow, TAAFT $49–$347 — both off-genre for a free OSS app). Drop novelty agent-social venues (Chirper.ai) and the clone swarm of "AI agents directories" — at most do AI Agents List free with no badge. Drop mcp-get (dead/archived). Drop enterprise agent marketplaces (Salesforce/Google/MS/AWS) — wrong audience. Good First Issue (DeepSource) is a future-only venue (needs ≥10 contributors). Never use automated posting on HN/r/mcp/Discords.
+
+
+---
+
+## Ready-to-use pitch copy
+
+PLATFORM PITCH (one paragraph, AI/agent context):
+libre.academy is a free, open-source learn-to-code app that teaches programming by building real projects — and it's built to plug into the agentic ecosystem. Through a Model Context Protocol server, any MCP-capable assistant (Claude, Cursor, Cline, VS Code Copilot) can call libre.academy directly: list courses, fetch a lesson, and submit a learner's code to libre's deterministic sandbox and validators for real pass/fail grading. Instead of an AI hallucinating a coding curriculum, the agent teaches and grades against a vetted, version-controlled course catalog — turning your everyday AI assistant into a structured, accountable programming tutor.
+
+MCP-SERVER DESCRIPTION (registry listing):
+libre.academy MCP — Teach and grade programming through your AI assistant. Exposes list_courses (browse the catalog), get_lesson (fetch lesson content + exercises + starter code), and check_solution / run_exercise (execute learner code in libre.academy's sandbox and return validator-backed pass/fail feedback), plus optional get_hint and next_lesson. Backed by the free, open-source libre.academy curriculum. Read-only content tools and execution tools are annotated separately. Self-hostable (stdio) or remote (Streamable HTTP). License: open source.
+
+AI-TOOL-DIRECTORY LISTING BLURB:
+libre.academy — Free, open-source learn-to-code app that teaches programming by building real projects, with hands-on exercises checked in real time. Now AI-native: an MCP integration lets Claude, Cursor, and other AI assistants pull lessons and grade your code against libre.academy's curriculum, so your AI tutor stays accurate instead of improvising. No account wall to start, no cost. Category: Education / Generative Code.
+
+FOR AI BUILDERS / CONTRIBUTORS:
+libre.academy is open source and welcomes contributors — including AI coding agents. The repo carries `good first issue` and `up for grabs` labels with a CONTRIBUTING guide, so a coding agent (or a first-time human contributor) can pick up a scoped task and open a PR. On the integration side, we ship a small MCP server (list_courses / get_lesson / check_solution) and would love help expanding tool coverage, adding language tracks to the validators, and hardening the server for the Claude Connectors directory. Star the repo, grab an issue, or build on the MCP server — PRs welcome.
