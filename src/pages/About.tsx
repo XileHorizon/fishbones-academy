@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { GithubMark } from "../components/icons/GithubMark";
 import { useSeo } from "../lib/useSeo";
+import { LANGUAGE_COUNT } from "../lib/siteStats";
 import "./About.css";
 
 const POINTS = [
@@ -53,7 +54,7 @@ const PRINCIPLES = [
 export function About() {
   useSeo({
     title: "About Libre Academy — Free Open-Source Interactive Coding Platform",
-    description: "Libre Academy is a free, open-source platform for learning to code. No signup, no paywall, no tracking. 26 languages, real editor, hidden tests.",
+    description: `Libre Academy is a free, open-source platform for learning to code. No signup, no paywall, no tracking. ${LANGUAGE_COUNT} languages, real editor, hidden tests.`,
     canonicalUrl: "https://libre.academy/about",
   });
   return (

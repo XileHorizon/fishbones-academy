@@ -39,12 +39,37 @@ import {
 } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { execSync } from "node:child_process";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const SITE_ROOT = join(__dirname, "..");
 const DIST = join(SITE_ROOT, "dist");
 const SITE = "https://libre.academy";
 const BUILD_DATE = new Date().toISOString().slice(0, 10);
+
+// ─── git-based lastmod ────────────────────────────────────────────────────────
+// Use the date of the last commit that touched a file as sitemap lastmod.
+// Falls back to BUILD_DATE when git isn't available or the file is untracked.
+const _gitDateCache = new Map();
+function gitLastmod(...paths) {
+  const key = paths.join("|");
+  if (_gitDateCache.has(key)) return _gitDateCache.get(key);
+  try {
+    const args = paths.map((p) => JSON.stringify(p)).join(" ");
+    const out = execSync(
+      `git -C ${JSON.stringify(SITE_ROOT)} log -1 --format=%cs -- ${args}`,
+      { stdio: ["ignore", "pipe", "ignore"] },
+    )
+      .toString()
+      .trim();
+    const date = out || BUILD_DATE;
+    _gitDateCache.set(key, date);
+    return date;
+  } catch {
+    _gitDateCache.set(key, BUILD_DATE);
+    return BUILD_DATE;
+  }
+}
 
 const md = new MarkdownIt({ html: false, linkify: true, typographer: true });
 
@@ -80,13 +105,24 @@ const vite = await createServer({
   appType: "custom",
   logLevel: "error",
 });
-let LANGUAGES, CATALOG, RELEASE_SECTION_ORDER, DOCS;
+let LANGUAGES, CATALOG, RELEASE_SECTION_ORDER, DOCS, courseSeoTitle, courseSeoDescription, languageSeoTitle, languageSeoDescription, COURSE_COUNT, LANGUAGE_COUNT, COURSE_COUNT_ROUNDED;
 try {
   ({ LANGUAGES } = await vite.ssrLoadModule("/src/data/languages.ts"));
   ({ CATALOG, RELEASE_SECTION_ORDER } = await vite.ssrLoadModule(
     "/src/data/courses.ts",
   ));
   ({ DOCS } = await vite.ssrLoadModule("/src/data/docs.ts"));
+  ({
+    courseSeoTitle,
+    courseSeoDescription,
+    languageSeoTitle,
+    languageSeoDescription,
+  } = await vite.ssrLoadModule("/src/lib/seoMeta.ts"));
+  ({
+    COURSE_COUNT,
+    LANGUAGE_COUNT,
+    COURSE_COUNT_ROUNDED,
+  } = await vite.ssrLoadModule("/src/lib/siteStats.ts"));
 } finally {
   await vite.close();
 }
@@ -175,7 +211,7 @@ function header() {
   return `<nav><a href="/"><strong>Libre Academy</strong></a> ${links}<a href="/learn/">Open the app →</a></nav>`;
 }
 function footer() {
-  return `<hr><footer><p>Libre Academy — free, open-source interactive coding courses. 90+ courses across 26 languages, no paywall.</p>
+  return `<hr><footer><p>Libre Academy — free, open-source interactive coding courses. ${COURSE_COUNT_ROUNDED} courses across ${LANGUAGE_COUNT} languages, no paywall.</p>
 <p><a href="/">Home</a><a href="/courses">Courses</a><a href="/languages">Languages</a><a href="/download">Download</a><a href="/docs">Docs</a><a href="/blog">Blog</a><a href="/about">About</a><a href="https://github.com/InfamousVague/Libre.academy">GitHub</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a></p>
 <p>© Libre Academy · MIT licensed · <a href="${SITE}/">libre.academy</a></p></footer>`;
 }
@@ -216,7 +252,7 @@ const ORG_NODE = {
   url: `${SITE}/`,
   logo: `${SITE}/libre_app_icon.png`,
   description:
-    "Free, open-source interactive coding courses. 90+ courses across 26 languages — real editor, hidden tests, zero paywall. A free alternative to Codecademy and freeCodeCamp.",
+    `Free, open-source interactive coding courses. ${COURSE_COUNT_ROUNDED} courses across ${LANGUAGE_COUNT} languages — real editor, hidden tests, zero paywall. A free alternative to Codecademy and freeCodeCamp.`,
   sameAs: ["https://github.com/InfamousVague/Libre.academy"],
 };
 const WEBSITE_NODE = {
@@ -225,11 +261,8 @@ const WEBSITE_NODE = {
   name: "Libre Academy",
   url: `${SITE}/`,
   publisher: { "@id": `${SITE}/#org` },
-  potentialAction: {
-    "@type": "SearchAction",
-    target: `${SITE}/courses?q={search_term_string}`,
-    "query-input": "required name=search_term_string",
-  },
+  // SearchAction removed: Google no longer surfaces the Sitelinks search
+  // box for this schema pattern and it adds noise to the JSON-LD.
 };
 function breadcrumb(items) {
   return {
@@ -309,7 +342,7 @@ const FAQ = [
   ],
   [
     "What programming languages can I learn?",
-    "26, including JavaScript, TypeScript, Python, Rust, Go, C, C++, Java, Kotlin, C#, Swift, Solidity and more. JavaScript, TypeScript, Python, Rust, Go and the web frameworks run in your browser; compiled languages like C, C++, Java and Swift run in the desktop app.",
+    `${LANGUAGE_COUNT}, including JavaScript, TypeScript, Python, Rust, Go, C, C++, Java, Kotlin, C#, Swift, Solidity and more. JavaScript, TypeScript, Python, Rust, Go and the web frameworks run in your browser; compiled languages like C, C++, Java and Swift run in the desktop app.`,
   ],
   [
     "How is it different from freeCodeCamp or Codecademy?",
@@ -348,10 +381,10 @@ const FAQ = [
     (l) => `<a href="/languages/${l.slug}">${esc(l.name)}</a>`,
   ).join(" · ");
   const main = `<main>
-<h1>Learn to code for free — 90+ interactive courses across 26 languages</h1>
-<p class="lede">Libre Academy is a free, open-source platform where you learn programming by writing real code in a built-in editor and getting instant feedback from hidden tests — 90+ courses across 26 languages, with no paywall and no sign-up. It runs in your browser and as a desktop app, and it's a free, open-source alternative to Codecademy, freeCodeCamp, and Scrimba.</p>
-<p><a href="/learn/">Start learning free →</a> &nbsp; <a href="/courses">Browse all 94 courses</a> &nbsp; <a href="/download">Download the app</a></p>
-<ul class="stats"><li>90+ courses</li><li>26 languages</li><li>$0 — free forever</li><li>Open source (MIT)</li></ul>
+<h1>Learn to code for free — ${COURSE_COUNT_ROUNDED} interactive courses across ${LANGUAGE_COUNT} languages</h1>
+<p class="lede">Libre Academy is a free, open-source platform where you learn programming by writing real code in a built-in editor and getting instant feedback from hidden tests — ${COURSE_COUNT_ROUNDED} courses across ${LANGUAGE_COUNT} languages, with no paywall and no sign-up. It runs in your browser and as a desktop app, and it's a free, open-source alternative to Codecademy, freeCodeCamp, and Scrimba.</p>
+<p><a href="/learn/">Start learning free →</a> &nbsp; <a href="/courses">Browse all ${COURSE_COUNT} courses</a> &nbsp; <a href="/download">Download the app</a></p>
+<ul class="stats"><li>${COURSE_COUNT_ROUNDED} courses</li><li>${LANGUAGE_COUNT} languages</li><li>$0 — free forever</li><li>Open source (MIT)</li></ul>
 <h2>Why Libre Academy</h2>
 <ul>
 <li><strong>Write code, don't watch video.</strong> Every lesson has a real Monaco editor and hidden tests that grade your work — active recall, not passive lectures.</li>
@@ -365,7 +398,7 @@ const FAQ = [
 <tr><th>&nbsp;</th><th>Libre Academy</th><th>Codecademy</th><th>freeCodeCamp</th></tr>
 <tr><td>Price</td><td>Free</td><td>Free tier + paid Pro</td><td>Free</td></tr>
 <tr><td>Open source</td><td>Yes (MIT)</td><td>No</td><td>Yes</td></tr>
-<tr><td>Languages</td><td>26</td><td>~14</td><td>~10</td></tr>
+<tr><td>Languages</td><td>${LANGUAGE_COUNT}</td><td>~14</td><td>~10</td></tr>
 <tr><td>Run code in the browser</td><td>Yes</td><td>Yes</td><td>Yes (some)</td></tr>
 <tr><td>Turn your own book into a course</td><td>Yes</td><td>No</td><td>No</td></tr>
 <tr><td>Sign-up required to start</td><td>No</td><td>Yes</td><td>Yes</td></tr>
@@ -373,7 +406,7 @@ const FAQ = [
 </table>
 <h2>Popular courses</h2>
 <ul>${featured.map(courseLI).join("")}</ul>
-<p><a href="/courses">Browse all 94 free courses →</a></p>
+<p><a href="/courses">Browse all ${COURSE_COUNT} free courses →</a></p>
 <h2>Languages you can learn</h2>
 <p>${langLinks}</p>
 <h2>Frequently asked questions</h2>
@@ -383,12 +416,13 @@ const FAQ = [
 </main>`;
   emit({
     path: "/",
-    title: "Learn to code free — 90+ courses, 26 languages | Libre Academy",
+    title: `Learn to code free — ${COURSE_COUNT_ROUNDED} courses, ${LANGUAGE_COUNT} languages | Libre Academy`,
     description:
-      "Free, open-source interactive coding courses. 90+ courses across 26 languages — write real code, graded by hidden tests, zero paywall and no sign-up. A free alternative to Codecademy.",
+      `Free, open-source interactive coding courses. ${COURSE_COUNT_ROUNDED} courses across ${LANGUAGE_COUNT} languages — write real code, graded by hidden tests, zero paywall and no sign-up. A free alternative to Codecademy.`,
     main,
     priority: 1.0,
     changefreq: "weekly",
+    lastmod: gitLastmod("src/pages/Home.tsx", "src/data/courses.ts", "src/data/languages.ts", "src/data/courses-manifest.json"),
     graph: [
       {
         "@type": "WebPage",
@@ -441,6 +475,7 @@ ${sections}
     main,
     priority: 0.9,
     changefreq: "weekly",
+    lastmod: gitLastmod("src/pages/Courses.tsx", "src/data/courses.ts", "src/data/courses-manifest.json"),
     graph: [
       breadcrumb([
         { name: "Home", path: "/" },
@@ -508,14 +543,17 @@ ${outline}
       ? `<a href="/languages/${lang.slug}">More free ${esc(lang.name)} courses</a>`
       : `<a href="/courses">Browse all courses</a>`
   }</p>
+<h2>Helpful reading</h2>
+<p><a href="/blog/why-passive-video-doesnt-work">Why passive video doesn't make you a programmer</a> &nbsp;·&nbsp; <a href="/blog/bring-your-own-book">Bring Your Own Book: turning any PDF into a course</a></p>
 </main>`;
   emit({
     path: `/courses/${c.id}`,
-    title: `${c.title} — free ${langName} ${kind} | Libre Academy`,
-    description: metaDesc,
+    title: courseSeoTitle(c),
+    description: metaDesc || courseSeoDescription(c),
     main,
     ogType: "article",
     priority: 0.6,
+    lastmod: gitLastmod("src/pages/CourseDetail.tsx", "src/data/courses.ts", "src/data/courses-manifest.json", `public/starter-courses/${c.id}.json`),
     graph: [
       breadcrumb([
         { name: "Home", path: "/" },
@@ -554,23 +592,34 @@ ${outline}
   ).join("");
   const main = `<main>
 <h1>Programming languages you can learn for free</h1>
-<p class="lede">Libre Academy has free, interactive courses in ${LANGUAGES.length} languages. JavaScript, TypeScript, Python, Rust, Go and the web frameworks run right in your browser; compiled languages run in the free desktop app.</p>
+<p class="lede">Libre Academy has free, interactive courses in ${LANGUAGE_COUNT} languages. JavaScript, TypeScript, Python, Rust, Go and the web frameworks run right in your browser; compiled languages run in the free desktop app.</p>
 <ul>${li}</ul>
-<p><a href="/courses">Browse all ${CATALOG.length} courses →</a></p>
+<p><a href="/courses">Browse all ${COURSE_COUNT} courses →</a></p>
 </main>`;
+  const itemList = {
+    "@type": "ItemList",
+    itemListElement: LANGUAGES.map((l, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      url: `${SITE}/languages/${l.slug}`,
+      name: l.name,
+    })),
+  };
   emit({
     path: "/languages",
-    title: "Learn 26 programming languages free | Libre Academy",
+    title: `${LANGUAGE_COUNT} programming languages — free interactive courses | Libre Academy`,
     description:
-      "Free, interactive courses in 26 programming languages — JavaScript, Python, Rust, Go, C, C++, Java, Swift, Solidity and more. Write real code in your browser. No paywall.",
+      `Free, interactive courses in ${LANGUAGE_COUNT} programming languages — JavaScript, Python, Rust, Go, C, C++, Java, Swift, Solidity and more. Write real code in your browser. No paywall.`,
     main,
     priority: 0.9,
     changefreq: "weekly",
+    lastmod: gitLastmod("src/pages/Languages.tsx", "src/data/languages.ts", "src/data/courses.ts", "src/data/courses-manifest.json"),
     graph: [
       breadcrumb([
         { name: "Home", path: "/" },
         { name: "Languages", path: "/languages" },
       ]),
+      { "@type": "CollectionPage", url: `${SITE}/languages`, name: "Languages", mainEntity: itemList },
     ],
   });
 }
@@ -591,16 +640,17 @@ for (const l of LANGUAGES) {
   )}. No paywall, no sign-up.</p>
 <p><a href="/learn/">Start learning ${esc(l.name)} free →</a></p>
 ${coursesHtml}
+<h2>Helpful reading</h2>
+<p><a href="/blog/why-passive-video-doesnt-work">Why passive video doesn't make you a programmer</a> &nbsp;·&nbsp; <a href="/blog/bring-your-own-book">Bring Your Own Book: turning any PDF into a course</a></p>
 </main>`;
   emit({
     path: `/languages/${l.slug}`,
-    title: `Learn ${l.name} free — interactive courses | Libre Academy`,
-    description: `Learn ${l.name} for free with interactive, test-graded coding lessons on Libre Academy${
-      courses.length ? ` (${courses.length} ${l.name} course${courses.length > 1 ? "s" : ""})` : ""
-    }. Write real code, no paywall, no sign-up.`,
+    title: languageSeoTitle(l),
+    description: languageSeoDescription(l, courses.length),
     main,
     ogType: "article",
     priority: 0.6,
+    lastmod: gitLastmod("src/pages/LanguageDetail.tsx", "src/data/languages.ts", "src/data/courses.ts", "src/data/courses-manifest.json"),
     graph: [
       breadcrumb([
         { name: "Home", path: "/" },
@@ -616,7 +666,7 @@ emit({
   path: "/download",
   title: "Download Libre Academy — free coding app for Mac, Windows, Linux",
   description:
-    "Download the free Libre Academy desktop app for macOS, Windows and Linux: 90+ interactive coding courses, native compilers, offline use, and turn your own books into courses. Free and open source.",
+    `Download the free Libre Academy desktop app for macOS, Windows and Linux: ${COURSE_COUNT_ROUNDED} interactive coding courses, native compilers, offline use, and turn your own books into courses. Free and open source.`,
   main: `<main>
 <h1>Download Libre Academy</h1>
 <p class="lede">Libre Academy is free on every platform. Learn in your browser with nothing to install, or download the desktop app for native compilers, offline use, and turning your own PDFs and EPUBs into interactive courses.</p>
@@ -626,10 +676,11 @@ emit({
 <li><strong>Desktop app</strong> — macOS, Windows and Linux. Adds native toolchain runners (C, C++, Java, Swift…), book ingestion, and a local AI tutor. <a href="https://github.com/InfamousVague/Libre.academy/releases/latest">Get the latest release</a>.</li>
 <li><strong>Optional cloud sync</strong> — free, opt-in, mirrors your progress across machines.</li>
 </ul>
-<p><a href="/courses">Browse the 94 courses →</a></p>
+<p><a href="/courses">Browse the ${COURSE_COUNT} courses →</a></p>
 </main>`,
   priority: 0.8,
   changefreq: "weekly",
+  lastmod: gitLastmod("src/pages/Download.tsx"),
   graph: [breadcrumb([{ name: "Home", path: "/" }, { name: "Download", path: "/download" }])],
 });
 
@@ -649,9 +700,10 @@ emit({
 <li><strong>Your books, your courses.</strong> The desktop app turns any technical PDF or EPUB into an interactive course.</li>
 <li><strong>Local-first and private.</strong> Courses and progress live on your device, with no telemetry and only opt-in cloud sync.</li>
 </ul>
-<p><a href="/courses">Browse 94 free courses →</a> &nbsp; <a href="https://github.com/InfamousVague/Libre.academy">View the source on GitHub</a></p>
+<p><a href="/courses">Browse ${COURSE_COUNT} free courses →</a> &nbsp; <a href="https://github.com/InfamousVague/Libre.academy">View the source on GitHub</a></p>
 </main>`,
   priority: 0.7,
+  lastmod: gitLastmod("src/pages/About.tsx"),
   graph: [breadcrumb([{ name: "Home", path: "/" }, { name: "About", path: "/about" }])],
 });
 
@@ -680,6 +732,7 @@ emit({
       intro.tagline || "How Libre Academy works and how to get started.",
     )}</p>${md.render(intro.body)}<h2>All pages</h2>${toc}</main>`,
     priority: 0.5,
+    lastmod: gitLastmod("src/pages/Docs.tsx", "src/data/docs.ts"),
     graph: [breadcrumb([{ name: "Home", path: "/" }, { name: "Docs", path: "/docs" }])],
   });
   for (const { sec, p } of allPages) {
@@ -694,6 +747,7 @@ emit({
       )}</main>`,
       ogType: "article",
       priority: 0.4,
+      lastmod: gitLastmod("src/pages/Docs.tsx", "src/data/docs.ts"),
       graph: [
         breadcrumb([
           { name: "Home", path: "/" },
@@ -721,6 +775,7 @@ emit({
     main: `<main><h1>Libre Academy blog</h1><p class="lede">Notes on learning to code effectively and how Libre Academy is built.</p><ul>${list}</ul></main>`,
     priority: 0.6,
     changefreq: "weekly",
+    lastmod: POSTS[0]?.date || gitLastmod("src/pages/Blog.tsx", "public/blog/manifest.json"),
     graph: [breadcrumb([{ name: "Home", path: "/" }, { name: "Blog", path: "/blog" }])],
   });
   for (const p of POSTS) {
@@ -765,6 +820,7 @@ emit({
     "Libre Academy is local-first with no telemetry. Your courses and progress live on your device; cloud sync is optional and stores only a small progress record.",
   main: `<main><h1>Privacy</h1><p class="lede">Libre Academy is local-first and private by design. There is no telemetry, no analytics on the learning app, and no tracking. Courses and progress live on your device. Optional cloud sync stores only a small JSON progress record, and only if you opt in.</p><p><a href="/docs/principles/offline">Read about local-first &amp; what talks to a server →</a></p></main>`,
   priority: 0.2,
+  lastmod: gitLastmod("src/pages/Privacy.tsx"),
   graph: [breadcrumb([{ name: "Home", path: "/" }, { name: "Privacy", path: "/privacy" }])],
 });
 emit({
@@ -774,6 +830,7 @@ emit({
     "Libre Academy is free and open source under the MIT license. Use it freely; it's provided as-is.",
   main: `<main><h1>Terms</h1><p class="lede">Libre Academy is free and open source under the MIT license. You're free to use, study, and build on it. The software is provided as-is, without warranty.</p><p><a href="https://github.com/InfamousVague/Libre.academy">See the license and source on GitHub →</a></p></main>`,
   priority: 0.2,
+  lastmod: gitLastmod("src/pages/Terms.tsx"),
   graph: [breadcrumb([{ name: "Home", path: "/" }, { name: "Terms", path: "/terms" }])],
 });
 emit({
@@ -783,6 +840,7 @@ emit({
     "Libre Academy is free and open source. If it helped you learn to code, you can support development — but every course stays free for everyone.",
   main: `<main><h1>Support Libre Academy</h1><p class="lede">Libre Academy is free and open source, and every course stays free for everyone. If it helped you learn to code, support is welcome and keeps development going — but it's never required and never gates content.</p><p><a href="/courses">Browse the free courses →</a> &nbsp; <a href="https://github.com/InfamousVague/Libre.academy">Star the project on GitHub</a></p></main>`,
   priority: 0.4,
+  lastmod: gitLastmod("src/pages/Support.tsx"),
   graph: [breadcrumb([{ name: "Home", path: "/" }, { name: "Support", path: "/support" }])],
 });
 emit({
@@ -792,7 +850,19 @@ emit({
     "How Libre Academy handles security: open-source, local-first, no telemetry, sandboxed code execution, and an opt-in sync server that stores only progress records.",
   main: `<main><h1>Security</h1><p class="lede">Libre Academy is open source, local-first, and runs lesson code in sandboxed environments. There's no telemetry, and the optional sync server stores only a small progress record. Because the whole stack is MIT-licensed, anyone can audit exactly how it works.</p><p><a href="https://github.com/InfamousVague/Libre.academy">Review the source on GitHub →</a></p></main>`,
   priority: 0.3,
+  lastmod: gitLastmod("src/pages/SecurityAudit.tsx"),
   graph: [breadcrumb([{ name: "Home", path: "/" }, { name: "Security", path: "/security" }])],
+});
+emit({
+  path: "/404",
+  title: "Page not found — Libre Academy",
+  description:
+    "The page you're looking for doesn't exist. Browse free courses, languages, docs, or head back to the Libre Academy homepage.",
+  main: `<main><h1>Page not found</h1><p class="lede">That URL doesn't exist on Libre Academy. Try the course catalog, language pages, docs, or head back home.</p><p><a href="/courses">Browse courses →</a> &nbsp; <a href="/languages">Browse languages</a> &nbsp; <a href="/">Home</a></p></main>`,
+  priority: 0.0,
+  lastmod: gitLastmod("src/pages/NotFound.tsx"),
+  sitemap: false,
+  graph: [],
 });
 
 // ─── COMPARISON / "ALTERNATIVE" LANDING PAGES ───────────────────────
@@ -801,7 +871,7 @@ emit({
 // These are STANDALONE static pages — NOT SPA routes — so they don't
 // boot React (which would 404 on an unknown route); they're plain,
 // fast, fully-crawlable HTML that link back into the app.
-function emitStandalone({ path, title, description, main, graph = [], priority = 0.8 }) {
+function emitStandalone({ path, title, description, main, graph = [], priority = 0.8, lastmod = gitLastmod("scripts/prerender.mjs") }) {
   const canonical = SITE + path;
   const jsonld = JSON.stringify(
     { "@context": "https://schema.org", "@graph": [ORG_NODE, WEBSITE_NODE, ...graph] },
@@ -843,7 +913,7 @@ ${PRE_STYLE}
   const file = join(DIST, `${path.slice(1)}.html`);
   mkdirSync(dirname(file), { recursive: true });
   writeFileSync(file, html);
-  routes.push({ path, lastmod: BUILD_DATE, priority, changefreq: "monthly" });
+  routes.push({ path, lastmod, priority, changefreq: "monthly" });
 }
 
 const cmpFeatured = [
@@ -886,23 +956,23 @@ const faqLd = (faq) => ({
     ],
     [
       "How is it different from Codecademy?",
-      "Same write-code-in-the-browser style, but free and open source, with 26 languages (including systems languages like Rust, C and C++ and Web3 languages), and a desktop app that can turn your own PDFs and EPUBs into interactive courses.",
+      `Same write-code-in-the-browser style, but free and open source, with ${LANGUAGE_COUNT} languages (including systems languages like Rust, C and C++ and Web3 languages), and a desktop app that can turn your own PDFs and EPUBs into interactive courses.`,
     ],
   ];
   emitStandalone({
     path: "/free-alternative-to-codecademy",
     title: "Free alternative to Codecademy — Libre Academy",
     description:
-      "Libre Academy is a free, open-source alternative to Codecademy: write real code in your browser graded by hidden tests, across 26 languages, with no paywall and no sign-up.",
+      `Libre Academy is a free, open-source alternative to Codecademy: write real code in your browser graded by hidden tests, across ${LANGUAGE_COUNT} languages, with no paywall and no sign-up.`,
     main: `<main>
 <h1>A free, open-source alternative to Codecademy</h1>
 <p class="lede">Like Codecademy, Libre Academy teaches by having you write real code in an in-browser editor with instant feedback. Unlike Codecademy, it's 100% free and open source — no Pro tier, no paywalled paths, and no sign-up to start.</p>
-<p><a href="/learn/">Start learning free →</a> &nbsp; <a href="/courses">Browse 94 courses</a></p>
+<p><a href="/learn/">Start learning free →</a> &nbsp; <a href="/courses">Browse ${COURSE_COUNT} courses</a></p>
 <h2>Libre Academy vs Codecademy</h2>
 ${compareTable("Codecademy", [
   ["Price", "Free", "Free tier + paid Pro"],
   ["Open source", "Yes (MIT)", "No"],
-  ["Languages", "26", "~14"],
+  ["Languages", String(LANGUAGE_COUNT), "~14"],
   ["Run code in the browser", "Yes", "Yes"],
   ["Hidden tests on every lesson", "Yes", "Partial (Pro)"],
   ["Turn your own book into a course", "Yes", "No"],
@@ -912,7 +982,7 @@ ${compareTable("Codecademy", [
 <h2>Why people switch</h2>
 <ul>
 <li><strong>Nothing is paywalled.</strong> Every course, project and language is free, forever.</li>
-<li><strong>More languages.</strong> 26, including Rust, Go, C, C++, SQL and Solidity — not just web basics.</li>
+<li><strong>More languages.</strong> ${LANGUAGE_COUNT}, including Rust, Go, C, C++, SQL and Solidity — not just web basics.</li>
 <li><strong>Your own material.</strong> The desktop app ingests any technical book into an interactive course.</li>
 <li><strong>Open source.</strong> MIT-licensed; audit or self-host the whole thing.</li>
 </ul>
@@ -937,7 +1007,7 @@ ${faqDl(faq)}
   const faq = [
     [
       "Is Libre Academy better than freeCodeCamp?",
-      "Neither is strictly better — they fit different goals. freeCodeCamp is excellent for the web-development certification path and a huge community. Libre Academy is better if you want active-recall drilling with hidden tests on every lesson across 26 languages (including systems and Web3 languages) and the ability to turn your own books into courses.",
+      `Neither is strictly better — they fit different goals. freeCodeCamp is excellent for the web-development certification path and a huge community. Libre Academy is better if you want active-recall drilling with hidden tests on every lesson across ${LANGUAGE_COUNT} languages (including systems and Web3 languages) and the ability to turn your own books into courses.`,
     ],
     [
       "Are both free?",
@@ -952,16 +1022,16 @@ ${faqDl(faq)}
     path: "/freecodecamp-alternative",
     title: "A freeCodeCamp alternative — Libre Academy",
     description:
-      "Libre Academy is a free, open-source freeCodeCamp alternative: code-graded lessons across 26 languages, bring-your-own-book ingestion, and a desktop app. Honest comparison of when to use which.",
+      `Libre Academy is a free, open-source freeCodeCamp alternative: code-graded lessons across ${LANGUAGE_COUNT} languages, bring-your-own-book ingestion, and a desktop app. Honest comparison of when to use which.`,
     main: `<main>
 <h1>A freeCodeCamp alternative — and when to use which</h1>
-<p class="lede">freeCodeCamp is a great, free, open-source way to learn web development and earn certifications. Libre Academy is also free and open source, but takes a different approach: every lesson is code you write and run, graded by hidden tests, across 26 languages — and the desktop app turns your own books into courses.</p>
-<p><a href="/learn/">Start learning free →</a> &nbsp; <a href="/courses">Browse 94 courses</a></p>
+<p class="lede">freeCodeCamp is a great, free, open-source way to learn web development and earn certifications. Libre Academy is also free and open source, but takes a different approach: every lesson is code you write and run, graded by hidden tests, across ${LANGUAGE_COUNT} languages — and the desktop app turns your own books into courses.</p>
+<p><a href="/learn/">Start learning free →</a> &nbsp; <a href="/courses">Browse ${COURSE_COUNT} courses</a></p>
 <h2>Libre Academy vs freeCodeCamp</h2>
 ${compareTable("freeCodeCamp", [
   ["Price", "Free", "Free"],
   ["Open source", "Yes (MIT)", "Yes"],
-  ["Languages", "26 (incl. systems & Web3)", "~10 (web-focused)"],
+  ["Languages", `${LANGUAGE_COUNT} (incl. systems & Web3)`, "~10 (web-focused)"],
   ["Lesson style", "Code + hidden tests every lesson", "Projects + challenges"],
   ["Turn your own book into a course", "Yes", "No"],
   ["Free certifications", "No", "Yes"],
@@ -1010,7 +1080,7 @@ ${faqDl(faq)}
     ],
     [
       "Libre Academy",
-      "Free and open source: write real code graded by hidden tests across 26 languages, in your browser or a desktop app — and turn your own books into courses. No sign-up.",
+      `Free and open source: write real code graded by hidden tests across ${LANGUAGE_COUNT} languages, in your browser or a desktop app — and turn your own books into courses. No sign-up.`,
     ],
     [
       "Exercism",
@@ -1042,8 +1112,8 @@ ${faqDl(faq)}
 <li><strong>Total beginner who wants the gentlest start?</strong> Khan Academy.</li>
 </ul>
 <h2>About Libre Academy</h2>
-<p>Libre Academy is a free, open-source platform with 94 interactive courses across 26 languages. Every lesson is code you write in a real editor, graded instantly by hidden tests — active recall, not passive video. It runs in your browser with no install or account, and the free desktop app adds offline use, native compilers, and the ability to turn any technical PDF or EPUB into an interactive course.</p>
-<p><a href="/learn/">Try Libre Academy free →</a> &nbsp; <a href="/courses">Browse all 94 courses</a></p>
+<p>Libre Academy is a free, open-source platform with ${COURSE_COUNT} interactive courses across ${LANGUAGE_COUNT} languages. Every lesson is code you write in a real editor, graded instantly by hidden tests — active recall, not passive video. It runs in your browser with no install or account, and the free desktop app adds offline use, native compilers, and the ability to turn any technical PDF or EPUB into an interactive course.</p>
+<p><a href="/learn/">Try Libre Academy free →</a> &nbsp; <a href="/courses">Browse all ${COURSE_COUNT} courses</a></p>
 </main>`,
     graph: [
       breadcrumb([

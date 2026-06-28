@@ -19,6 +19,11 @@ import type { CourseChapter, CourseLesson, FullCourse } from "../data/types";
 import { renderMarkdown, truncateMarkdown } from "../lib/markdown";
 import { useSeo } from "../lib/useSeo";
 import {
+  courseSeoTitle,
+  courseSeoDescription,
+  courseCanonical,
+} from "../lib/seoMeta";
+import {
   libreOpenUrl,
   hasLibreInstalled,
   openInLibre,
@@ -72,13 +77,13 @@ export function CourseDetail() {
   // so hook order stays stable across renders.
   useSeo({
     title: catalogEntry
-      ? `${catalogEntry.title} — Free ${catalogEntry.languageLabel} Course`
+      ? courseSeoTitle(catalogEntry)
       : "Course Not Found",
     description: catalogEntry
-      ? `Learn ${catalogEntry.languageLabel} free with this interactive course. Real editor, hidden tests, ${catalogEntry.approxLessons}+ lessons. No signup, no paywall.`
+      ? courseSeoDescription(catalogEntry)
       : undefined,
     canonicalUrl: catalogEntry
-      ? `https://libre.academy/courses/${catalogEntry.id}`
+      ? courseCanonical(catalogEntry.id)
       : undefined,
     ogType: "article",
   });
@@ -444,6 +449,23 @@ export function CourseDetail() {
                   });
                 })()}
               </ul>
+            </div>
+
+            <div className="course-detail__sidebar-card">
+              <h3 className="course-detail__sidebar-title">Keep exploring</h3>
+              <p className="course-detail__sidebar-body">
+                Want more context before or after the lessons? Read why
+                passive video falls short, or learn how Libre turns books
+                into interactive courses.
+              </p>
+              <div className="course-detail__sidebar-links">
+                <Link to="/blog/why-passive-video-doesnt-work" className="course-detail__sidebar-hint">
+                  Why passive video doesn't work
+                </Link>
+                <Link to="/blog/bring-your-own-book" className="course-detail__sidebar-hint">
+                  Bring Your Own Book
+                </Link>
+              </div>
             </div>
           </aside>
         </div>

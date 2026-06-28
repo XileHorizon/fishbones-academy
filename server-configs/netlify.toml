@@ -1,0 +1,20 @@
+# Netlify config — same fix but for Netlify hosting.
+# The [[redirects]] block must come AFTER any explicit static file declarations.
+# Drop this file in the repo root as netlify.toml
+
+[[headers]]
+  for = "/robots.txt"
+  [headers.values]
+    Content-Type = "text/plain"
+
+[[headers]]
+  for = "/sitemap.xml"
+  [headers.values]
+    Content-Type = "application/xml"
+
+[[redirects]]
+  # SPA fallback — only for routes that aren't real files
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  force = false

@@ -1,0 +1,20 @@
+# Vercel config — ensures static files in /public are served before
+# the SPA catch-all, fixing robots.txt and sitemap.xml returning index.html.
+{
+  "rewrites": [
+    {
+      "source": "/((?!robots\\.txt|sitemap\\.xml|.*\\..*).*)",
+      "destination": "/index.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/robots.txt",
+      "headers": [{ "key": "Content-Type", "value": "text/plain" }]
+    },
+    {
+      "source": "/sitemap.xml",
+      "headers": [{ "key": "Content-Type", "value": "application/xml" }]
+    }
+  ]
+}
