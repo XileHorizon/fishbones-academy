@@ -13,7 +13,7 @@ import {
   Download,
 } from "lucide-react";
 import { LANGUAGES } from "../data/languages";
-import { COURSE_COUNT, COURSE_COUNT_ROUNDED, LANGUAGE_COUNT } from "../lib/siteStats";
+import { COURSE_COUNT_ROUNDED, LANGUAGE_COUNT } from "../lib/siteStats";
 import { ParticleField } from "../components/spotlights/ParticleField";
 import { WorkbenchSpotlight } from "../components/spotlights/WorkbenchSpotlight";
 import { EvmChainSpotlight } from "../components/spotlights/EvmChainSpotlight";
