@@ -158,6 +158,14 @@ function rsyncToVps() {
   // without the exclude `--delete` would wipe the entire audio dir
   // on every site deploy — meaning every push of marketing-copy or
   // /learn/ embed would silently nuke the narration tracks.
+  // `--exclude=courses/` is the same protection for the desktop
+  // course-download archives: remote-tier `.academy` files are
+  // uploaded by hand to /var/www/libre-academy/courses/<id>.academy
+  // (NOT shipped in dist/) and the desktop installer fetches them from
+  // libre.academy/courses/ (REMOTE_ARCHIVE_BASE in
+  // Apps/Libre.academy/scripts/course-tiers.mjs). Without the exclude
+  // `--delete` would wipe them every deploy — the same failure that
+  // made the old mattssoftware.com/fishbones/courses/ host unusable.
   // `-T` disables pseudo-tty allocation — required when sshpass is
   // driving the connection from a non-interactive shell (e.g. when
   // this script is invoked from another tool, an agent harness, or
@@ -167,10 +175,23 @@ function rsyncToVps() {
   const sshOpts = `ssh -T -o StrictHostKeyChecking=no -o ConnectTimeout=15 -p ${VPS_PORT}`;
   const target = `${VPS_USER}@${VPS_HOST}:${VPS_TARGET_DIR}/`;
   run(
-    `sshpass -e rsync -a --delete --exclude=audio/ --stats -e "${sshOpts}" dist/ "${target}"`,
+    `sshpass -e rsync -a --delete --exclude=audio/ --exclude=courses/ --stats -e "${sshOpts}" dist/ "${target}"`,
     { env: { SSHPASS: pwd } },
   );
-  console.log(`[deploy] synced dist/ → ${target} (audio/ preserved)`);
+  console.log(`[deploy] synced dist/ → ${target} (audio/ + courses/ preserved)`);
+
+  // The main rsync excludes courses/ to protect the remote .academy
+  // archive downloads (uploaded separately, NOT in dist/). But
+  // scripts/prerender.mjs ALSO writes the per-course landing pages to
+  // dist/courses/<id>.html — so push just those with a SECOND rsync
+  // that has NO --delete: it adds/updates the .html pages and leaves
+  // the .academy archives untouched. Keep this in lockstep with the
+  // matching step in .github/workflows/deploy.yml.
+  run(
+    `sshpass -e rsync -a --include="*.html" --exclude="*" --stats -e "${sshOpts}" dist/courses/ "${target}courses/"`,
+    { env: { SSHPASS: pwd } },
+  );
+  console.log(`[deploy] synced prerendered course pages → courses/ (archives preserved)`);
 }
 
 if (!RSYNC_ONLY) {
@@ -196,5 +217,14 @@ if (!NO_RSYNC) {
 }
 
 step("rsync to VPS", rsyncToVps);
+
+// Ping IndexNow AFTER the sync so every URL (and the key file) is live.
+// One ping reaches Bing — and therefore ChatGPT search — plus Perplexity,
+// Yandex, etc. Non-fatal: scripts/indexnow.mjs always exits 0.
+if (!NO_RSYNC) {
+  step("IndexNow ping (Bing / ChatGPT / Perplexity)", () =>
+    run("node scripts/indexnow.mjs"),
+  );
+}
 
 console.log("\n[deploy] Done. Visit https://libre.academy/ to verify.");

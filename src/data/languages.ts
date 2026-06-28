@@ -80,6 +80,16 @@ export const LANGUAGES: Language[] = [
     inBrowser: true,
   },
   {
+    id: "sql",
+    slug: "sql",
+    name: "SQL",
+    glyph: "SQL",
+    blurb: "Query, join, and shape data — the language every database speaks.",
+    run: "browser",
+    runNote: "(sql.js / SQLite WASM)",
+    inBrowser: true,
+  },
+  {
     id: "c",
     slug: "c",
     name: "C",

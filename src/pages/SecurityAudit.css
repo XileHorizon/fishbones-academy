@@ -1,0 +1,438 @@
+/* Security audit page. Uses the shared site tokens / .section /
+   .card / .btn / .pill vocabulary; only adds page-specific status
+   colours + the grid + the banner/preamble/code blocks. The site is
+   dark-theme-locked, so the success/warn tints are tuned for a dark
+   surface and scoped here rather than added to the global token set. */
+
+.security-page {
+  padding-top: 96px;
+  --sec-ok: #4ade80;
+  --sec-ok-bg: rgba(74, 222, 128, 0.1);
+  --sec-ok-border: rgba(74, 222, 128, 0.32);
+  --sec-warn: var(--color-accent-warm, #f0a464);
+  --sec-warn-bg: rgba(240, 164, 100, 0.1);
+  --sec-warn-border: rgba(240, 164, 100, 0.32);
+}
+
+.security-page .section__title {
+  margin-bottom: 14px;
+}
+
+.security-page__lede {
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--color-text-secondary);
+  max-width: 660px;
+  margin: 0 0 40px;
+}
+
+/* ── Preamble (the "verify yourself" ask) ───────────────────────── */
+
+.security-preamble {
+  display: flex;
+  gap: 16px;
+  padding: 22px 24px;
+  margin-bottom: 56px;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-strong);
+  border-left: 3px solid var(--color-accent-warm, #f0a464);
+  border-radius: 12px;
+}
+
+.security-preamble__icon {
+  flex-shrink: 0;
+  color: var(--color-accent-warm, #f0a464);
+  margin-top: 2px;
+}
+
+.security-preamble__title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin: 0 0 6px;
+}
+
+.security-preamble p {
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.security-preamble a {
+  color: var(--color-text-primary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* ── Section rhythm ─────────────────────────────────────────────── */
+
+.security-section {
+  margin-bottom: 64px;
+}
+
+.security-section__title {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--color-text-primary);
+  margin: 0 0 16px;
+}
+
+.security-section__title svg {
+  color: var(--color-text-tertiary);
+}
+
+.security-section__lede {
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--color-text-secondary);
+  max-width: 660px;
+  margin: 0 0 24px;
+}
+
+.security-section__lede code,
+.security-section__foot code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  padding: 1px 5px;
+  border-radius: 5px;
+  background: var(--color-bg-tertiary);
+}
+
+.security-section__foot {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--color-text-tertiary);
+  margin: 22px 0 0;
+}
+
+.security-section__foot a {
+  color: var(--color-text-secondary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* ── Headline banner ────────────────────────────────────────────── */
+
+.security-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 18px 20px;
+  border-radius: 12px;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+  margin-bottom: 28px;
+}
+
+.security-banner strong {
+  color: var(--color-text-primary);
+}
+
+.security-banner code {
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+}
+
+.security-banner--ok {
+  background: var(--sec-ok-bg);
+  border: 1px solid var(--sec-ok-border);
+}
+
+.security-banner--ok > svg {
+  flex-shrink: 0;
+  color: var(--sec-ok);
+  margin-top: 1px;
+}
+
+.security-banner--info {
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-default);
+  margin-top: 20px;
+  margin-bottom: 0;
+}
+
+.security-banner--info > svg {
+  flex-shrink: 0;
+  color: var(--color-text-tertiary);
+  margin-top: 1px;
+}
+
+/* Resolved code-audit findings reuse the advisory card column. */
+.security-resolved {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Tracked hardening — icon-bulleted honest list. */
+.security-tracked {
+  list-style: none;
+  margin: 0 0 4px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.security-tracked li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+}
+
+.security-tracked li svg {
+  flex-shrink: 0;
+  margin-top: 3px;
+  color: var(--sec-warn);
+}
+
+/* ── Card grids ─────────────────────────────────────────────────── */
+
+.security-grid {
+  display: grid;
+  gap: 14px;
+}
+
+.security-grid--supply {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.security-grid--posture {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.security-card {
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-default);
+  border-radius: 12px;
+  padding: 20px;
+  transition: border-color 0.15s ease;
+}
+
+.security-card:hover {
+  border-color: var(--color-border-strong);
+}
+
+.security-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.security-card__when {
+  font-size: 11.5px;
+  color: var(--color-text-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+.security-card__title {
+  font-size: 15.5px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin: 0 0 8px;
+}
+
+.security-card__pkgs {
+  font-size: 12px;
+  color: var(--color-text-tertiary);
+  margin: 0 0 14px;
+  word-break: break-word;
+}
+
+.security-card__body {
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.security-card__posture-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  background: var(--color-bg-tertiary);
+  color: var(--color-text-primary);
+  margin-bottom: 14px;
+}
+
+.security-card__detail {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.security-card__detail div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.security-card__detail dt {
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--color-text-tertiary);
+}
+
+.security-card__detail dd {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+}
+
+/* ── Status chips ───────────────────────────────────────────────── */
+
+.security-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: capitalize;
+  white-space: nowrap;
+}
+
+.security-status--ok {
+  background: var(--sec-ok-bg);
+  border: 1px solid var(--sec-ok-border);
+  color: var(--sec-ok);
+}
+
+.security-status--warn {
+  background: var(--sec-warn-bg);
+  border: 1px solid var(--sec-warn-border);
+  color: var(--sec-warn);
+}
+
+.security-status--info {
+  background: var(--color-bg-tertiary);
+  border: 1px solid var(--color-border-default);
+  color: var(--color-text-secondary);
+}
+
+/* ── Advisories ─────────────────────────────────────────────────── */
+
+.security-advisories {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.security-advisory {
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-default);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.security-advisory__head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.security-advisory__pkgs {
+  font-size: 12px;
+  color: var(--color-text-tertiary);
+  word-break: break-word;
+}
+
+/* ── Reproducible-commands code block ───────────────────────────── */
+
+.security-code {
+  margin: 0 0 4px;
+  padding: 20px 22px;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-default);
+  border-radius: 12px;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  line-height: 1.7;
+  color: var(--color-text-secondary);
+}
+
+.security-code code {
+  white-space: pre;
+}
+
+/* ── Final CTA ──────────────────────────────────────────────────── */
+
+.security-final {
+  text-align: center;
+  padding: 48px 24px;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-default);
+  border-radius: 16px;
+  margin-bottom: 48px;
+}
+
+.security-final__title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin: 0 0 8px;
+}
+
+.security-final p {
+  font-size: 15px;
+  color: var(--color-text-secondary);
+  margin: 0 0 24px;
+}
+
+.security-final__actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.security-page__back {
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--color-text-tertiary);
+}
+
+.security-page__back a {
+  color: var(--color-text-secondary);
+}
+
+.security-page__back a:hover {
+  color: var(--color-text-primary);
+}
+
+/* ── Responsive ─────────────────────────────────────────────────── */
+
+@media (max-width: 720px) {
+  .security-grid--supply,
+  .security-grid--posture {
+    grid-template-columns: 1fr;
+  }
+  .security-preamble {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .security-code {
+    font-size: 11.5px;
+  }
+}
