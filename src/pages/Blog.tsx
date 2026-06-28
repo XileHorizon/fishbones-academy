@@ -27,11 +27,10 @@ export function Blog() {
       <header className="blog-hero section section--narrow">
         <span className="section__eyebrow">Blog</span>
         <h1 className="section__title">
-          Thoughts on learning to code the right way.
+          Thoughts from the Libre team.
         </h1>
         <p className="section__subtitle">
-          Updates, deep-dives, and the occasional rant about why passive video
-          doesn't make you a programmer.
+          Updates, deep-dives, opinion pieces, and the occasional rant about the industry and state of things.
         </p>
       </header>
 
